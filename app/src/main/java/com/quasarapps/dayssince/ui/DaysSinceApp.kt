@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.quasarapps.dayssince.DaysSince
-import com.quasarapps.dayssince.Prefs
+import com.quasarapps.dayssince.SelectedStartDateTime
 import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
 import com.quasarapps.dayssince.util.EnglishDateFormat
 import com.quasarapps.dayssince.widget.DaysHoursMinutesSinceWidgetProvider
@@ -28,13 +28,9 @@ import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
 
-private const val PREF_SELECTED_DATE = "selected_date"
-private const val PREF_SELECTED_TIME = "selected_time"
-
 @Composable
 fun DaysSinceApp(darkTheme: Boolean = true) {
     val context = LocalContext.current
-    val prefs = remember(context) { Prefs.get(context) }
 
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     var selectedTime by remember { mutableStateOf(LocalTime.now().withSecond(0).withNano(0)) }
@@ -49,20 +45,18 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
     }
 
     // Load persisted values once.
-    LaunchedEffect(prefs) {
-        prefs.getString(PREF_SELECTED_DATE, null)
-            ?.runCatching(LocalDate::parse)
-            ?.getOrNull()
-            ?.let { selectedDate = it }
-
-        prefs.getString(PREF_SELECTED_TIME, null)
-            ?.runCatching(LocalTime::parse)
-            ?.getOrNull()
-            ?.let { selectedTime = it }
+    LaunchedEffect(context) {
+        val picked = SelectedStartDateTime.load(context)
+        selectedDate = picked.date
+        selectedTime = picked.time
     }
 
-    val daysSincePicked by remember(selectedDate, selectedTime, nowTick) {
-        derivedStateOf { DaysSince.sincePicked(selectedDate, selectedTime) }
+    val dhmSincePicked by remember(selectedDate, selectedTime, nowTick) {
+        derivedStateOf { DaysSince.sincePickedDhm(selectedDate, selectedTime) }
+    }
+
+    val daysSincePicked by remember(dhmSincePicked) {
+        derivedStateOf { dhmSincePicked.days }
     }
 
     DaysSinceTheme(darkTheme = darkTheme) {
@@ -80,6 +74,17 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
                 Text(
                     text = daysSincePicked.toString(),
                     style = MaterialTheme.typography.displayMedium
+                )
+
+                Text(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = "%d days, %02d hours, %02d minutes".format(
+                        dhmSincePicked.days,
+                        dhmSincePicked.hours,
+                        dhmSincePicked.minutes
+                    ),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Text(
@@ -113,13 +118,13 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
                     selectedTime = selectedTime,
                     onSelectedDateChange = { newDate ->
                         selectedDate = newDate
-                        prefs.edit().putString(PREF_SELECTED_DATE, newDate.toString()).apply()
+                        SelectedStartDateTime.persistDate(context, newDate)
                         DaysSinceWidgetProvider.requestUpdate(context)
                         DaysHoursMinutesSinceWidgetProvider.requestUpdate(context)
                     },
                     onSelectedTimeChange = { newTime ->
                         selectedTime = newTime
-                        prefs.edit().putString(PREF_SELECTED_TIME, newTime.toString()).apply()
+                        SelectedStartDateTime.persistTime(context, newTime)
                         DaysSinceWidgetProvider.requestUpdate(context)
                         DaysHoursMinutesSinceWidgetProvider.requestUpdate(context)
                     }

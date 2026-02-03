@@ -18,8 +18,7 @@ object DaysSince {
     /**
      * Whole days since the user-picked date & time in the device time zone.
      *
-     * - Returns 0 if the picked timestamp is in the future.
-     * - Uses floor whole days (i.e., <24h => 0).
+     * This delegates to [sincePickedDhm] so the DHM breakdown is the single source of truth.
      */
     fun sincePicked(
         pickedDate: LocalDate,
@@ -27,10 +26,7 @@ object DaysSince {
         clock: Clock = Clock.systemDefaultZone(),
         zoneId: ZoneId = ZoneId.systemDefault()
     ): Long {
-        val start = LocalDateTime.of(pickedDate, pickedTime)
-        val now = LocalDateTime.now(clock.withZone(zoneId))
-        val days = ChronoUnit.DAYS.between(start, now)
-        return if (days < 0) 0 else days
+        return sincePickedDhm(pickedDate, pickedTime, clock = clock, zoneId = zoneId).days
     }
 
     /**

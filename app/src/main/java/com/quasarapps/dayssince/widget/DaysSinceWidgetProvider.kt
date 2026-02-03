@@ -2,19 +2,14 @@ package com.quasarapps.dayssince.widget
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
-import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
 import android.widget.RemoteViews
 import com.quasarapps.dayssince.DaysSince
-import com.quasarapps.dayssince.MainActivity
-import com.quasarapps.dayssince.Prefs
 import com.quasarapps.dayssince.R
-import java.time.LocalDate
-import java.time.LocalTime
+import com.quasarapps.dayssince.SelectedStartDateTime
 
 /**
  * Home screen widget provider (1x1).
@@ -30,11 +25,19 @@ class DaysSinceWidgetProvider : AppWidgetProvider() {
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
 
+        val views = buildRemoteViews(context)
         for (appWidgetId in appWidgetIds) {
-            appWidgetManager.updateAppWidget(appWidgetId, buildRemoteViews(context))
+            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
-        scheduleHourlyUpdate(context)
+        WidgetScheduler.scheduleInexactRepeating(
+            context = context,
+            receiverClass = DaysSinceWidgetProvider::class.java,
+            requestCode = REQUEST_CODE_ALARM,
+            action = ACTION_UPDATE_WIDGETS,
+            intervalMs = AlarmManager.INTERVAL_HOUR,
+            wakeup = true
+        )
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -45,82 +48,45 @@ class DaysSinceWidgetProvider : AppWidgetProvider() {
             Intent.ACTION_TIME_CHANGED,
             Intent.ACTION_TIMEZONE_CHANGED,
             Intent.ACTION_TIME_TICK -> {
-                val manager = AppWidgetManager.getInstance(context)
-                val component =
-                    android.content.ComponentName(context, DaysSinceWidgetProvider::class.java)
-                val ids = manager.getAppWidgetIds(component)
-                if (ids.isNotEmpty()) {
-                    onUpdate(context, manager, ids)
-                }
+                WidgetUpdateHelper.updateAll(
+                    context = context,
+                    providerClass = DaysSinceWidgetProvider::class.java,
+                    buildRemoteViews = ::buildRemoteViews
+                )
             }
         }
     }
 
     private fun buildRemoteViews(context: Context): RemoteViews {
-        val prefs = Prefs.get(context)
+        val picked = SelectedStartDateTime.load(context)
 
-        val pickedDate = prefs.getString(PREF_SELECTED_DATE, null)
-            ?.runCatching(LocalDate::parse)
-            ?.getOrNull() ?: LocalDate.now()
+        val dhm = DaysSince.sincePickedDhm(picked.date, picked.time)
 
-        val pickedTime = prefs.getString(PREF_SELECTED_TIME, null)
-            ?.runCatching(LocalTime::parse)
-            ?.getOrNull() ?: LocalTime.MIDNIGHT
-
-        val days = DaysSince.sincePicked(pickedDate, pickedTime)
-
-        val launchIntent = Intent(context, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-
-        val launchPendingIntent = PendingIntent.getActivity(
-            context,
-            REQUEST_CODE_LAUNCH,
-            launchIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val launchPendingIntent = WidgetIntents.launchMainActivity(context)
 
         return RemoteViews(context.packageName, R.layout.widget_days_since_1x1).apply {
-            setTextViewText(R.id.widget_day_number, days.toString())
+            setTextViewText(R.id.widget_day_number, dhm.days.toString())
             setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
         }
     }
 
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleHourlyUpdate(context: Context) {
-        val alarmManager =
-            context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
-
-        val intent = Intent(context, DaysSinceWidgetProvider::class.java).apply {
-            action = ACTION_UPDATE_WIDGETS
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            REQUEST_CODE,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val firstTriggerElapsed = SystemClock.elapsedRealtime() + 60_000L
-
-        alarmManager.cancel(pendingIntent)
-        alarmManager.setInexactRepeating(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            firstTriggerElapsed,
-            AlarmManager.INTERVAL_HOUR,
-            pendingIntent
+        // Intentionally left for binary compatibility; now delegated to WidgetScheduler.
+        WidgetScheduler.scheduleInexactRepeating(
+            context = context,
+            receiverClass = DaysSinceWidgetProvider::class.java,
+            requestCode = REQUEST_CODE_ALARM,
+            action = ACTION_UPDATE_WIDGETS,
+            intervalMs = AlarmManager.INTERVAL_HOUR,
+            wakeup = true
         )
     }
 
     companion object {
-        private const val REQUEST_CODE = 10101
-        private const val REQUEST_CODE_LAUNCH = 10102
+        private const val REQUEST_CODE_ALARM = 10101
 
         const val ACTION_UPDATE_WIDGETS = "com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS"
-
-        private const val PREF_SELECTED_DATE = "selected_date"
-        private const val PREF_SELECTED_TIME = "selected_time"
 
         fun requestUpdate(context: Context) {
             val intent = Intent(context, DaysSinceWidgetProvider::class.java).apply {
@@ -130,4 +96,3 @@ class DaysSinceWidgetProvider : AppWidgetProvider() {
         }
     }
 }
-
