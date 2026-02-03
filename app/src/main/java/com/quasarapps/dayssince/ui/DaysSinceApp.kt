@@ -1,5 +1,6 @@
 package com.quasarapps.dayssince.ui
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.quasarapps.dayssince.DaysSince
 import com.quasarapps.dayssince.SelectedStartDateTime
@@ -56,10 +58,6 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
         derivedStateOf { DaysSince.sincePickedDhm(selectedDate, selectedTime) }
     }
 
-    val daysSincePicked by remember(dhmSincePicked) {
-        derivedStateOf { dhmSincePicked.days }
-    }
-
     DaysSinceTheme(darkTheme = darkTheme) {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -68,53 +66,29 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Center,
+                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = daysSincePicked.toString(),
-                    style = MaterialTheme.typography.displayMedium
-                )
-
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = "%d days, %02d hours, %02d minutes".format(
-                        dhmSincePicked.days,
-                        dhmSincePicked.hours,
-                        dhmSincePicked.minutes
-                    ),
+                    text = "Days since…",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Text(
-                    modifier = Modifier.padding(top = 16.dp),
-                    text = "Days Since",
-                    style = MaterialTheme.typography.headlineMedium
+                ElapsedTimeBlock(
+                    days = dhmSincePicked.days,
+                    hours = dhmSincePicked.hours,
+                    minutes = dhmSincePicked.minutes
                 )
 
-                Text(
-                    modifier = Modifier.padding(top = 20.dp),
-                    text = EnglishDateFormat.formatOrdinalDate(selectedDate),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Text(
-                    modifier = Modifier.padding(top = 4.dp),
-                    text = "at",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Text(
-                    modifier = Modifier.padding(top = 4.dp),
-                    text = "%02d:%02d".format(selectedTime.hour, selectedTime.minute),
-                    style = MaterialTheme.typography.bodyLarge
+                PickedDateTimeSummary(
+                    date = selectedDate,
+                    time = selectedTime
                 )
 
                 NativePickers(
-                    modifier = Modifier.padding(top = 24.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                     selectedDate = selectedDate,
                     selectedTime = selectedTime,
                     onSelectedDateChange = { newDate ->
@@ -139,4 +113,104 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
             }
         }
     }
+}
+
+@Composable
+private fun ElapsedTimeBlock(
+    days: Long,
+    hours: Long,
+    minutes: Long
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = "It’s been:",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = "$days days",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Text(
+                text = "$hours hours",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = "$minutes minutes",
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+    }
+}
+
+@Composable
+private fun PickedDateTimeSummary(
+    date: LocalDate,
+    time: LocalTime
+) {
+    Text(
+        text = "Since ${EnglishDateFormat.formatOrdinalDate(date)} at %02d:%02d".format(
+            time.hour,
+            time.minute
+        ),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+}
+
+// Remove the preview-only screen (it hid the pickers/buttons area) and instead drive DaysSinceApp
+// by writing deterministic preview values into the same persistence it already reads.
+
+@Composable
+private fun PersistPreviewSelection(
+    context: Context,
+    date: LocalDate,
+    time: LocalTime
+) {
+    LaunchedEffect(date, time) {
+        SelectedStartDateTime.persistDate(context, date)
+        SelectedStartDateTime.persistTime(context, time)
+    }
+}
+
+@Preview(name = "DaysSince - Dark", showBackground = true)
+@Composable
+private fun PreviewDaysSinceDark() {
+    DaysSinceApp(darkTheme = true)
+}
+
+@Preview(name = "DaysSince - Light", showBackground = true)
+@Composable
+private fun PreviewDaysSinceLight() {
+    DaysSinceApp(darkTheme = false)
+}
+
+@Preview(name = "DaysSince - Recent (2h 15m)", showBackground = true)
+@Composable
+private fun PreviewDaysSinceRecent() {
+    val context = LocalContext.current
+    val date = LocalDate.now()
+    val time = LocalTime.now().minusHours(2).minusMinutes(15).withSecond(0).withNano(0)
+    PersistPreviewSelection(context = context, date = date, time = time)
+
+    DaysSinceApp(darkTheme = true)
+}
+
+@Preview(name = "DaysSince - Long ago", showBackground = true)
+@Composable
+private fun PreviewDaysSinceLongAgo() {
+    val context = LocalContext.current
+    val date = LocalDate.now().minusDays(1234)
+    val time = LocalTime.of(9, 30)
+    PersistPreviewSelection(context = context, date = date, time = time)
+
+    DaysSinceApp(darkTheme = true)
 }
