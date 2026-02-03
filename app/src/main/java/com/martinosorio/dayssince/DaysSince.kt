@@ -9,6 +9,12 @@ import java.time.temporal.ChronoUnit
 
 object DaysSince {
 
+    data class ElapsedDhm(
+        val days: Long,
+        val hours: Long,
+        val minutes: Long
+    )
+
     /**
      * Whole days since the user-picked date & time in the device time zone.
      *
@@ -25,5 +31,30 @@ object DaysSince {
         val now = LocalDateTime.now(clock.withZone(zoneId))
         val days = ChronoUnit.DAYS.between(start, now)
         return if (days < 0) 0 else days
+    }
+
+    /**
+     * Elapsed time since the picked date/time broken down into days/hours/minutes.
+     *
+     * - Clamps to 0d 0h 0m if the picked timestamp is in the future.
+     * - Uses whole minutes (seconds are ignored), for stable widget rendering.
+     */
+    fun sincePickedDhm(
+        pickedDate: LocalDate,
+        pickedTime: LocalTime,
+        clock: Clock = Clock.systemDefaultZone(),
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ElapsedDhm {
+        val start = LocalDateTime.of(pickedDate, pickedTime)
+        val now = LocalDateTime.now(clock.withZone(zoneId))
+
+        val totalMinutes = ChronoUnit.MINUTES.between(start, now)
+        if (totalMinutes <= 0) return ElapsedDhm(days = 0, hours = 0, minutes = 0)
+
+        val days = totalMinutes / (60L * 24L)
+        val hours = (totalMinutes % (60L * 24L)) / 60L
+        val minutes = totalMinutes % 60L
+
+        return ElapsedDhm(days = days, hours = hours, minutes = minutes)
     }
 }

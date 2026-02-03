@@ -11,10 +11,10 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class DayOfMonthAppWidgetProviderTest {
+class DaysSinceWidgetTest {
 
     private fun invokeBuildRemoteViews(
-        provider: DayOfMonthAppWidgetProvider,
+        provider: DaysSinceWidgetProvider,
         context: android.content.Context
     ): android.widget.RemoteViews {
         return provider
@@ -45,7 +45,7 @@ class DayOfMonthAppWidgetProviderTest {
             .putString("selected_time", "00:00")
             .commit()
 
-        val provider = DayOfMonthAppWidgetProvider()
+        val provider = DaysSinceWidgetProvider()
         val text = renderText(invokeBuildRemoteViews(provider, context), context)
 
         assertTrue(text.isNotBlank())
@@ -59,7 +59,7 @@ class DayOfMonthAppWidgetProviderTest {
         val prefs = Prefs.get(context)
         prefs.edit().clear().commit()
 
-        val provider = DayOfMonthAppWidgetProvider()
+        val provider = DaysSinceWidgetProvider()
         val text = renderText(invokeBuildRemoteViews(provider, context), context)
 
         assertTrue(text.isNotBlank())
@@ -77,7 +77,7 @@ class DayOfMonthAppWidgetProviderTest {
             .putString("selected_time", "00:00")
             .commit()
 
-        val provider = DayOfMonthAppWidgetProvider()
+        val provider = DaysSinceWidgetProvider()
         val text = renderText(invokeBuildRemoteViews(provider, context), context)
 
         assertTrue(text.isNotBlank())
@@ -95,7 +95,7 @@ class DayOfMonthAppWidgetProviderTest {
             .putString("selected_time", "not-a-time")
             .commit()
 
-        val provider = DayOfMonthAppWidgetProvider()
+        val provider = DaysSinceWidgetProvider()
         val text = renderText(invokeBuildRemoteViews(provider, context), context)
 
         assertTrue(text.isNotBlank())

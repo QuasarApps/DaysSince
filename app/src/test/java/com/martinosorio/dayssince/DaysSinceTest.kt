@@ -129,4 +129,41 @@ class DaysSinceTest {
         assertEquals(0, daysUtc)
         assertEquals(0, daysKiritimati)
     }
+
+    @Test
+    fun sincePickedDhm_sameInstant_returnsZeros() {
+        val pickedDate = LocalDate.of(2026, 1, 7)
+        val pickedTime = LocalTime.of(0, 0)
+
+        val now = Instant.parse("2026-01-07T00:00:00Z")
+        val clock = Clock.fixed(now, utc)
+
+        val dhm = DaysSince.sincePickedDhm(pickedDate, pickedTime, clock = clock, zoneId = utc)
+        assertEquals(DaysSince.ElapsedDhm(days = 0, hours = 0, minutes = 0), dhm)
+    }
+
+    @Test
+    fun sincePickedDhm_oneDayTwoHoursThreeMinutes_isComputedCorrectly() {
+        val pickedDate = LocalDate.of(2026, 1, 6)
+        val pickedTime = LocalTime.of(9, 0)
+
+        // 1 day, 2 hours, 3 minutes later
+        val now = Instant.parse("2026-01-07T11:03:00Z")
+        val clock = Clock.fixed(now, utc)
+
+        val dhm = DaysSince.sincePickedDhm(pickedDate, pickedTime, clock = clock, zoneId = utc)
+        assertEquals(DaysSince.ElapsedDhm(days = 1, hours = 2, minutes = 3), dhm)
+    }
+
+    @Test
+    fun sincePickedDhm_future_returnsZeros() {
+        val pickedDate = LocalDate.of(2026, 1, 8)
+        val pickedTime = LocalTime.of(0, 0)
+
+        val now = Instant.parse("2026-01-07T00:00:00Z")
+        val clock = Clock.fixed(now, utc)
+
+        val dhm = DaysSince.sincePickedDhm(pickedDate, pickedTime, clock = clock, zoneId = utc)
+        assertEquals(DaysSince.ElapsedDhm(days = 0, hours = 0, minutes = 0), dhm)
+    }
 }
