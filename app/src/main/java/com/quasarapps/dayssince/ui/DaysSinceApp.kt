@@ -1,9 +1,7 @@
 package com.quasarapps.dayssince.ui
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -21,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -132,60 +131,64 @@ private fun ElapsedTimeBlock(
     minutes: Long
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text(
-                    text = days.toString(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = hours.toString(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = minutes.toString(),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Text(
-                    text = "Days",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Hours",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Minutes",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
+            Text(
+                text = days.toString(),
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Days",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            Text(
+                text = hours.toString(),
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Hours",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(0.dp)
+        ) {
+            Text(
+                text = minutes.toString(),
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "Minutes",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
+
+        Spacer(modifier = Modifier.height(6.dp))
     }
 }
 
@@ -201,35 +204,87 @@ private fun PickedDateTimeSummary(
         Text(
             text = "Since",
             style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = EnglishDateFormat.formatOrdinalDate(date),
             style = MaterialTheme.typography.headlineSmall,
+            fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "At %02d:%02d".format(time.hour, time.minute),
+            text = "At",
             style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Text(
+            text = "%02d:%02d".format(time.hour, time.minute),
+            style = MaterialTheme.typography.headlineSmall,
+            fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
 
-// Remove the preview-only screen (it hid the pickers/buttons area) and instead drive DaysSinceApp
-// by writing deterministic preview values into the same persistence it already reads.
-
 @Composable
-private fun PersistPreviewSelection(
-    context: Context,
-    date: LocalDate,
-    time: LocalTime
+private fun DaysSincePreviewScreen(
+    selectedDate: LocalDate,
+    selectedTime: LocalTime
 ) {
-    LaunchedEffect(date, time) {
-        SelectedStartDateTime.persistDate(context, date)
-        SelectedStartDateTime.persistTime(context, time)
+    val dhmSincePicked by remember(selectedDate, selectedTime) {
+        derivedStateOf { DaysSince.sincePickedDhm(selectedDate, selectedTime) }
+    }
+
+    DaysSinceTheme(darkTheme = true) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 24.dp, end = 24.dp, top = 112.dp, bottom = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Days Since",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                ElapsedTimeBlock(
+                    days = dhmSincePicked.days,
+                    hours = dhmSincePicked.hours,
+                    minutes = dhmSincePicked.minutes
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                PickedDateTimeSummary(
+                    date = selectedDate,
+                    time = selectedTime
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Previews don't need dialogs/pickers; keep spacing similar.
+                NativePickers(
+                    modifier = Modifier.padding(top = 4.dp),
+                    selectedDate = selectedDate,
+                    selectedTime = selectedTime,
+                    onSelectedDateChange = {},
+                    onSelectedTimeChange = {}
+                )
+            }
+        }
     }
 }
 
@@ -248,21 +303,18 @@ private fun PreviewDaysSinceLight() {
 @Preview(name = "DaysSince - Recent (2h 15m)", showBackground = true)
 @Composable
 private fun PreviewDaysSinceRecent() {
-    val context = LocalContext.current
-    val date = LocalDate.now()
-    val time = LocalTime.now().minusHours(2).minusMinutes(15).withSecond(0).withNano(0)
-    PersistPreviewSelection(context = context, date = date, time = time)
-
-    DaysSinceApp(darkTheme = true)
+    val now = LocalTime.of(12, 0)
+    DaysSincePreviewScreen(
+        selectedDate = LocalDate.now(),
+        selectedTime = now.minusHours(2).minusMinutes(15)
+    )
 }
 
 @Preview(name = "DaysSince - Long ago", showBackground = true)
 @Composable
 private fun PreviewDaysSinceLongAgo() {
-    val context = LocalContext.current
-    val date = LocalDate.now().minusDays(1234)
-    val time = LocalTime.of(9, 30)
-    PersistPreviewSelection(context = context, date = date, time = time)
-
-    DaysSinceApp(darkTheme = true)
+    DaysSincePreviewScreen(
+        selectedDate = LocalDate.now().minusDays(1234),
+        selectedTime = LocalTime.of(9, 30)
+    )
 }
