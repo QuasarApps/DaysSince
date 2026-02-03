@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -47,7 +50,10 @@ fun NativePickers(
                     dialog.show()
                 }
             ) {
-                Text("Pick Date")
+                Text(
+                    text = "Pick Date",
+                    style = MaterialTheme.typography.headlineSmall
+                )
             }
 
             Button(
@@ -64,8 +70,37 @@ fun NativePickers(
                     dialog.show()
                 }
             ) {
-                Text("Pick Time")
+                Text(
+                    text = "Pick Time",
+                    style = MaterialTheme.typography.headlineSmall
+                )
             }
         }
+    }
+}
+
+@Preview(name = "NativePickers - Dark", showBackground = true)
+@Composable
+private fun PreviewNativePickersDark() {
+    DaysSinceTheme(darkTheme = true) {
+        NativePickers(
+            selectedDate = LocalDate.of(2025, 1, 1),
+            selectedTime = LocalTime.of(9, 30),
+            onSelectedDateChange = {},
+            onSelectedTimeChange = {}
+        )
+    }
+}
+
+@Preview(name = "NativePickers - Light", showBackground = true)
+@Composable
+private fun PreviewNativePickersLight() {
+    DaysSinceTheme(darkTheme = false) {
+        NativePickers(
+            selectedDate = LocalDate.of(2025, 1, 1),
+            selectedTime = LocalTime.of(9, 30),
+            onSelectedDateChange = {},
+            onSelectedTimeChange = {}
+        )
     }
 }
