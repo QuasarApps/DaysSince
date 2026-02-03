@@ -1,8 +1,8 @@
-package com.martinosorio.dayssince.widget
+package com.quasarapps.dayssince.widget
 
 import android.widget.TextView
-import com.martinosorio.dayssince.Prefs
-import com.martinosorio.dayssince.R
+import com.quasarapps.dayssince.Prefs
+import com.quasarapps.dayssince.R
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.martinosorio.dayssince"
+    namespace = "com.quasarapps.dayssince"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.martinosorio.dayssince"
+        applicationId = "com.quasarapps.dayssince"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.0"
+        versionCode = 1
+        versionName = "0.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

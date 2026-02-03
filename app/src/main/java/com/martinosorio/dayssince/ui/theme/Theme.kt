@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince.ui.theme
+package com.quasarapps.dayssince.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme

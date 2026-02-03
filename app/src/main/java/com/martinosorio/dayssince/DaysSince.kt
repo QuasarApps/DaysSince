@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince
+package com.quasarapps.dayssince
 
 import java.time.Clock
 import java.time.LocalDate

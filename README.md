@@ -30,7 +30,7 @@ a user-picked date and time**.
 
 The computation lives in:
 
-- `app/src/main/java/com/martinosorio/dayssince/DaysSince.kt`
+- `app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`
 
 Contract:
 
@@ -54,7 +54,7 @@ The selected date/time are stored as ISO strings in app-private prefs:
 
 Storage wrapper:
 
-- `app/src/main/java/com/martinosorio/dayssince/Prefs.kt`
+- `app/src/main/java/com/quasarapps/dayssince/Prefs.kt`
 
 This is “minimal and secure” in the sense that it is:
 
@@ -84,7 +84,7 @@ The widget updates from multiple event sources (best effort, per Android power m
 
 Implementation:
 
-- Provider: `app/src/main/java/com/martinosorio/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
+- Provider: `app/src/main/java/com/quasarapps/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
 - Widget info: `app/src/main/res/xml/day_of_month_widget_info.xml`
 - Layout: `app/src/main/res/layout/widget_day_of_month.xml`
 
@@ -99,18 +99,18 @@ Tapping the widget launches `MainActivity`.
 Key files:
 
 - App entry:
-    - `app/src/main/java/com/martinosorio/dayssince/MainActivity.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/MainActivity.kt`
 
 - Compose UI:
-    - `app/src/main/java/com/martinosorio/dayssince/ui/DaysSinceApp.kt`
-    - `app/src/main/java/com/martinosorio/dayssince/ui/DaysSinceWidget.kt`
-    - `app/src/main/java/com/martinosorio/dayssince/ui/NativePickers.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/ui/DaysSinceApp.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/ui/DaysSinceWidget.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/ui/NativePickers.kt`
 
 - Core logic:
-    - `app/src/main/java/com/martinosorio/dayssince/DaysSince.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`
 
 - Widget:
-    - `app/src/main/java/com/martinosorio/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
+  - `app/src/main/java/com/quasarapps/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
 
 ---
 

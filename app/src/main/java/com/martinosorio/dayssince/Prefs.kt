@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince
+package com.quasarapps.dayssince
 
 import android.content.Context
 import android.content.SharedPreferences

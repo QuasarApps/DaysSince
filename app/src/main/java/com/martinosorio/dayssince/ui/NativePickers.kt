@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince.ui
+package com.quasarapps.dayssince.ui
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog

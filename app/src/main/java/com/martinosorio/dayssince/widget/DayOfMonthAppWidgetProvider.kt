@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince.widget
+package com.quasarapps.dayssince.widget
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -9,12 +9,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
 import android.widget.RemoteViews
-import com.martinosorio.dayssince.DaysSince
-import com.martinosorio.dayssince.MainActivity
-import com.martinosorio.dayssince.Prefs
-import com.martinosorio.dayssince.R
-import com.martinosorio.dayssince.widget.DayOfMonthAppWidgetProvider.Companion.PREF_SELECTED_DATE
-import com.martinosorio.dayssince.widget.DayOfMonthAppWidgetProvider.Companion.PREF_SELECTED_TIME
+import com.quasarapps.dayssince.DaysSince
+import com.quasarapps.dayssince.MainActivity
+import com.quasarapps.dayssince.Prefs
+import com.quasarapps.dayssince.R
+import com.quasarapps.dayssince.widget.DayOfMonthAppWidgetProvider.Companion.PREF_SELECTED_DATE
+import com.quasarapps.dayssince.widget.DayOfMonthAppWidgetProvider.Companion.PREF_SELECTED_TIME
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -187,7 +187,7 @@ class DayOfMonthAppWidgetProvider : AppWidgetProvider() {
          *
          * The app sends this broadcast after the user changes the selected date/time.
          */
-        const val ACTION_UPDATE_WIDGETS = "com.martinosorio.dayssince.widget.ACTION_UPDATE_WIDGETS"
+        const val ACTION_UPDATE_WIDGETS = "com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS"
 
         /** Preference key storing the selected date (ISO-8601 LocalDate). */
         private const val PREF_SELECTED_DATE = "selected_date"

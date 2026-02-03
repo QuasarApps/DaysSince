@@ -1,4 +1,4 @@
-package com.martinosorio.dayssince.ui
+package com.quasarapps.dayssince.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,11 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.martinosorio.dayssince.DaysSince
-import com.martinosorio.dayssince.Prefs
-import com.martinosorio.dayssince.ui.theme.DaysSinceTheme
-import com.martinosorio.dayssince.util.EnglishDateFormat
-import com.martinosorio.dayssince.widget.DayOfMonthAppWidgetProvider
+import com.quasarapps.dayssince.DaysSince
+import com.quasarapps.dayssince.Prefs
+import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
+import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.widget.DayOfMonthAppWidgetProvider
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
