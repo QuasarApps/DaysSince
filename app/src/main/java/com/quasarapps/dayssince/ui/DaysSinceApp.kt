@@ -24,6 +24,7 @@ import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
 import com.quasarapps.dayssince.util.EnglishDateFormat
 import com.quasarapps.dayssince.widget.DaysHoursMinutesSinceWidgetProvider
 import com.quasarapps.dayssince.widget.DaysSinceWidgetProvider
+import com.quasarapps.dayssince.widget.WidgetBroadcasts
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
@@ -119,14 +120,20 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
                     onSelectedDateChange = { newDate ->
                         selectedDate = newDate
                         SelectedStartDateTime.persistDate(context, newDate)
-                        DaysSinceWidgetProvider.requestUpdate(context)
-                        DaysHoursMinutesSinceWidgetProvider.requestUpdate(context)
+                        WidgetBroadcasts.requestUpdate(context, DaysSinceWidgetProvider::class.java)
+                        WidgetBroadcasts.requestUpdate(
+                            context,
+                            DaysHoursMinutesSinceWidgetProvider::class.java
+                        )
                     },
                     onSelectedTimeChange = { newTime ->
                         selectedTime = newTime
                         SelectedStartDateTime.persistTime(context, newTime)
-                        DaysSinceWidgetProvider.requestUpdate(context)
-                        DaysHoursMinutesSinceWidgetProvider.requestUpdate(context)
+                        WidgetBroadcasts.requestUpdate(context, DaysSinceWidgetProvider::class.java)
+                        WidgetBroadcasts.requestUpdate(
+                            context,
+                            DaysHoursMinutesSinceWidgetProvider::class.java
+                        )
                     }
                 )
             }
