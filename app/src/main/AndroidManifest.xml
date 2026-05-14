@@ -30,6 +30,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data
@@ -44,6 +45,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data

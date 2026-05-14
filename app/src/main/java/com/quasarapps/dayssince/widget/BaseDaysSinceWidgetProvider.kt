@@ -48,6 +48,16 @@ abstract class BaseDaysSinceWidgetProvider : AppWidgetProvider() {
         )
     }
 
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        WidgetScheduler.cancelRepeating(
+            context = context,
+            receiverClass = receiverClass,
+            requestCode = alarmRequestCode,
+            action = WidgetBroadcasts.ACTION_UPDATE_WIDGETS
+        )
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
