@@ -40,5 +40,22 @@ internal object WidgetScheduler {
             pendingIntent
         )
     }
+
+    fun cancelRepeating(
+        context: Context,
+        receiverClass: Class<*>,
+        requestCode: Int,
+        action: String
+    ) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+        val intent = Intent(context, receiverClass).apply { this.action = action }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+    }
 }
 

@@ -19,7 +19,7 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
 
     override val receiverClass: Class<out AppWidgetProvider> =
         DaysHoursMinutesSinceWidgetProvider::class.java
-    override val alarmRequestCode: Int = REQUEST_CODE_ALARM
+    override val alarmRequestCode: Int = WidgetRequestCodes.ALARM_DAYS_HOURS_MINUTES_SINCE
     override val refreshIntervalMs: Long = 15 * 60_000L
     override val wakeup: Boolean = false
 
@@ -41,8 +41,6 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
     }
 
     companion object {
-        private const val REQUEST_CODE_ALARM = 20201
-
         fun requestUpdate(context: Context) {
             WidgetBroadcasts.requestUpdate(context, DaysHoursMinutesSinceWidgetProvider::class.java)
         }

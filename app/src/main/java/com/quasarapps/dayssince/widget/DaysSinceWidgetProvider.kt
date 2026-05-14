@@ -15,7 +15,7 @@ import com.quasarapps.dayssince.SelectedStartDateTime
 class DaysSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
 
     override val receiverClass: Class<out AppWidgetProvider> = DaysSinceWidgetProvider::class.java
-    override val alarmRequestCode: Int = REQUEST_CODE_ALARM
+    override val alarmRequestCode: Int = WidgetRequestCodes.ALARM_DAYS_SINCE
     override val refreshIntervalMs: Long = android.app.AlarmManager.INTERVAL_HOUR
     override val wakeup: Boolean = true
 
@@ -32,14 +32,6 @@ class DaysSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
     }
 
     companion object {
-        private const val REQUEST_CODE_ALARM = 10101
-
-        @Deprecated(
-            "Use WidgetBroadcasts.ACTION_UPDATE_WIDGETS",
-            ReplaceWith("WidgetBroadcasts.ACTION_UPDATE_WIDGETS")
-        )
-        const val ACTION_UPDATE_WIDGETS: String = WidgetBroadcasts.ACTION_UPDATE_WIDGETS
-
         fun requestUpdate(context: Context) {
             WidgetBroadcasts.requestUpdate(context, DaysSinceWidgetProvider::class.java)
         }
