@@ -127,7 +127,7 @@ Key files:
 From repo root:
 
 ```powershell
-cd C:\Users\marti\AndroidStudioProjects\DaysSince
+cd C:\Users\quasa\StudioProjects\DaysSince
 .\gradlew.bat :app:assembleDebug
 ```
 
@@ -160,7 +160,7 @@ This project uses JUnit 4 and Robolectric for JVM tests.
 Run:
 
 ```powershell
-cd C:\Users\marti\AndroidStudioProjects\DaysSince
+cd C:\Users\quasa\StudioProjects\DaysSince
 .\gradlew.bat :app:testDebugUnitTest
 ```
 
