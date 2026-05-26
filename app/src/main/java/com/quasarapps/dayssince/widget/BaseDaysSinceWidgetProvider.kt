@@ -61,11 +61,14 @@ abstract class BaseDaysSinceWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
+        // Note: ACTION_TIME_TICK is intentionally not handled here. It is only delivered to
+        // receivers registered at runtime via Context.registerReceiver, never to manifest-declared
+        // receivers like this one, so handling it would be dead code. Minute-level refreshes come
+        // from the alarm scheduled in onUpdate instead.
         when (intent.action) {
             WidgetBroadcasts.ACTION_UPDATE_WIDGETS,
             Intent.ACTION_TIME_CHANGED,
-            Intent.ACTION_TIMEZONE_CHANGED,
-            Intent.ACTION_TIME_TICK -> {
+            Intent.ACTION_TIMEZONE_CHANGED -> {
                 WidgetUpdateHelper.updateAll(
                     context = context,
                     providerClass = receiverClass,
