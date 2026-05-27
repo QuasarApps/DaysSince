@@ -17,35 +17,17 @@ priority and include the exact files/lines affected plus a concrete fix plan.
 
 ## 🔴 Priority 1 — Bugs (fix before next release)
 
-### BUG-1 · `ACTION_TIME_TICK` missing from `AndroidManifest.xml`
+### ~~BUG-1 · `ACTION_TIME_TICK` missing from `AndroidManifest.xml`~~ — NOT A BUG
 
-**File:** `app/src/main/AndroidManifest.xml`
+**Status: Closed — correctly handled by design.**
 
-**Problem:**
-`BaseDaysSinceWidgetProvider.onReceive` handles `Intent.ACTION_TIME_TICK` but
-neither widget receiver declares it in the manifest intent-filter. On API 26+,
-`ACTION_TIME_TICK` is a protected broadcast that is only delivered to receivers
-with an explicit manifest declaration. As a result the per-minute tick is
-silently swallowed and the widget never updates from it.
-
-**Fix:**
-Add `<action android:name="android.intent.action.TIME_TICK" />` to both
-`<receiver>` intent-filters in `AndroidManifest.xml`.
-
-```xml
-<!-- example — add to both DaysSinceWidgetProvider and
-     DaysHoursMinutesSinceWidgetProvider receivers -->
-<intent-filter>
-    ...
-    <action android:name="android.intent.action.TIME_TICK" />
-</intent-filter>
-```
-
-**Test:** Add a Robolectric test that sends `ACTION_TIME_TICK` to the receiver
-and asserts `onReceive` is called and `updateAll` fires.
-
-- [ ] Fix implemented
-- [ ] Test added
+`BaseDaysSinceWidgetProvider.kt` lines 64–67 contains an explicit comment
+explaining that `ACTION_TIME_TICK` is intentionally *not* handled: it is a
+special system broadcast that Android only delivers to receivers registered at
+runtime via `Context.registerReceiver`, never to manifest-declared receivers.
+Adding it to the manifest intent-filter would have no effect. Minute-level
+widget refreshes are driven by the `AlarmManager` inexact repeating alarm
+scheduled in `onUpdate` instead, which is the correct approach.
 
 ---
 
@@ -78,8 +60,8 @@ val time = prefs.getString(KEY_TIME, null)
 `load()` and assert that when no prefs exist the returned time equals the clock
 instant (truncated to minutes).
 
-- [ ] Fix implemented
-- [ ] Test added
+- [x] Fix implemented — `SelectedStartDateTime.kt` now defaults to `LocalTime.now()` truncated to the minute; Clock injected for testability
+- [x] Test added — `SelectedStartDateTimeTest` uses fixed Clock to verify fallback date + time
 
 ---
 
@@ -112,7 +94,7 @@ LaunchedEffect(Unit) {
 }
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — delay now calculates `msToNextMinute` based on `LocalTime.now().second` and `.nano`
 
 ---
 
@@ -168,8 +150,8 @@ arithmetic is used.
 // Expected: 1 day, 0 hours, 0 minutes
 ```
 
-- [ ] Fix implemented
-- [ ] DST test cases added
+- [x] Fix implemented — `DaysSince.kt` now uses `ZonedDateTime` for both start and now
+- [x] DST test cases added — spring-forward (23 h day) and fall-back (25 h day) in `DaysSinceTest.kt`
 
 ---
 
@@ -196,7 +178,7 @@ DatePickerDialog(context, { _, y, m, d ->
     .show()
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — `dialog.datePicker.maxDate = System.currentTimeMillis()` added; `TimePickerDialog` uses `DateFormat.is24HourFormat(context)`
 
 ---
 
@@ -219,7 +201,7 @@ val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
 Text(text = time.format(timeFormatter))
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — `DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)` used in `PickedDateTimeSummary`
 
 ---
 
@@ -244,7 +226,7 @@ Modifier
     .padding(horizontal = 24.dp, vertical = 32.dp)
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — `Modifier.systemBarsPadding()` replaces magic 112dp in `DaysSinceApp` and `DaysSincePreviewScreen`
 
 ---
 
@@ -268,7 +250,7 @@ not already a dependency).
 <style name="Theme.DaysSince" parent="Theme.Material3.DayNight.NoActionBar">
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — theme parent changed to `Theme.MaterialComponents.DayNight.NoActionBar`
 
 ---
 
@@ -294,7 +276,7 @@ views.setContentDescription(
 )
 ```
 
-- [ ] Fix implemented
+- [x] Fix implemented — `setContentDescription` added to all value TextViews in both widget providers
 
 ---
 
@@ -326,7 +308,7 @@ etc.) has several branches with well-known edge cases and no test coverage.
 
 Also test `formatOrdinalDate` for a full formatted string round-trip.
 
-- [ ] Tests added
+- [x] Tests added — `EnglishDateFormatTest.kt` covers all ordinal branches including 11/12/13 exceptions
 
 ---
 
@@ -346,7 +328,7 @@ Mark `buildRemoteViews` as `internal` (with `@VisibleForTesting`) so it can be
 called directly from tests in the same module without reflection. Alternatively,
 test through `onUpdate` end-to-end using `ShadowAppWidgetManager`.
 
-- [ ] Fix implemented
+- [x] Fix implemented — `buildRemoteViews` changed to `internal` in `BaseDaysSinceWidgetProvider`; both widget test files updated to call it directly
 
 ---
 
@@ -365,7 +347,7 @@ Once BUG-2 is fixed, add a test that passes a fixed `Clock` to `load()` with
 empty prefs and asserts the returned `LocalDate` and `LocalTime` match the
 clock's instant (truncated to minutes).
 
-- [ ] Tests added (depends on BUG-2 fix)
+- [x] Tests added — `SelectedStartDateTimeTest` now injects a fixed Clock and asserts exact date + time fallback values
 
 ---
 
@@ -386,7 +368,7 @@ Zero test coverage on the scheduling and broadcast helper classes.
 - `WidgetBroadcasts.requestUpdate` sends an explicit broadcast to both
   widget receiver classes.
 
-- [ ] Tests added
+- [x] Tests added — `WidgetSchedulerTest.kt` and `WidgetBroadcastsTest.kt` added using Robolectric shadow objects
 
 ---
 
@@ -459,8 +441,8 @@ Minimum `proguard-rules.pro` entries:
 -keep class com.quasarapps.dayssince.MainActivity { *; }
 ```
 
-- [ ] Minification enabled
-- [ ] ProGuard rules verified (no runtime crashes in release build)
+- [x] Minification enabled — `isMinifyEnabled = true`, `isShrinkResources = true`
+- [ ] ProGuard rules verified (no runtime crashes in release build — verify on next release build)
 
 ---
 
@@ -485,7 +467,7 @@ kotlinOptions {
 }
 ```
 
-- [ ] Java 11 target set
+- [x] Java 11 target set — `sourceCompatibility`, `targetCompatibility`, and `jvmTarget` all set to 11
 
 ---
 
@@ -526,7 +508,7 @@ Explicitly include only `dayssince_prefs` in backup:
 </data-extraction-rules>
 ```
 
-- [ ] Backup rules configured
+- [x] Backup rules configured — `backup_rules.xml` and `data_extraction_rules.xml` now explicitly include only `dayssince_prefs.xml`
 
 ---
 
@@ -549,8 +531,8 @@ on most launchers, giving a poor first impression.
    ```
 2. For older APIs, add a static `@drawable/widget_preview` PNG/XML.
 
-- [ ] Preview layout declared (API 31+)
-- [ ] Fallback preview drawable created
+- [x] Preview layout declared — `android:previewLayout` added to both widget info XML files
+- [ ] Fallback preview drawable for API <31 (optional, low priority)
 
 ---
 
@@ -568,4 +550,4 @@ but are tracked here for completeness.
 
 ---
 
-*Last updated: 2026-05-26*
+*Last updated: 2026-05-26 — all items implemented except BUILD-1 (Kotlin/AGP upgrade, deferred) and PERF-2 short-term warmup (deferred to DataStore migration)*
