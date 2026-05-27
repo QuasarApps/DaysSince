@@ -166,4 +166,42 @@ class DaysSinceTest {
         val dhm = DaysSince.sincePickedDhm(pickedDate, pickedTime, clock = clock, zoneId = utc)
         assertEquals(DaysSince.ElapsedDhm(days = 0, hours = 0, minutes = 0), dhm)
     }
+
+    // DST tests — America/New_York (EST=UTC-5, EDT=UTC-4)
+
+    @Test
+    fun sincePickedDhm_springForward_23hDayCountedCorrectly() {
+        // On 2025-03-09 clocks spring forward at 02:00 EST -> 03:00 EDT.
+        // The wall-clock day is only 23 hours long.
+        // picked: 2025-03-08 10:00 EST (= 2025-03-08T15:00Z)
+        // now:    2025-03-09 10:00 EDT (= 2025-03-09T14:00Z)
+        // Real elapsed: 23 h → 0 days, 23 hours, 0 minutes
+        val ny = ZoneId.of("America/New_York")
+        val picked = LocalDate.of(2025, 3, 8)
+        val pickedTime = LocalTime.of(10, 0)
+
+        val nowInstant = Instant.parse("2025-03-09T14:00:00Z")
+        val clock = Clock.fixed(nowInstant, ny)
+
+        val dhm = DaysSince.sincePickedDhm(picked, pickedTime, clock = clock, zoneId = ny)
+        assertEquals(DaysSince.ElapsedDhm(days = 0, hours = 23, minutes = 0), dhm)
+    }
+
+    @Test
+    fun sincePickedDhm_fallBack_25hDayCountedCorrectly() {
+        // On 2025-11-02 clocks fall back at 02:00 EDT -> 01:00 EST.
+        // The wall-clock day is 25 hours long.
+        // picked: 2025-11-01 10:00 EDT (= 2025-11-01T14:00Z)
+        // now:    2025-11-02 10:00 EST (= 2025-11-02T15:00Z)
+        // Real elapsed: 25 h → 1 day, 1 hour, 0 minutes
+        val ny = ZoneId.of("America/New_York")
+        val picked = LocalDate.of(2025, 11, 1)
+        val pickedTime = LocalTime.of(10, 0)
+
+        val nowInstant = Instant.parse("2025-11-02T15:00:00Z")
+        val clock = Clock.fixed(nowInstant, ny)
+
+        val dhm = DaysSince.sincePickedDhm(picked, pickedTime, clock = clock, zoneId = ny)
+        assertEquals(DaysSince.ElapsedDhm(days = 1, hours = 1, minutes = 0), dhm)
+    }
 }

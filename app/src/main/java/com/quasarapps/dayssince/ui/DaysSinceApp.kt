@@ -42,11 +42,16 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
     var selectedTime by remember { mutableStateOf(LocalTime.now().withSecond(0).withNano(0)) }
 
     // Tick while this composable is on screen so we react to system time changes.
+    // Delay is aligned to the next whole minute boundary so the display changes exactly
+    // when the minute turns over rather than up to 59 seconds late.
     var nowTick by remember { mutableStateOf(0L) }
     LaunchedEffect(Unit) {
         while (true) {
             nowTick = System.currentTimeMillis()
-            delay(60_000L)
+            val now = LocalTime.now()
+            val msToNextMinute =
+                ((60 - now.second) * 1_000L) - (now.nano / 1_000_000L)
+            delay(msToNextMinute.coerceAtLeast(100L))
         }
     }
 
