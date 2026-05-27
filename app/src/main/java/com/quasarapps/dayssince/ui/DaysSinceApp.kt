@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,6 +34,8 @@ import com.quasarapps.dayssince.widget.WidgetBroadcasts
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun DaysSinceApp(darkTheme: Boolean = true) {
@@ -74,7 +77,8 @@ fun DaysSinceApp(darkTheme: Boolean = true) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 24.dp, end = 24.dp, top = 112.dp, bottom = 32.dp),
+                    .systemBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -202,6 +206,9 @@ private fun PickedDateTimeSummary(
     date: LocalDate,
     time: LocalTime
 ) {
+    // Locale-aware short time format (e.g. "2:30 PM" on US devices, "14:30" on EU devices)
+    val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -228,7 +235,7 @@ private fun PickedDateTimeSummary(
         )
 
         Text(
-            text = "%02d:%02d".format(time.hour, time.minute),
+            text = time.format(timeFormatter),
             style = MaterialTheme.typography.headlineSmall,
             fontStyle = FontStyle.Italic,
             color = MaterialTheme.colorScheme.onSurface
@@ -253,7 +260,8 @@ private fun DaysSincePreviewScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 24.dp, end = 24.dp, top = 112.dp, bottom = 32.dp),
+                    .systemBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 32.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.Top),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

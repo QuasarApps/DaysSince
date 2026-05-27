@@ -27,6 +27,7 @@ class DaysSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
 
         return RemoteViews(context.packageName, R.layout.widget_days_since_1x1).apply {
             setTextViewText(R.id.widget_day_number, dhm.days.toString())
+            setContentDescription(R.id.widget_day_number, "${dhm.days} days")
             setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
         }
     }

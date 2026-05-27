@@ -36,6 +36,9 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
             setTextViewText(R.id.widget_days_value, dhm.days.toString())
             setTextViewText(R.id.widget_hours_value, dhm.hours.toString())
             setTextViewText(R.id.widget_minutes_value, dhm.minutes.toString())
+            setContentDescription(R.id.widget_days_value, "${dhm.days} days")
+            setContentDescription(R.id.widget_hours_value, "${dhm.hours} hours")
+            setContentDescription(R.id.widget_minutes_value, "${dhm.minutes} minutes")
             setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
         }
     }
