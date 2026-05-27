@@ -1,6 +1,7 @@
 package com.quasarapps.dayssince
 
 import android.content.Context
+import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -25,20 +26,22 @@ object SelectedStartDateTime {
     /**
      * Loads the selected date/time from [Prefs].
      *
-     * Fallbacks:
+     * Fallbacks (used only on fresh install before the user picks anything):
      * - date: today
-     * - time: midnight
+     * - time: current time (truncated to the minute) so the app shows "0d 0h 0m" on first launch
+     *
+     * @param clock injectable for testing; defaults to the system clock.
      */
-    fun load(context: Context): Value {
+    fun load(context: Context, clock: Clock = Clock.systemDefaultZone()): Value {
         val prefs = Prefs.get(context)
 
         val date = prefs.getString(PREF_SELECTED_DATE, null)
             ?.runCatching(LocalDate::parse)
-            ?.getOrNull() ?: LocalDate.now()
+            ?.getOrNull() ?: LocalDate.now(clock)
 
         val time = prefs.getString(PREF_SELECTED_TIME, null)
             ?.runCatching(LocalTime::parse)
-            ?.getOrNull() ?: LocalTime.MIDNIGHT
+            ?.getOrNull() ?: LocalTime.now(clock).withSecond(0).withNano(0)
 
         return Value(date = date, time = time)
     }
