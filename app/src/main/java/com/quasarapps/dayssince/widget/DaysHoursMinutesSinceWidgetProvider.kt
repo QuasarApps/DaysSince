@@ -23,7 +23,7 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
     override val refreshIntervalMs: Long = 15 * 60_000L
     override val wakeup: Boolean = false
 
-    override fun buildRemoteViews(context: Context): RemoteViews {
+    override internal fun buildRemoteViews(context: Context): RemoteViews {
         val picked = SelectedStartDateTime.load(context)
         val dhm = DaysSince.sincePickedDhm(picked.date, picked.time)
 
@@ -36,6 +36,9 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
             setTextViewText(R.id.widget_days_value, dhm.days.toString())
             setTextViewText(R.id.widget_hours_value, dhm.hours.toString())
             setTextViewText(R.id.widget_minutes_value, dhm.minutes.toString())
+            setContentDescription(R.id.widget_days_value, "${dhm.days} days")
+            setContentDescription(R.id.widget_hours_value, "${dhm.hours} hours")
+            setContentDescription(R.id.widget_minutes_value, "${dhm.minutes} minutes")
             setOnClickPendingIntent(R.id.widget_root, launchPendingIntent)
         }
     }

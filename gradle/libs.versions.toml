@@ -13,7 +13,8 @@ material = "1.13.0"
 # Compose BOM compatible with Kotlin 1.9.x + Compose compiler 1.5.x
 composeBom = "2024.06.00"
 activityCompose = "1.9.0"
-robolectric = "4.12.2"
+# 4.14+ is required to support Android SDK 35 (project targetSdk); 4.12.x maxed out at SDK 34.
+robolectric = "4.14.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

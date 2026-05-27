@@ -2,6 +2,7 @@ package com.quasarapps.dayssince.ui
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,8 @@ fun NativePickers(
                         selectedDate.monthValue - 1,
                         selectedDate.dayOfMonth
                     )
+                    // Prevent picking future dates — the app clamps to 0 but shows no explanation
+                    dialog.datePicker.maxDate = System.currentTimeMillis()
                     dialog.show()
                 }
             ) {
@@ -65,7 +68,7 @@ fun NativePickers(
                         },
                         selectedTime.hour,
                         selectedTime.minute,
-                        true
+                        DateFormat.is24HourFormat(context) // respect device locale
                     )
                     dialog.show()
                 }
