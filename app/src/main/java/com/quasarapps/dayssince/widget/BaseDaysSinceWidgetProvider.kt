@@ -24,7 +24,8 @@ abstract class BaseDaysSinceWidgetProvider : AppWidgetProvider() {
     protected abstract val refreshIntervalMs: Long
     protected abstract val wakeup: Boolean
 
-    protected abstract fun buildRemoteViews(context: Context): RemoteViews
+    // `internal` so tests in the same module can call it directly without reflection.
+    internal abstract fun buildRemoteViews(context: Context): RemoteViews
 
     override fun onUpdate(
         context: Context,

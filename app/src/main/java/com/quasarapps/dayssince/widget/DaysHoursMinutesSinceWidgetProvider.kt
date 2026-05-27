@@ -23,7 +23,7 @@ class DaysHoursMinutesSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
     override val refreshIntervalMs: Long = 15 * 60_000L
     override val wakeup: Boolean = false
 
-    override fun buildRemoteViews(context: Context): RemoteViews {
+    override internal fun buildRemoteViews(context: Context): RemoteViews {
         val picked = SelectedStartDateTime.load(context)
         val dhm = DaysSince.sincePickedDhm(picked.date, picked.time)
 

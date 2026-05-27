@@ -19,7 +19,7 @@ class DaysSinceWidgetProvider : BaseDaysSinceWidgetProvider() {
     override val refreshIntervalMs: Long = android.app.AlarmManager.INTERVAL_HOUR
     override val wakeup: Boolean = true
 
-    override fun buildRemoteViews(context: Context): RemoteViews {
+    override internal fun buildRemoteViews(context: Context): RemoteViews {
         val picked = SelectedStartDateTime.load(context)
         val dhm = DaysSince.sincePickedDhm(picked.date, picked.time)
 

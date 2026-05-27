@@ -13,21 +13,9 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class DaysSinceWidgetTest {
 
-    private fun invokeBuildRemoteViews(
-        provider: DaysSinceWidgetProvider,
-        context: android.content.Context
-    ): android.widget.RemoteViews {
-        return provider
-            .javaClass
-            .getDeclaredMethod("buildRemoteViews", android.content.Context::class.java)
-            .apply { isAccessible = true }
-            .invoke(provider, context) as android.widget.RemoteViews
-    }
-
-    private fun renderText(
-        remoteViews: android.widget.RemoteViews,
-        context: android.content.Context
-    ): String {
+    private fun renderDayText(context: android.content.Context): String {
+        val provider = DaysSinceWidgetProvider()
+        val remoteViews = provider.buildRemoteViews(context)
         val view = remoteViews.apply(context, null)
         val tv = view.findViewById<TextView>(R.id.widget_day_number)
         assertNotNull(tv)
@@ -37,16 +25,13 @@ class DaysSinceWidgetTest {
     @Test
     fun buildRemoteViews_withValidPrefs_rendersNumericText() {
         val context = RuntimeEnvironment.getApplication()
-
-        val prefs = Prefs.get(context)
-        prefs.edit().clear().commit()
-        prefs.edit()
+        Prefs.get(context).edit().clear().commit()
+        Prefs.get(context).edit()
             .putString("selected_date", "2026-01-01")
             .putString("selected_time", "00:00")
             .commit()
 
-        val provider = DaysSinceWidgetProvider()
-        val text = renderText(invokeBuildRemoteViews(provider, context), context)
+        val text = renderDayText(context)
 
         assertTrue(text.isNotBlank())
         assertTrue(text.all { ch -> ch.isDigit() })
@@ -55,12 +40,9 @@ class DaysSinceWidgetTest {
     @Test
     fun buildRemoteViews_missingPrefs_doesNotCrash_rendersNumericText() {
         val context = RuntimeEnvironment.getApplication()
+        Prefs.get(context).edit().clear().commit()
 
-        val prefs = Prefs.get(context)
-        prefs.edit().clear().commit()
-
-        val provider = DaysSinceWidgetProvider()
-        val text = renderText(invokeBuildRemoteViews(provider, context), context)
+        val text = renderDayText(context)
 
         assertTrue(text.isNotBlank())
         assertTrue(text.all { ch -> ch.isDigit() })
@@ -69,16 +51,13 @@ class DaysSinceWidgetTest {
     @Test
     fun buildRemoteViews_invalidDateFallsBack_rendersNumericText() {
         val context = RuntimeEnvironment.getApplication()
-
-        val prefs = Prefs.get(context)
-        prefs.edit().clear().commit()
-        prefs.edit()
+        Prefs.get(context).edit().clear().commit()
+        Prefs.get(context).edit()
             .putString("selected_date", "not-a-date")
             .putString("selected_time", "00:00")
             .commit()
 
-        val provider = DaysSinceWidgetProvider()
-        val text = renderText(invokeBuildRemoteViews(provider, context), context)
+        val text = renderDayText(context)
 
         assertTrue(text.isNotBlank())
         assertTrue(text.all { ch -> ch.isDigit() })
@@ -87,16 +66,13 @@ class DaysSinceWidgetTest {
     @Test
     fun buildRemoteViews_invalidTimeFallsBack_rendersNumericText() {
         val context = RuntimeEnvironment.getApplication()
-
-        val prefs = Prefs.get(context)
-        prefs.edit().clear().commit()
-        prefs.edit()
+        Prefs.get(context).edit().clear().commit()
+        Prefs.get(context).edit()
             .putString("selected_date", "2026-01-01")
             .putString("selected_time", "not-a-time")
             .commit()
 
-        val provider = DaysSinceWidgetProvider()
-        val text = renderText(invokeBuildRemoteViews(provider, context), context)
+        val text = renderDayText(context)
 
         assertTrue(text.isNotBlank())
         assertTrue(text.all { ch -> ch.isDigit() })
