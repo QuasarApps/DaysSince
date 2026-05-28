@@ -8,15 +8,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -70,17 +67,14 @@ fun HomeScreen(
         },
         floatingActionButton = {
             if (milestones.isNotEmpty()) {
+                // FAB position respects the Scaffold's contentWindowInsets (set to
+                // safeDrawing above), so it sits inside the right software nav bar in
+                // landscape and above the bottom nav bar in portrait without any extra
+                // modifier on the FAB itself.
                 ExtendedFloatingActionButton(
                     onClick = onAdd,
                     icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
                     text = { Text("New") },
-                    // In landscape, the 3-button nav bar sits on the right edge; shift the
-                    // FAB inside it so it doesn't slide under the system buttons.
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.End + WindowInsetsSides.Bottom,
-                        ),
-                    ),
                 )
             }
         },
