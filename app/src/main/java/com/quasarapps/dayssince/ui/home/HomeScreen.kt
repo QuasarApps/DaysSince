@@ -7,15 +7,19 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -23,12 +27,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +46,8 @@ import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.LegibilityScrim
 import com.quasarapps.dayssince.ui.theme.accentBrush
 import com.quasarapps.dayssince.util.EnglishDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,10 +58,14 @@ fun HomeScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        // Pad away from status bar (top), nav bar (bottom), and landscape side nav bar.
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
-            LargeTopAppBar(
+            // Small top bar keeps the title close to the top — much better in landscape than
+            // the large variant, which leaves a big empty band above the cards.
+            TopAppBar(
                 title = { Text("Days Since", fontWeight = FontWeight.Bold) },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             )
         },
         floatingActionButton = {
@@ -63,6 +74,13 @@ fun HomeScreen(
                     onClick = onAdd,
                     icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
                     text = { Text("New") },
+                    // In landscape, the 3-button nav bar sits on the right edge; shift the
+                    // FAB inside it so it doesn't slide under the system buttons.
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.End + WindowInsetsSides.Bottom,
+                        ),
+                    ),
                 )
             }
         },
@@ -84,12 +102,8 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(14.dp),
                 verticalItemSpacing = 14.dp,
             ) {
-                itemsIndexed(milestones, key = { _, m -> m.id }) { index, milestone ->
-                    MilestoneCard(
-                        milestone = milestone,
-                        tall = index % 3 == 0,
-                        onClick = { onOpen(milestone.id) },
-                    )
+                items(milestones, key = { it.id }) { milestone ->
+                    MilestoneCard(milestone = milestone, onClick = { onOpen(milestone.id) })
                 }
             }
         }
@@ -97,32 +111,28 @@ fun HomeScreen(
 }
 
 @Composable
-private fun MilestoneCard(
-    milestone: Milestone,
-    tall: Boolean,
-    onClick: () -> Unit,
-) {
+private fun MilestoneCard(milestone: Milestone, onClick: () -> Unit) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
     val brush = accentBrush(milestone.accent)
+    val timeText = remember(milestone.time) {
+        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+    }
 
+    // No fixed height: each card grows to fit its title + wrapped date so columns balance
+    // naturally based on actual content (no more left/right size mismatch).
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = if (tall) 184.dp else 150.dp)
             .clip(MaterialTheme.shapes.large)
             .background(brush)
             .clickable(onClick = onClick),
     ) {
-        Box(
-            Modifier
-                .matchParentSize()
-                .background(LegibilityScrim),
-        )
+        Box(Modifier.matchParentSize().background(LegibilityScrim))
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(18.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Text(
                 text = dhm.days.toString(),
@@ -131,29 +141,31 @@ private fun MilestoneCard(
                 color = Color.White,
                 maxLines = 1,
             )
-            Column {
-                Text(
-                    text = "DAYS",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.White.copy(alpha = 0.85f),
-                )
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = milestone.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    text = "since ${EnglishDateFormat.formatOrdinalDate(milestone.date)}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.82f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+            Text(
+                text = "DAYS",
+                style = MaterialTheme.typography.labelMedium,
+                color = Color.White.copy(alpha = 0.85f),
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                text = milestone.title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            // Allow the date to wrap onto multiple lines instead of ellipsizing.
+            Text(
+                text = "since ${EnglishDateFormat.formatOrdinalDate(milestone.date)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.85f),
+            )
+            Text(
+                text = "at $timeText",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.85f),
+            )
         }
     }
 }

@@ -15,11 +15,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="365"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
@@ -38,11 +42,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView
@@ -61,11 +69,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
             android:textStyle="bold" />
 
         <TextView

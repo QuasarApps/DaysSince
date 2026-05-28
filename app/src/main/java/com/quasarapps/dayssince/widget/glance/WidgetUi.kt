@@ -33,49 +33,65 @@ import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.theme.accentOrDefault
 import com.quasarapps.dayssince.util.EnglishDateFormat
 
-/** Background + foreground color providers for a widget, dynamic-color aware. */
 @Composable
-private fun widgetColors(milestone: Milestone?): Pair<ColorProvider, ColorProvider> =
-    if (milestone == null || milestone.accent == 0) {
-        GlanceTheme.colors.primaryContainer to GlanceTheme.colors.onPrimaryContainer
+private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorProvider {
+    return if (transparent) {
+        // On a transparent background, use the milestone accent (or the theme primary for the
+        // dynamic accent) so the number stays legible over the user's wallpaper.
+        if (milestone == null || milestone.accent == 0) GlanceTheme.colors.primary
+        else ColorProvider(accentOrDefault(milestone.accent).end)
     } else {
-        val accent = accentOrDefault(milestone.accent)
-        ColorProvider(accent.start) to ColorProvider(Color.White)
+        if (milestone == null || milestone.accent == 0) GlanceTheme.colors.onPrimaryContainer
+        else ColorProvider(Color.White)
     }
+}
+
+@Composable
+private fun backgroundColor(milestone: Milestone?): ColorProvider {
+    return if (milestone == null || milestone.accent == 0) GlanceTheme.colors.primaryContainer
+    else ColorProvider(accentOrDefault(milestone.accent).start)
+}
 
 @Composable
 private fun WidgetScaffold(
     milestone: Milestone?,
+    transparent: Boolean,
     description: String,
     content: @Composable (fg: ColorProvider) -> Unit,
 ) {
     GlanceTheme {
         val context = LocalContext.current
-        val (bg, fg) = widgetColors(milestone)
+        val fg = foregroundColor(milestone, transparent)
         val launch = Intent(context, MainActivity::class.java).apply {
             if (milestone != null) putExtra(MainActivity.EXTRA_MILESTONE_ID, milestone.id)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
-        Box(
-            modifier = GlanceModifier
-                .fillMaxSize()
-                .appWidgetBackground()
-                .background(bg)
+
+        val baseModifier = GlanceModifier
+            .fillMaxSize()
+            .appWidgetBackground()
+            .clickable(actionStartActivity(launch))
+            .semantics { contentDescription = description }
+
+        val modifier = if (transparent) {
+            baseModifier.padding(4.dp)
+        } else {
+            baseModifier
+                .background(backgroundColor(milestone))
                 .cornerRadius(20.dp)
                 .padding(8.dp)
-                .clickable(actionStartActivity(launch))
-                .semantics { contentDescription = description },
-            contentAlignment = Alignment.Center,
-        ) {
+        }
+
+        Box(modifier = modifier, contentAlignment = Alignment.Center) {
             content(fg)
         }
     }
 }
 
 @Composable
-internal fun DaysWidgetContent(milestone: Milestone?) {
+internal fun DaysWidgetContent(milestone: Milestone?, transparent: Boolean = false) {
     if (milestone == null) {
-        WidgetScaffold(null, "Tap to choose a milestone") { fg ->
+        WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
             Text("Set up", style = TextStyle(color = fg, fontSize = 13.sp))
         }
         return
@@ -83,11 +99,12 @@ internal fun DaysWidgetContent(milestone: Milestone?) {
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time)
     val description = "${dhm.days} days since ${milestone.title}, " +
         EnglishDateFormat.formatOrdinalDate(milestone.date)
-    WidgetScaffold(milestone, description) { fg ->
+    WidgetScaffold(milestone, transparent, description) { fg ->
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = dhm.days.toString(),
                 style = TextStyle(color = fg, fontSize = 30.sp, fontWeight = FontWeight.Bold),
+                maxLines = 1,
             )
             Text("DAYS", style = TextStyle(color = fg, fontSize = 11.sp))
         }
@@ -95,16 +112,16 @@ internal fun DaysWidgetContent(milestone: Milestone?) {
 }
 
 @Composable
-internal fun DaysHoursMinutesWidgetContent(milestone: Milestone?) {
+internal fun DaysHoursMinutesWidgetContent(milestone: Milestone?, transparent: Boolean = false) {
     if (milestone == null) {
-        WidgetScaffold(null, "Tap to choose a milestone") { fg ->
+        WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
             Text("Tap to set up", style = TextStyle(color = fg, fontSize = 14.sp))
         }
         return
     }
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time)
     val description = "${milestone.title}: ${dhm.days} days, ${dhm.hours} hours, ${dhm.minutes} minutes"
-    WidgetScaffold(milestone, description) { fg ->
+    WidgetScaffold(milestone, transparent, description) { fg ->
         Row(verticalAlignment = Alignment.CenterVertically) {
             Stat(dhm.days, "DAYS", fg)
             Spacer(GlanceModifier.width(12.dp))
