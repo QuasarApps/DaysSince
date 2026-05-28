@@ -12,8 +12,11 @@ import com.quasarapps.dayssince.data.MilestonesRepository
 class DaysHoursMinutesWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)
-        val milestone = MilestonesRepository(context).milestoneForWidget(appWidgetId)
-        provideContent { DaysHoursMinutesWidgetContent(milestone) }
+        val repo = MilestonesRepository(context)
+        val binding = repo.bindingForWidget(appWidgetId)
+        val milestone = binding?.let { repo.getById(it.milestoneId) }
+        val transparent = binding?.transparent ?: false
+        provideContent { DaysHoursMinutesWidgetContent(milestone, transparent) }
     }
 }
 

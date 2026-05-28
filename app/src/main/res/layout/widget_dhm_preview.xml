@@ -15,11 +15,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="365"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -27,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="DAYS"
             android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,11 +42,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -50,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="HRS"
             android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,11 +69,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="32sp"
+            android:autoSizeMinTextSize="18sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
             android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -73,6 +85,6 @@
             android:layout_height="wrap_content"
             android:text="MIN"
             android:textColor="@android:color/white"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

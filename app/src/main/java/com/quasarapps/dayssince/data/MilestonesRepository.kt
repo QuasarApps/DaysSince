@@ -15,11 +15,18 @@ import org.json.JSONObject
 private val Context.milestonesDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "dayssince_store")
 
+/** Per-appWidgetId configuration: which milestone, and whether to render transparently. */
+data class WidgetBinding(
+    val milestoneId: String,
+    val transparent: Boolean = false,
+)
+
 /**
  * Single source of truth for milestones and widget bindings, backed by Preferences DataStore.
  *
- * Milestones are stored as a JSON array string (see [MilestoneJson] — no extra dependency or
- * annotation processor); widget bindings as a JSON object string mapping appWidgetId -> milestoneId.
+ * Milestones are stored as a JSON array string (see [MilestoneJson]); widget bindings as a
+ * JSON object string mapping appWidgetId -> {id, transparent}. Old data that stored only the
+ * milestone id as a bare string is decoded back into a [WidgetBinding] with transparent=false.
  */
 class MilestonesRepository(context: Context) {
 
@@ -47,17 +54,17 @@ class MilestonesRepository(context: Context) {
         dataStore.edit { prefs ->
             val remaining = MilestoneJson.decode(prefs[KEY_MILESTONES]).filterNot { it.id == id }
             prefs[KEY_MILESTONES] = MilestoneJson.encode(remaining)
-            val bindings = decodeBindings(prefs[KEY_BINDINGS]).filterValues { it != id }
+            val bindings = decodeBindings(prefs[KEY_BINDINGS]).filterValues { it.milestoneId != id }
             prefs[KEY_BINDINGS] = encodeBindings(bindings)
         }
     }
 
-    // ---- widget bindings (appWidgetId -> milestoneId) ----
+    // ---- widget bindings (appWidgetId -> WidgetBinding) ----
 
-    suspend fun bindWidget(appWidgetId: Int, milestoneId: String) {
+    suspend fun bindWidget(appWidgetId: Int, milestoneId: String, transparent: Boolean = false) {
         dataStore.edit { prefs ->
             val bindings = decodeBindings(prefs[KEY_BINDINGS]).toMutableMap()
-            bindings[appWidgetId] = milestoneId
+            bindings[appWidgetId] = WidgetBinding(milestoneId, transparent)
             prefs[KEY_BINDINGS] = encodeBindings(bindings)
         }
     }
@@ -70,10 +77,16 @@ class MilestonesRepository(context: Context) {
         }
     }
 
-    suspend fun milestoneForWidget(appWidgetId: Int): Milestone? {
+    suspend fun bindingForWidget(appWidgetId: Int): WidgetBinding? {
         val prefs = dataStore.data.first()
-        val id = decodeBindings(prefs[KEY_BINDINGS])[appWidgetId] ?: return null
-        return MilestoneJson.decode(prefs[KEY_MILESTONES]).firstOrNull { it.id == id }
+        return decodeBindings(prefs[KEY_BINDINGS])[appWidgetId]
+    }
+
+    suspend fun milestoneForWidget(appWidgetId: Int): Milestone? {
+        val binding = bindingForWidget(appWidgetId) ?: return null
+        val prefs = dataStore.data.first()
+        return MilestoneJson.decode(prefs[KEY_MILESTONES])
+            .firstOrNull { it.id == binding.milestoneId }
     }
 
     /**
@@ -108,13 +121,26 @@ class MilestonesRepository(context: Context) {
         private val KEY_BINDINGS = stringPreferencesKey("widget_bindings_json")
         private val KEY_MIGRATED = stringPreferencesKey("legacy_migrated")
 
-        private fun encodeBindings(map: Map<Int, String>): String {
+        internal fun encodeBindings(map: Map<Int, WidgetBinding>): String {
             val o = JSONObject()
-            map.forEach { (k, v) -> o.put(k.toString(), v) }
+            map.forEach { (k, v) ->
+                o.put(
+                    k.toString(),
+                    JSONObject().apply {
+                        put("id", v.milestoneId)
+                        put("transparent", v.transparent)
+                    },
+                )
+            }
             return o.toString()
         }
 
-        private fun decodeBindings(json: String?): Map<Int, String> {
+        /**
+         * Decodes the bindings JSON, accepting both the current `{id, transparent}` shape and
+         * the legacy plain-string shape (just the milestone id), upgrading legacy values to a
+         * [WidgetBinding] with transparent=false.
+         */
+        internal fun decodeBindings(json: String?): Map<Int, WidgetBinding> {
             if (json.isNullOrBlank()) return emptyMap()
             return runCatching {
                 val o = JSONObject(json)
@@ -122,9 +148,19 @@ class MilestonesRepository(context: Context) {
                     val keys = o.keys()
                     while (keys.hasNext()) {
                         val key = keys.next()
-                        val id = o.optString(key)
-                        val widgetId = key.toIntOrNull()
-                        if (widgetId != null && id.isNotBlank()) put(widgetId, id)
+                        val widgetId = key.toIntOrNull() ?: continue
+                        val value = o.opt(key)
+                        val binding: WidgetBinding? = when (value) {
+                            is String -> if (value.isNotBlank()) WidgetBinding(value, false) else null
+                            is JSONObject -> {
+                                val id = value.optString("id")
+                                if (id.isNotBlank()) {
+                                    WidgetBinding(id, value.optBoolean("transparent", false))
+                                } else null
+                            }
+                            else -> null
+                        }
+                        if (binding != null) put(widgetId, binding)
                     }
                 }
             }.getOrDefault(emptyMap())
