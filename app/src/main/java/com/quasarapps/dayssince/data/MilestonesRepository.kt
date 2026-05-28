@@ -10,10 +10,7 @@ import com.quasarapps.dayssince.SelectedStartDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import org.json.JSONArray
 import org.json.JSONObject
-import java.time.LocalDate
-import java.time.LocalTime
 
 private val Context.milestonesDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "dayssince_store")
@@ -21,8 +18,8 @@ private val Context.milestonesDataStore: DataStore<Preferences> by
 /**
  * Single source of truth for milestones and widget bindings, backed by Preferences DataStore.
  *
- * Milestones are stored as a JSON array string (org.json — no extra dependency / annotation
- * processor); widget bindings as a JSON object string mapping appWidgetId -> milestoneId.
+ * Milestones are stored as a JSON array string (see [MilestoneJson] — no extra dependency or
+ * annotation processor); widget bindings as a JSON object string mapping appWidgetId -> milestoneId.
  */
 class MilestonesRepository(context: Context) {
 
@@ -30,7 +27,7 @@ class MilestonesRepository(context: Context) {
     private val dataStore get() = appContext.milestonesDataStore
 
     val milestones: Flow<List<Milestone>> = dataStore.data.map { prefs ->
-        decodeList(prefs[KEY_MILESTONES]).sortedByDescending { it.createdAt }
+        MilestoneJson.decode(prefs[KEY_MILESTONES]).sortedByDescending { it.createdAt }
     }
 
     suspend fun snapshot(): List<Milestone> = milestones.first()
@@ -39,17 +36,17 @@ class MilestonesRepository(context: Context) {
 
     suspend fun upsert(milestone: Milestone) {
         dataStore.edit { prefs ->
-            val current = decodeList(prefs[KEY_MILESTONES]).toMutableList()
+            val current = MilestoneJson.decode(prefs[KEY_MILESTONES]).toMutableList()
             val idx = current.indexOfFirst { it.id == milestone.id }
             if (idx >= 0) current[idx] = milestone else current.add(milestone)
-            prefs[KEY_MILESTONES] = encodeList(current)
+            prefs[KEY_MILESTONES] = MilestoneJson.encode(current)
         }
     }
 
     suspend fun delete(id: String) {
         dataStore.edit { prefs ->
-            val remaining = decodeList(prefs[KEY_MILESTONES]).filterNot { it.id == id }
-            prefs[KEY_MILESTONES] = encodeList(remaining)
+            val remaining = MilestoneJson.decode(prefs[KEY_MILESTONES]).filterNot { it.id == id }
+            prefs[KEY_MILESTONES] = MilestoneJson.encode(remaining)
             val bindings = decodeBindings(prefs[KEY_BINDINGS]).filterValues { it != id }
             prefs[KEY_BINDINGS] = encodeBindings(bindings)
         }
@@ -76,17 +73,22 @@ class MilestonesRepository(context: Context) {
     suspend fun milestoneForWidget(appWidgetId: Int): Milestone? {
         val prefs = dataStore.data.first()
         val id = decodeBindings(prefs[KEY_BINDINGS])[appWidgetId] ?: return null
-        return decodeList(prefs[KEY_MILESTONES]).firstOrNull { it.id == id }
+        return MilestoneJson.decode(prefs[KEY_MILESTONES]).firstOrNull { it.id == id }
     }
 
     /**
-     * One-time migration: if there are no milestones yet but the old single-counter prefs exist,
-     * seed a first milestone from them so upgrading users keep their counter.
+     * One-time migration of the old single-counter prefs into a first milestone, so upgrading
+     * users keep their counter.
+     *
+     * Only seeds when those prefs were *actually saved* ([SelectedStartDateTime.hasStored]) —
+     * a brand-new install has no legacy data and should land on the empty state instead of a
+     * phantom "0 days" milestone.
      */
     suspend fun migrateLegacyIfNeeded() {
         dataStore.edit { prefs ->
             if (prefs[KEY_MIGRATED] == "1") return@edit
-            if (decodeList(prefs[KEY_MILESTONES]).isEmpty()) {
+            val noMilestonesYet = MilestoneJson.decode(prefs[KEY_MILESTONES]).isEmpty()
+            if (noMilestonesYet && SelectedStartDateTime.hasStored(appContext)) {
                 val legacy = SelectedStartDateTime.load(appContext)
                 val seeded = Milestone(
                     id = Milestone.newId(),
@@ -95,7 +97,7 @@ class MilestonesRepository(context: Context) {
                     time = legacy.time,
                     accent = 0,
                 )
-                prefs[KEY_MILESTONES] = encodeList(listOf(seeded))
+                prefs[KEY_MILESTONES] = MilestoneJson.encode(listOf(seeded))
             }
             prefs[KEY_MIGRATED] = "1"
         }
@@ -105,45 +107,6 @@ class MilestonesRepository(context: Context) {
         private val KEY_MILESTONES = stringPreferencesKey("milestones_json")
         private val KEY_BINDINGS = stringPreferencesKey("widget_bindings_json")
         private val KEY_MIGRATED = stringPreferencesKey("legacy_migrated")
-
-        private fun encodeList(list: List<Milestone>): String {
-            val arr = JSONArray()
-            list.forEach { m ->
-                arr.put(
-                    JSONObject().apply {
-                        put("id", m.id)
-                        put("title", m.title)
-                        put("date", m.date.toString())
-                        put("time", m.time.toString())
-                        put("accent", m.accent)
-                        put("createdAt", m.createdAt)
-                    }
-                )
-            }
-            return arr.toString()
-        }
-
-        private fun decodeList(json: String?): List<Milestone> {
-            if (json.isNullOrBlank()) return emptyList()
-            return runCatching {
-                val arr = JSONArray(json)
-                (0 until arr.length()).mapNotNull { i ->
-                    val o = arr.optJSONObject(i) ?: return@mapNotNull null
-                    val date = runCatching { LocalDate.parse(o.optString("date")) }
-                        .getOrNull() ?: LocalDate.now()
-                    val time = runCatching { LocalTime.parse(o.optString("time")) }
-                        .getOrNull() ?: LocalTime.MIDNIGHT
-                    Milestone(
-                        id = o.optString("id").ifBlank { Milestone.newId() },
-                        title = o.optString("title"),
-                        date = date,
-                        time = time,
-                        accent = o.optInt("accent", 0),
-                        createdAt = o.optLong("createdAt", System.currentTimeMillis()),
-                    )
-                }
-            }.getOrDefault(emptyList())
-        }
 
         private fun encodeBindings(map: Map<Int, String>): String {
             val o = JSONObject()

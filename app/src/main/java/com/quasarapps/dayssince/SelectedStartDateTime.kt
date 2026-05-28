@@ -43,6 +43,12 @@ object SelectedStartDateTime {
         return Value(date = date, time = time)
     }
 
+    /** True only if the legacy single-counter prefs were actually saved. Gates one-time migration. */
+    fun hasStored(context: Context): Boolean {
+        val prefs = Prefs.get(context)
+        return prefs.contains(PREF_SELECTED_DATE) || prefs.contains(PREF_SELECTED_TIME)
+    }
+
     fun persistDate(context: Context, date: LocalDate) {
         Prefs.get(context).edit().putString(PREF_SELECTED_DATE, date.toString()).apply()
     }
