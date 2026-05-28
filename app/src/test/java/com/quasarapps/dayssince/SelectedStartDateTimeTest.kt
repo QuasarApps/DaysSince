@@ -1,6 +1,8 @@
 package com.quasarapps.dayssince
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -63,5 +65,33 @@ class SelectedStartDateTimeTest {
         val picked = SelectedStartDateTime.load(context)
         assertEquals(date, picked.date)
         assertEquals(time, picked.time)
+    }
+
+    @Test
+    fun hasStored_isFalse_whenNoLegacyPrefsExist() {
+        val context = RuntimeEnvironment.getApplication()
+        Prefs.get(context).edit().clear().commit()
+
+        assertFalse(SelectedStartDateTime.hasStored(context))
+    }
+
+    @Test
+    fun hasStored_isTrue_afterPersistDate() {
+        val context = RuntimeEnvironment.getApplication()
+        Prefs.get(context).edit().clear().commit()
+
+        SelectedStartDateTime.persistDate(context, java.time.LocalDate.of(2026, 1, 1))
+
+        assertTrue(SelectedStartDateTime.hasStored(context))
+    }
+
+    @Test
+    fun hasStored_isTrue_afterPersistTime() {
+        val context = RuntimeEnvironment.getApplication()
+        Prefs.get(context).edit().clear().commit()
+
+        SelectedStartDateTime.persistTime(context, java.time.LocalTime.of(9, 30))
+
+        assertTrue(SelectedStartDateTime.hasStored(context))
     }
 }
