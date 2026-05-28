@@ -107,9 +107,9 @@ internal fun DaysHoursMinutesWidgetContent(milestone: Milestone?) {
     WidgetScaffold(milestone, description) { fg ->
         Row(verticalAlignment = Alignment.CenterVertically) {
             Stat(dhm.days, "DAYS", fg)
-            Spacer(GlanceModifier.width(12.dp))
+            Spacer(GlanceModifier.width(16.dp))
             Stat(dhm.hours, "HRS", fg)
-            Spacer(GlanceModifier.width(12.dp))
+            Spacer(GlanceModifier.width(16.dp))
             Stat(dhm.minutes, "MIN", fg)
         }
     }
@@ -120,9 +120,8 @@ private fun Stat(value: Long, label: String, fg: ColorProvider) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value.toString(),
-            style = TextStyle(color = fg, fontSize = 32.sp, fontWeight = FontWeight.Bold),
-            maxLines = 1,
+            style = TextStyle(color = fg, fontSize = 22.sp, fontWeight = FontWeight.Bold),
         )
-        Text(label, style = TextStyle(color = fg, fontSize = 12.sp))
+        Text(label, style = TextStyle(color = fg, fontSize = 10.sp))
     }
 }

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="365"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="DAYS"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="HRS"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -73,6 +73,6 @@
             android:layout_height="wrap_content"
             android:text="MIN"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>
