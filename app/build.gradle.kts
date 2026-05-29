@@ -24,9 +24,25 @@ val signingStorePassword = signingValue("storePassword", "DAYSSINCE_KEYSTORE_PAS
 val signingKeyAlias = signingValue("keyAlias", "DAYSSINCE_KEY_ALIAS")
 val signingKeyPassword = signingValue("keyPassword", "DAYSSINCE_KEY_PASSWORD")
 
-val hasReleaseSigning = listOf(
+val signingValues = listOf(
     signingStoreFile, signingStorePassword, signingKeyAlias, signingKeyPassword,
-).all { !it.isNullOrBlank() }
+)
+val hasReleaseSigning = signingValues.all { !it.isNullOrBlank() }
+val hasPartialReleaseSigning =
+    !hasReleaseSigning && signingValues.any { !it.isNullOrBlank() }
+
+if (hasPartialReleaseSigning) {
+    // Surface this loudly — a partial config is almost always a misconfiguration
+    // (typo in a property name, missing env var on CI, etc.) and the silent
+    // fallback to an unsigned APK only gets caught at upload time.
+    logger.warn(
+        "DaysSince: partial release signing config detected. " +
+            "Some of [storeFile, storePassword, keyAlias, keyPassword] are set " +
+            "but not all — :app:assembleRelease will produce an UNSIGNED APK. " +
+            "Check keystore.properties or the DAYSSINCE_KEYSTORE_* / DAYSSINCE_KEY_* " +
+            "environment variables.",
+    )
+}
 
 android {
     namespace = "com.quasarapps.dayssince"
