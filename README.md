@@ -1,116 +1,114 @@
-# DaysSince
+# Days Since
 
-DaysSince is a small Android app + home screen widget that displays the **number of whole days since
-a user-picked date and time**.
+A small Android app for tracking the days, hours, and minutes since the
+milestones that matter to you — sober time, last gym session, an anniversary,
+whatever. Each milestone gets a bold gradient card in the app and an optional
+home-screen widget.
 
-- The **app** lets the user pick a date/time using the platform’s native `DatePickerDialog`
-  and `TimePickerDialog`.
-- The **widget** shows the same “days since” value on the launcher, independent of any activity.
-
-> “Whole days” means the value increments every 24 hours since the picked timestamp. For example,
-> 23h 59m since the picked date/time still shows **0**.
+- Minimum Android version: **8.0 (API 26)**
+- Targets Android: **15 (API 35)**
+- Fully offline. No accounts, no network calls, no permissions.
 
 ---
 
 ## Features
 
-- **Compose UI** (Material 3) for the main screen.
-- **Native date/time pickers** using Android dialogs.
-- **Home screen widget** (AppWidget) that:
-    - displays the same computed value as the app
-    - updates immediately when the user updates the picked date/time
-    - updates periodically in the background (roughly hourly)
-    - refreshes on device time/timezone changes
-    - launches the app when tapped
-- **Persistence** across app restarts via `SharedPreferences` (`MODE_PRIVATE`).
+- **Multiple milestones.** Add as many as you like; each gets its own colour
+  accent (or "Dynamic" to inherit your Material You scheme).
+- **Detail screen** with a full-bleed gradient hero, count-up animation, and
+  a days / hours / minutes breakdown.
+- **Two home-screen widgets:**
+    - *Days Since* — 1×1 widget showing whole days.
+    - *Days · Hours · Minutes* — wide widget with the full breakdown.
+- **Per-widget configuration** — when you place a widget, a picker lets you
+  bind it to a specific milestone and optionally render it with a transparent
+  background (just the number, floating on your wallpaper).
+- **Material You** dynamic colour on Android 12+, with a curated brand
+  fallback on older devices. Follows the system light/dark setting.
+- **Accessibility:** TalkBack descriptions on widget content, respects the
+  system reduce-motion setting, tabular figures so digits don't jump.
+- **No network, no permissions.** Data is stored in app-private DataStore
+  preferences and included in Auto Backup so it survives a reinstall.
 
 ---
 
-## How the “days since” number is calculated
+## How the elapsed time is calculated
 
-The computation lives in:
+The math lives in
+[`app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`](app/src/main/java/com/quasarapps/dayssince/DaysSince.kt).
 
-- `app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`
+- Computes `ZonedDateTime.now() - picked` in the device time zone, so DST
+  transitions (spring-forward / fall-back) are accounted for rather than
+  always assuming a 24-hour day.
+- "Whole days" means the value increments every 24 elapsed hours since the
+  picked timestamp. 23h 59m still shows as **0 days**.
+- If the picked timestamp is in the future the value clamps to `0d 0h 0m`
+  (and the date picker enforces `max = today` to make this hard to trigger).
 
-Contract:
-
-- Input: `pickedDate: LocalDate`, `pickedTime: LocalTime`
-- Output: `Long` (whole days)
-- Behavior:
-    - Uses the device time zone (or a provided zone in tests)
-    - `days = floor( (now - pickedDateTime) / 24h )`
-    - If the picked timestamp is in the future, the displayed value clamps to `0`
-
----
-
-## Persistence (storage)
-
-The selected date/time are stored as ISO strings in app-private prefs:
-
-- File: `SharedPreferences("dayssince_prefs")`
-- Keys:
-    - `selected_date` (example: `2026-01-01`)
-    - `selected_time` (example: `00:00`)
-
-Storage wrapper:
-
-- `app/src/main/java/com/quasarapps/dayssince/Prefs.kt`
-
-This is “minimal and secure” in the sense that it is:
-
-- **app-private** (`MODE_PRIVATE` in the app sandbox)
-- simple and reliable
-
-If you need encryption at rest later, you can swap this to AndroidX Security Crypto.
+The behaviour is unit-tested in `DaysSinceTest`, including UTC, non-UTC
+zones (Pacific/Kiritimati), and both DST transition directions in
+America/New_York.
 
 ---
 
-## Widget behavior
+## Architecture
 
-### What it displays
+```
+ui/                         Compose screens + theme
+  home/HomeScreen           staggered grid of milestone cards
+  detail/DetailScreen       gradient hero + d/h/m breakdown
+  edit/EditMilestoneScreen  Material 3 date + time pickers, accent picker
+  components/               CountUpNumber, rememberElapsedDhm tick
+  theme/                    Material You + brand fallback + accent gradients
 
-The widget displays the same computed whole-days-since value as the app.
+data/
+  Milestone                 id, title, date, time, accent, createdAt
+  MilestoneJson             JSON (de)serialisation for the milestone list
+  MilestonesRepository      DataStore-backed CRUD + widget bindings
 
-### When it updates
+widget/
+  WidgetConfigActivity      milestone picker shown when a widget is placed
+  glance/DaysWidget         1×1 Glance widget
+  glance/DaysHoursMinutes…  wide Glance widget
+  glance/WidgetUi           shared Glance scaffold, colours, and click target
+  MilestoneWidgets          updateAll() helper called after milestone changes
 
-The widget updates from multiple event sources (best effort, per Android power management):
+util/EnglishDateFormat      "1st of January 2026" formatting
+```
 
-1. **Immediately** when the user changes date/time in the app.
-    - The app persists to prefs then broadcasts an update request.
-2. **On system time changes**
-    - Time set / timezone changed broadcasts trigger a refresh.
-3. **Background periodic refresh**
-    - An **inexact repeating** alarm is scheduled to refresh roughly once per hour.
+Persistence is a single [Preferences DataStore](app/src/main/java/com/quasarapps/dayssince/data/MilestonesRepository.kt)
+named `dayssince_store`, with two keys:
 
-Implementation:
+- `milestones_json` — JSON array of `Milestone` objects.
+- `widget_bindings_json` — JSON map of `appWidgetId → {milestoneId, transparent}`.
 
-- Provider: `app/src/main/java/com/quasarapps/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
-- Widget info: `app/src/main/res/xml/day_of_month_widget_info.xml`
-- Layout: `app/src/main/res/layout/widget_day_of_month.xml`
-
-### Click behavior
-
-Tapping the widget launches `MainActivity`.
+There is a one-time migration that folds the old single-counter
+SharedPreferences (`dayssince_prefs`) into a first `Milestone` row, so users
+of an earlier internal build keep their counter on upgrade. It runs the
+first time a `MilestonesViewModel` is created.
 
 ---
 
-## Project structure
+## Widgets
 
-Key files:
+Both widgets are written with [Jetpack Glance](https://developer.android.com/develop/ui/compose/glance).
+They share:
 
-- App entry:
-  - `app/src/main/java/com/quasarapps/dayssince/MainActivity.kt`
+- The milestone's accent gradient as the widget background, or a fully
+  transparent background if the user opts in during configuration.
+- A `previewLayout` so the widget picker shows a real-looking preview
+  instead of a grey square on Android 12+.
+- A `contentDescription` so TalkBack reads e.g.
+  *"365 days since Sober, 1st of January 2026"*.
+- A tap target that opens `MainActivity` deep-linked to the bound
+  milestone's detail screen.
 
-- Compose UI:
-  - `app/src/main/java/com/quasarapps/dayssince/ui/DaysSinceApp.kt`
-  - `app/src/main/java/com/quasarapps/dayssince/ui/DaysSinceWidget.kt`
-  - `app/src/main/java/com/quasarapps/dayssince/ui/NativePickers.kt`
-
-- Core logic:
-  - `app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`
-
-- Widget:
-  - `app/src/main/java/com/quasarapps/dayssince/widget/DayOfMonthAppWidgetProvider.kt`
+Update cadence is driven by `appwidget-provider` `updatePeriodMillis`
+(6 h for the days-only widget, 30 min for the d/h/m widget — the platform
+minimum) plus an explicit `updateAll()` after every milestone or binding
+change. The minutes value on the wide widget will lag real time by up to
+30 minutes between system-driven updates; the app itself ticks once per
+minute aligned to the minute boundary while it's in the foreground.
 
 ---
 
@@ -118,84 +116,57 @@ Key files:
 
 ### Android Studio
 
-1. Open the project folder (`DaysSince`) in Android Studio.
+1. Open the project root in Android Studio Iguana or newer.
 2. Allow Gradle sync.
 3. Run the `app` configuration on an emulator or device.
 
-### Command line (Windows / PowerShell)
-
-From repo root:
+### Command line
 
 ```powershell
-cd C:\Users\quasa\StudioProjects\DaysSince
 .\gradlew.bat :app:assembleDebug
-```
-
-Install on a connected device/emulator:
-
-```powershell
 .\gradlew.bat :app:installDebug
 ```
 
----
-
-## Add the widget (launcher)
-
-1. Install and run the app once (helps some launchers discover widgets).
-2. Long-press the home screen.
-3. Choose **Widgets**.
-4. Find the **DaysSince** widget and add it.
-
-The widget is configured to request a **1x1** footprint via `minWidth`/`minHeight`.
-Actual sizing can vary slightly by launcher.
-
----
-
-## Testing
-
-### Unit tests (JVM)
-
-This project uses JUnit 4 and Robolectric for JVM tests.
-
-Run:
+### Tests
 
 ```powershell
-cd C:\Users\quasa\StudioProjects\DaysSince
 .\gradlew.bat :app:testDebugUnitTest
 ```
 
-Notable tests:
+Notable test files:
 
-- `DaysSinceTest` covers date/time boundary cases (24h boundaries, leap day, etc.)
-- `PrefsTest` covers persistence basics (overwrite, clear/remove, unicode)
-- `DayOfMonthAppWidgetProviderTest` verifies widget RemoteViews render numeric output and handle
-  invalid/missing prefs
+- `DaysSinceTest` — date math, future-clamp, DST transitions.
+- `EnglishDateFormatTest` — ordinal-suffix edge cases (11/12/13, 21st, 31st).
+- `MilestoneJsonTest` — round-trip and defensive decoding of stored JSON.
+- `MilestonesRepositoryBindingsTest` — widget binding serialisation,
+  including the legacy bare-string format from before the transparent flag
+  was added.
+- `SelectedStartDateTimeTest` — legacy single-counter fallback handling.
+- `PrefsTest` — SharedPreferences round-trip.
 
-> Note: Robolectric has limitations around inflating `<appwidget-provider>` XML directly; widget
-> tests avoid those paths and instead validate `RemoteViews` generation/rendering.
-
----
-
-## Troubleshooting
-
-### The widget doesn’t update immediately
-
-- Some launchers cache widget views.
-- Try removing the widget and adding it again.
-- Ensure battery optimizations aren’t extremely restrictive.
-
-### Time changes don’t reflect instantly
-
-- The app UI updates while visible (it “ticks” periodically).
-- The widget listens to time/timezone change broadcasts, but delivery varies by Android version and
-  OEM. The hourly refresh also helps keep it up to date.
+CI assembles the debug variant and runs the JVM tests on every push and
+pull request — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ---
 
-## Notes / future improvements
+## Placing a widget
 
-- Add an options screen (choose 12/24 hour display, show hours/minutes since, etc.).
-- Use WorkManager instead of AlarmManager (simpler scheduling semantics, but its own constraints).
-- Add encrypted local storage for the picked date/time.
-- Add better widget theming (rounded corners, dynamic colors, etc.).
+1. Long-press an empty spot on your launcher.
+2. Choose **Widgets** and find **Days Since**.
+3. Drag the widget onto the home screen.
+4. A picker opens — choose which milestone the widget should track, and
+   optionally enable the transparent background.
+5. Tap the milestone to confirm.
 
+The same flow works for both widget sizes. Each placement can track a
+different milestone.
+
+---
+
+## Privacy
+
+Days Since stores all data locally in the app's private storage. It does
+not request any runtime permissions, makes no network requests, and
+includes no analytics or crash reporting. The stored milestones are
+included in Android Auto Backup so they survive an uninstall/reinstall
+on the same Google account.
