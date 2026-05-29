@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Days Since</string>
+    <!-- app_name is provided per-build-type from app/build.gradle.kts so the debug variant can
+         differentiate itself on the launcher. Don't redeclare it here. -->
 </resources>

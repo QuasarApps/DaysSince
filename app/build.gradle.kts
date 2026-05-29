@@ -54,6 +54,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Let a debug build coexist with an installed release build on the same device,
+            // and show up as "Days Since (debug)" on the launcher so it's obvious which is
+            // which during development.
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            resValue("string", "app_name", "Days Since (debug)")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -61,6 +69,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            resValue("string", "app_name", "Days Since")
             if (hasReleaseSigning) {
                 signingConfig = signingConfigs.getByName("release")
             }
