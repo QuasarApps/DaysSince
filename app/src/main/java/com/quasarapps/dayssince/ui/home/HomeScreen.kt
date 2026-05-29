@@ -5,18 +5,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
@@ -55,11 +60,11 @@ fun HomeScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
-        // Pad away from status bar (top), nav bar (bottom), and landscape side nav bar.
+        // Pad away from status bar (top), nav bar (bottom), and the landscape side nav bar.
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             // Small top bar keeps the title close to the top — much better in landscape than
-            // the large variant, which leaves a big empty band above the cards.
+            // the large variant which leaves a big empty band above the cards.
             TopAppBar(
                 title = { Text("Days Since", fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
@@ -67,14 +72,17 @@ fun HomeScreen(
         },
         floatingActionButton = {
             if (milestones.isNotEmpty()) {
-                // FAB position respects the Scaffold's contentWindowInsets (set to
-                // safeDrawing above), so it sits inside the right software nav bar in
-                // landscape and above the bottom nav bar in portrait without any extra
-                // modifier on the FAB itself.
+                // Scaffold's contentWindowInsets handles the BOTTOM inset on the FAB, but in
+                // M3 1.2.x it doesn't add the END inset. In landscape the system nav bar sits
+                // on the right edge, so we add the End inset explicitly to shift the FAB left
+                // and keep it out from under the software buttons.
                 ExtendedFloatingActionButton(
                     onClick = onAdd,
                     icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
                     text = { Text("New") },
+                    modifier = Modifier.windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.End),
+                    ),
                 )
             }
         },
@@ -87,17 +95,43 @@ fun HomeScreen(
                     .padding(padding),
             )
         } else {
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
+            // Two-column layout via a LazyColumn of paired Rows: both cells in a row share
+            // the row's max content height (via height(IntrinsicSize.Min) + fillMaxHeight),
+            // so the left and right columns of each row are visually balanced. Rows still
+            // size to their own content, so a row with more text grows independently of
+            // others.
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
-                verticalItemSpacing = 14.dp,
+                verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                items(milestones, key = { it.id }) { milestone ->
-                    MilestoneCard(milestone = milestone, onClick = { onOpen(milestone.id) })
+                items(
+                    items = milestones.chunked(2),
+                    key = { pair -> pair.joinToString("|") { it.id } },
+                ) { pair ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    ) {
+                        pair.forEach { milestone ->
+                            MilestoneCard(
+                                milestone = milestone,
+                                onClick = { onOpen(milestone.id) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                            )
+                        }
+                        // Last row may have a single item — fill the remaining column with
+                        // a spacer so the card stays half-width.
+                        if (pair.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }
@@ -105,18 +139,19 @@ fun HomeScreen(
 }
 
 @Composable
-private fun MilestoneCard(milestone: Milestone, onClick: () -> Unit) {
+private fun MilestoneCard(
+    milestone: Milestone,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
     val brush = accentBrush(milestone.accent)
     val timeText = remember(milestone.time) {
         milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
     }
 
-    // No fixed height: each card grows to fit its title + wrapped date so columns balance
-    // naturally based on actual content (no more left/right size mismatch).
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .clip(MaterialTheme.shapes.large)
             .background(brush)
             .clickable(onClick = onClick),
