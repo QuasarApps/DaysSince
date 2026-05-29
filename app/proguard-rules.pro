@@ -1,21 +1,12 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Keep the Glance widget receivers, their GlanceAppWidget subclasses, and the
+# widget configuration activity — all referenced by name from AndroidManifest.xml
+# and must survive R8 shrinking. A package wildcard is the most robust form
+# because it survives future renames inside the widget layer.
+-keep class com.quasarapps.dayssince.widget.** { *; }
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep MainActivity — it is the launcher activity declared in the manifest.
+-keep class com.quasarapps.dayssince.MainActivity { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Preserve source file names and line numbers in stack traces for easier debugging.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
