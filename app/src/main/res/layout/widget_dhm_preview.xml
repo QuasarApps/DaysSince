@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Static preview shown in the widget picker. autoSize was unreliable across
+    launchers' picker rendering ("365" still wrapped to a second line in some
+    cases), so this uses a conservative fixed text size that fits comfortably
+    in any picker cell width.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,15 +21,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="32sp"
-            android:autoSizeMinTextSize="18sp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
             android:maxLines="1"
             android:text="365"
             android:textColor="@android:color/white"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
@@ -31,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="DAYS"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,15 +45,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="32sp"
-            android:autoSizeMinTextSize="18sp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
             android:maxLines="1"
             android:text="8"
             android:textColor="@android:color/white"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:text="HRS"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -69,15 +69,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="32sp"
-            android:autoSizeMinTextSize="18sp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
             android:maxLines="1"
             android:text="42"
             android:textColor="@android:color/white"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
@@ -85,6 +82,6 @@
             android:layout_height="wrap_content"
             android:text="MIN"
             android:textColor="@android:color/white"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 </LinearLayout>
