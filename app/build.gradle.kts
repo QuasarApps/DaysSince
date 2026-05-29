@@ -57,10 +57,11 @@ android {
         debug {
             // Let a debug build coexist with an installed release build on the same device,
             // and show up as "Days Since (debug)" on the launcher so it's obvious which is
-            // which during development.
+            // which during development. The release variant resolves `${appLabel}` to
+            // `@string/app_name`, so translations in values-*/strings.xml still apply.
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            resValue("string", "app_name", "Days Since (debug)")
+            manifestPlaceholders["appLabel"] = "Days Since (debug)"
         }
         release {
             isMinifyEnabled = true
@@ -69,7 +70,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            resValue("string", "app_name", "Days Since")
+            manifestPlaceholders["appLabel"] = "@string/app_name"
             if (hasReleaseSigning) {
                 signingConfig = signingConfigs.getByName("release")
             }
