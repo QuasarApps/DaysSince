@@ -29,8 +29,8 @@
 
     <!-- TODO(icon): the adaptive icon foreground PNG already bakes in its dark
          background, so launchers can't extract a monochrome silhouette. Adding
-         a real monochrome variant needs the original icon source (vector). Until
-         then this warning is acknowledged rather than fixed. -->
-    <issue id="MonochromeLauncherIcon" severity="informational" />
+         a real monochrome variant needs the original icon source (vector). Once
+         that lands, delete this entry so the warning starts surfacing again. -->
+    <issue id="MonochromeLauncherIcon" severity="ignore" />
 
 </lint>
