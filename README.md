@@ -84,8 +84,11 @@ named `dayssince_store`, with two keys:
 
 There is a one-time migration that folds the old single-counter
 SharedPreferences (`dayssince_prefs`) into a first `Milestone` row, so users
-of an earlier internal build keep their counter on upgrade. It runs the
-first time a `MilestonesViewModel` is created.
+of an earlier internal build keep their counter on upgrade. It runs from
+`DaysSinceApplication.onCreate` on every cold start (idempotent — a
+`legacy_migrated` flag in DataStore short-circuits subsequent calls), so
+the migrated state is in place before either the launcher activity or the
+widget config picker reads it.
 
 ---
 
