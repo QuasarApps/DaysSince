@@ -171,7 +171,7 @@ private fun MilestoneCard(
                 maxLines = 1,
             )
             Text(
-                text = "DAYS",
+                text = "DAYS SINCE",
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White.copy(alpha = 0.85f),
             )
@@ -186,12 +186,7 @@ private fun MilestoneCard(
             )
             // Allow the date to wrap onto multiple lines instead of ellipsizing.
             Text(
-                text = "since ${EnglishDateFormat.formatOrdinalDate(milestone.date)}",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.85f),
-            )
-            Text(
-                text = "at $timeText",
+                text = "On ${EnglishDateFormat.formatOrdinalDate(milestone.date)} at $timeText",
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White.copy(alpha = 0.85f),
             )
