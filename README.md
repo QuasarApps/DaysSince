@@ -123,18 +123,22 @@ minute aligned to the minute boundary while it's in the foreground.
 2. Allow Gradle sync.
 3. Run the `app` configuration on an emulator or device.
 
-### Command line
+### Command line (Windows / PowerShell)
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
 .\gradlew.bat :app:installDebug
 ```
 
-### Tests
+On macOS / Linux use the wrapper script instead, e.g. `./gradlew :app:assembleDebug`.
+
+### Tests (Windows / PowerShell)
 
 ```powershell
 .\gradlew.bat :app:testDebugUnitTest
 ```
+
+On macOS / Linux: `./gradlew :app:testDebugUnitTest`.
 
 Notable test files:
 

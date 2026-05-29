@@ -1,6 +1,7 @@
 package com.quasarapps.dayssince
 
 import android.app.Application
+import android.util.Log
 import com.quasarapps.dayssince.data.MilestonesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +36,21 @@ class DaysSinceApplication : Application() {
             // background load inside SharedPreferencesImpl, but calling `getAll()`
             // forces that load to complete here instead of on whichever thread first
             // reads a value later — usually the main thread inside `onUpdate`.
-            Prefs.get(this@DaysSinceApplication).all
+            //
+            // Both init tasks are best-effort: a failure here only costs us the warm
+            // cache (the value is re-read lazily later) or defers the migration to the
+            // next entry point. Neither is worth crashing process startup over, so we
+            // swallow-and-log instead of letting the uncaught exception propagate.
+            runCatching { Prefs.get(this@DaysSinceApplication).all }
+                .onFailure { Log.w(TAG, "Prefs warmup failed", it) }
         }
-        initScope.launch { MilestonesRepository(this@DaysSinceApplication).migrateLegacyIfNeeded() }
+        initScope.launch {
+            runCatching { MilestonesRepository(this@DaysSinceApplication).migrateLegacyIfNeeded() }
+                .onFailure { Log.w(TAG, "Legacy migration failed", it) }
+        }
+    }
+
+    private companion object {
+        const val TAG = "DaysSinceApplication"
     }
 }
