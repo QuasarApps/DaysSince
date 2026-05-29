@@ -29,7 +29,14 @@ class DaysSinceApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initScope.launch { Prefs.get(this@DaysSinceApplication) }
+        initScope.launch {
+            // Touch the prefs file off the main thread so the first widget callback
+            // doesn't pay the disk read. `getSharedPreferences` itself kicks off the
+            // background load inside SharedPreferencesImpl, but calling `getAll()`
+            // forces that load to complete here instead of on whichever thread first
+            // reads a value later — usually the main thread inside `onUpdate`.
+            Prefs.get(this@DaysSinceApplication).all
+        }
         initScope.launch { MilestonesRepository(this@DaysSinceApplication).migrateLegacyIfNeeded() }
     }
 }
