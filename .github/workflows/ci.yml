@@ -26,3 +26,18 @@ jobs:
 
       - name: assembleDebug + unit tests
         run: ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon --stacktrace
+
+      # Build the release variant and run release-mode lint so R8 / ProGuard rule
+      # regressions and policy-level lint findings (icons, exported components, etc.)
+      # surface in PR CI instead of the night before publish. The release APK here is
+      # intentionally unsigned — Play Store uploads use a separate signed build.
+      - name: assembleRelease + lintRelease
+        run: ./gradlew :app:assembleRelease :app:lintRelease --no-daemon --stacktrace
+
+      - name: Upload release lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-release-report
+          path: app/build/reports/lint-results-release.*
+          if-no-files-found: ignore
