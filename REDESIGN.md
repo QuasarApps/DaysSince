@@ -1,11 +1,16 @@
 # DaysSince — UI/UX Redesign Plan
 
-A full visual and UX redesign of the DaysSince app and its home-screen widgets.
-This document is the design spec and phased build plan. It is intentionally
-separate from [IMPROVEMENTS.md](IMPROVEMENTS.md) (bugs / tech-debt), though the
-redesign incidentally resolves several UX items tracked there.
+> **Status: shipped in 1.0.0.** This document is preserved as the design rationale
+> for the multi-counter / Glance / Material You direction the app took. All five
+> phases (Foundation → Data → App UI → Widgets → Polish) landed prior to first
+> public release. New design work should not edit this file — start a new doc.
 
-*Last updated: 2026-05-26*
+A full visual and UX redesign of the DaysSince app and its home-screen widgets.
+This document was the design spec and phased build plan. It is intentionally
+separate from [IMPROVEMENTS.md](IMPROVEMENTS.md) (bugs / tech-debt), though the
+redesign incidentally resolved several UX items tracked there.
+
+*Originally written 2026-05-26; shipped pre-1.0.0.*
 
 ---
 
