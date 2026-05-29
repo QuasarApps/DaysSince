@@ -171,7 +171,7 @@ private fun MilestoneCard(
                 maxLines = 1,
             )
             Text(
-                text = "Days Since",
+                text = "DAYS SINCE",
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White.copy(alpha = 0.85f),
             )
