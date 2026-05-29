@@ -1,7 +1,32 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
+
+// Release signing: loaded from a gitignored `keystore.properties` at the repo root
+// (preferred for local builds) or from environment variables (preferred for CI).
+// If neither is present, assembleRelease still works but produces an unsigned APK —
+// fine for CI smoke-tests, not uploadable to Play.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+fun signingValue(propKey: String, envKey: String): String? =
+    keystoreProperties.getProperty(propKey) ?: System.getenv(envKey)
+
+val signingStoreFile = signingValue("storeFile", "DAYSSINCE_KEYSTORE_PATH")
+val signingStorePassword = signingValue("storePassword", "DAYSSINCE_KEYSTORE_PASSWORD")
+val signingKeyAlias = signingValue("keyAlias", "DAYSSINCE_KEY_ALIAS")
+val signingKeyPassword = signingValue("keyPassword", "DAYSSINCE_KEY_PASSWORD")
+
+val hasReleaseSigning = listOf(
+    signingStoreFile, signingStorePassword, signingKeyAlias, signingKeyPassword,
+).all { !it.isNullOrBlank() }
 
 android {
     namespace = "com.quasarapps.dayssince"
@@ -17,6 +42,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(signingStoreFile!!)
+                storePassword = signingStorePassword
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -25,6 +61,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
