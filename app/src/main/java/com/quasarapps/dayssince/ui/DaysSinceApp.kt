@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -33,8 +36,17 @@ fun DaysSinceApp(initialMilestoneId: String? = null) {
         val milestones by vm.milestones.collectAsState()
 
         // Deep-link from a widget tap: jump straight to that milestone's detail.
+        //
+        // Guard with a saveable flag so this fires exactly once for a given launch.
+        // The flag is restored across Activity recreation (e.g. a device rotation),
+        // so the effect won't re-run and re-navigate to the detail screen after the
+        // user has already navigated elsewhere — otherwise rotating anywhere in the
+        // app would snap back to this milestone's detail. The NavController restores
+        // its own back stack across rotation, so honoring it is all we need to do.
+        var deepLinkHandled by rememberSaveable { mutableStateOf(false) }
         LaunchedEffect(initialMilestoneId) {
-            if (initialMilestoneId != null) {
+            if (initialMilestoneId != null && !deepLinkHandled) {
+                deepLinkHandled = true
                 navController.navigate(Routes.detail(initialMilestoneId))
             }
         }
