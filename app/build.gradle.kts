@@ -161,6 +161,23 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // On-device test infrastructure: ApplicationProvider, ActivityScenario(Rule), runner/rules.
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.rules)
+
+    // Coroutine test helpers (runTest, test dispatchers) for repository / view-model tests.
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+
+    // Navigation under test (TestNavHostController) for the end-to-end app navigation test.
+    androidTestImplementation(libs.androidx.navigation.testing)
+
+    // Glance widget composable unit testing (runGlanceAppWidgetUnitTest).
+    androidTestImplementation(libs.androidx.glance.testing)
+    androidTestImplementation(libs.androidx.glance.appwidget.testing)
+
+    // Compose UI tests on a device/emulator.
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    // Provides the stub ComponentActivity that createComposeRule() hosts content in.
+    androidTestImplementation(libs.androidx.compose.ui.test.manifest)
 }

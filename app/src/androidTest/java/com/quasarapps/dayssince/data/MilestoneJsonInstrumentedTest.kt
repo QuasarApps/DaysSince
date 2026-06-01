@@ -1,0 +1,68 @@
+package com.quasarapps.dayssince.data
+
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+import org.junit.runner.RunWith
+import java.time.LocalDate
+import java.time.LocalTime
+
+/**
+ * On-device coverage for [MilestoneJson]. Runs against the platform's real `org.json`
+ * implementation (the host JVM only has the stubbed one), so it verifies the encode/decode cycle
+ * the persistence layer relies on actually behaves on a device.
+ */
+@RunWith(AndroidJUnit4::class)
+class MilestoneJsonInstrumentedTest {
+
+    @Test
+    fun encodeThenDecode_roundTripsAllFields() {
+        val original = listOf(
+            Milestone("a", "Sober", LocalDate.of(2025, 6, 15), LocalTime.of(9, 30), accent = 3, createdAt = 100L),
+            Milestone("b", "Gym", LocalDate.of(2024, 1, 1), LocalTime.of(0, 0), accent = 0, createdAt = 200L),
+        )
+
+        val decoded = MilestoneJson.decode(MilestoneJson.encode(original))
+
+        assertEquals(original, decoded)
+    }
+
+    @Test
+    fun decode_nullOrBlank_returnsEmptyList() {
+        assertTrue(MilestoneJson.decode(null).isEmpty())
+        assertTrue(MilestoneJson.decode("").isEmpty())
+        assertTrue(MilestoneJson.decode("   ").isEmpty())
+    }
+
+    @Test
+    fun decode_malformedJson_returnsEmptyListInsteadOfThrowing() {
+        assertTrue(MilestoneJson.decode("not json at all").isEmpty())
+        assertTrue(MilestoneJson.decode("{\"oops\":true}").isEmpty())
+    }
+
+    @Test
+    fun decode_partialEntry_fallsBackToSensibleDefaults() {
+        // Missing date/time should fall back (today / midnight) rather than dropping the entry.
+        val json = """[{"id":"x","title":"Half","accent":2}]"""
+
+        val decoded = MilestoneJson.decode(json)
+
+        assertEquals(1, decoded.size)
+        val m = decoded.single()
+        assertEquals("x", m.id)
+        assertEquals("Half", m.title)
+        assertEquals(2, m.accent)
+        assertEquals(LocalTime.MIDNIGHT, m.time)
+        assertEquals(LocalDate.now(), m.date)
+    }
+
+    @Test
+    fun decode_blankId_isReplacedWithGeneratedId() {
+        val json = """[{"id":"","title":"NoId","date":"2025-01-01","time":"08:00"}]"""
+
+        val decoded = MilestoneJson.decode(json)
+
+        assertTrue(decoded.single().id.isNotBlank())
+    }
+}
