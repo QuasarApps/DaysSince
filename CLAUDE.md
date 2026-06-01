@@ -1,5 +1,9 @@
 # Repo instructions for Claude
 
+## Workflow
+
+- **Always raise a PR for changes.** Never commit code changes directly to `develop` (or `main`). Create a fresh branch off the latest `origin/develop`, commit there, push, and open a PR against `develop` with `gh pr create`. This applies to every change, no matter how small.
+
 ## Shell command style
 
 Keep commands flat so the permission checker can match them cleanly.
