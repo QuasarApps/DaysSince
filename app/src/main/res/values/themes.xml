@@ -1,15 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!--
-        NoActionBar prevents the native action bar from briefly flashing during launch
-        before Compose renders its full-screen Surface.
-        Status bar color is managed by WindowCompat edge-to-edge setup in Theme.kt.
-    -->
-    <style name="Theme.DaysSince" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+    <!-- Material 3, no action bar (Compose draws everything). Transparent system bars; the
+         Activity opts into edge-to-edge in code. -->
+    <style name="Theme.DaysSince" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 </resources>

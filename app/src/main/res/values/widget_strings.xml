@@ -1,3 +1,6 @@
 <resources>
-    <string name="widget_day_placeholder">0</string>
+    <string name="widget_days_label">Days Since</string>
+    <string name="widget_days_description">Whole days since a milestone you choose.</string>
+    <string name="widget_dhm_label">Days · Hours · Minutes</string>
+    <string name="widget_dhm_description">Time since a milestone, in days, hours and minutes.</string>
 </resources>

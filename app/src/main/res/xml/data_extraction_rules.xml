@@ -7,9 +7,13 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
+        <!-- Legacy single-counter SharedPreferences (kept for one-time migration). -->
         <include domain="sharedpref" path="dayssince_prefs.xml" />
+        <!-- Current DataStore (Preferences): milestones list + widget bindings. -->
+        <include domain="file" path="datastore/dayssince_store.preferences_pb" />
     </cloud-backup>
     <device-transfer>
         <include domain="sharedpref" path="dayssince_prefs.xml" />
+        <include domain="file" path="datastore/dayssince_store.preferences_pb" />
     </device-transfer>
 </data-extraction-rules>

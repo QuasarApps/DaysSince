@@ -1,3 +1,6 @@
 <resources>
+    <!-- Canonical app name. The launcher label routes through the `${appLabel}` manifest
+         placeholder so the debug variant can override to "Days Since (debug)" without losing
+         translatability of the release-variant string here. -->
     <string name="app_name">Days Since</string>
 </resources>

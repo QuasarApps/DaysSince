@@ -1,7 +1,6 @@
 package com.quasarapps.dayssince
 
 import android.content.Context
-import java.time.Clock
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -26,24 +25,28 @@ object SelectedStartDateTime {
     /**
      * Loads the selected date/time from [Prefs].
      *
-     * Fallbacks (used only on fresh install before the user picks anything):
+     * Fallbacks:
      * - date: today
-     * - time: current time (truncated to the minute) so the app shows "0d 0h 0m" on first launch
-     *
-     * @param clock injectable for testing; defaults to the system clock.
+     * - time: midnight
      */
-    fun load(context: Context, clock: Clock = Clock.systemDefaultZone()): Value {
+    fun load(context: Context): Value {
         val prefs = Prefs.get(context)
 
         val date = prefs.getString(PREF_SELECTED_DATE, null)
             ?.runCatching(LocalDate::parse)
-            ?.getOrNull() ?: LocalDate.now(clock)
+            ?.getOrNull() ?: LocalDate.now()
 
         val time = prefs.getString(PREF_SELECTED_TIME, null)
             ?.runCatching(LocalTime::parse)
-            ?.getOrNull() ?: LocalTime.now(clock).withSecond(0).withNano(0)
+            ?.getOrNull() ?: LocalTime.MIDNIGHT
 
         return Value(date = date, time = time)
+    }
+
+    /** True only if the legacy single-counter prefs were actually saved. Gates one-time migration. */
+    fun hasStored(context: Context): Boolean {
+        val prefs = Prefs.get(context)
+        return prefs.contains(PREF_SELECTED_DATE) || prefs.contains(PREF_SELECTED_TIME)
     }
 
     fun persistDate(context: Context, date: LocalDate) {

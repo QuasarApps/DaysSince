@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".DaysSinceApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="${appLabel}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DaysSince"
-        tools:targetApi="31">
+        android:theme="@style/Theme.DaysSince">
 
         <activity
             android:name=".MainActivity"
@@ -23,14 +23,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".widget.WidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DaysSince">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <receiver
-            android:name=".widget.DaysSinceWidgetProvider"
-            android:exported="false">
+            android:name=".widget.glance.DaysWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_days_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data
@@ -39,13 +46,11 @@
         </receiver>
 
         <receiver
-            android:name=".widget.DaysHoursMinutesSinceWidgetProvider"
-            android:exported="false">
+            android:name=".widget.glance.DaysHoursMinutesWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_dhm_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="com.quasarapps.dayssince.widget.ACTION_UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data

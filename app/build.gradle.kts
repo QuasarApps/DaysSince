@@ -1,6 +1,48 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kover)
+}
+
+// Release signing: loaded from a gitignored `keystore.properties` at the repo root
+// (preferred for local builds) or from environment variables (preferred for CI).
+// If neither is present, assembleRelease still works but produces an unsigned APK —
+// fine for CI smoke-tests, not uploadable to Play.
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+fun signingValue(propKey: String, envKey: String): String? =
+    keystoreProperties.getProperty(propKey) ?: System.getenv(envKey)
+
+val signingStoreFile = signingValue("storeFile", "DAYSSINCE_KEYSTORE_PATH")
+val signingStorePassword = signingValue("storePassword", "DAYSSINCE_KEYSTORE_PASSWORD")
+val signingKeyAlias = signingValue("keyAlias", "DAYSSINCE_KEY_ALIAS")
+val signingKeyPassword = signingValue("keyPassword", "DAYSSINCE_KEY_PASSWORD")
+
+val signingValues = listOf(
+    signingStoreFile, signingStorePassword, signingKeyAlias, signingKeyPassword,
+)
+val hasReleaseSigning = signingValues.all { !it.isNullOrBlank() }
+val hasPartialReleaseSigning =
+    !hasReleaseSigning && signingValues.any { !it.isNullOrBlank() }
+
+if (hasPartialReleaseSigning) {
+    // Surface this loudly — a partial config is almost always a misconfiguration
+    // (typo in a property name, missing env var on CI, etc.) and the silent
+    // fallback to an unsigned APK only gets caught at upload time.
+    logger.warn(
+        "DaysSince: partial release signing config detected. " +
+            "Some of [storeFile, storePassword, keyAlias, keyPassword] are set " +
+            "but not all — :app:assembleRelease will produce an UNSIGNED APK. " +
+            "Check keystore.properties or the DAYSSINCE_KEYSTORE_* / DAYSSINCE_KEY_* " +
+            "environment variables.",
+    )
 }
 
 android {
@@ -12,12 +54,32 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(signingStoreFile!!)
+                storePassword = signingStorePassword
+                keyAlias = signingKeyAlias
+                keyPassword = signingKeyPassword
+            }
+        }
+    }
+
     buildTypes {
+        debug {
+            // Let a debug build coexist with an installed release build on the same device,
+            // and show up as "Days Since (debug)" on the launcher so it's obvious which is
+            // which during development. The release variant resolves `${appLabel}` to
+            // `@string/app_name`, so translations in values-*/strings.xml still apply.
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
+            manifestPlaceholders["appLabel"] = "Days Since (debug)"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -25,6 +87,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["appLabel"] = "@string/app_name"
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
     compileOptions {
@@ -65,6 +131,19 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.ui.text.google.fonts)
+
+    // Navigation + lifecycle (multi-counter screens)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Persistence (milestones + widget bindings)
+    implementation(libs.androidx.datastore.preferences)
+
+    // Home-screen widgets (Glance / Compose)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 
     debugImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -72,6 +151,12 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Compose UI tests run on the JVM under Robolectric (no emulator needed).
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.compose.ui.test.manifest)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
