@@ -1,0 +1,30 @@
+# Treat everything as text with LF line endings by default; git will auto-detect
+# binary files. Pin specific exceptions below.
+* text=auto eol=lf
+
+# Windows shell scripts need CRLF to run.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+gradlew.bat text eol=crlf
+
+# Unix shell wrapper stays LF (already covered by default; explicit for clarity).
+gradlew text eol=lf
+
+# Common binary file types — never normalize.
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.webp     binary
+*.ico      binary
+*.ttf      binary
+*.otf      binary
+*.woff     binary
+*.woff2    binary
+*.jar      binary
+*.aar      binary
+*.apk      binary
+*.aab      binary
+*.keystore binary
+*.jks      binary
+*.so       binary

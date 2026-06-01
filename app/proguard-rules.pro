@@ -1,7 +1,8 @@
-# Keep widget provider classes — they are referenced by name in AndroidManifest.xml
-# and must survive R8 shrinking.
--keep class com.quasarapps.dayssince.widget.DaysSinceWidgetProvider { *; }
--keep class com.quasarapps.dayssince.widget.DaysHoursMinutesSinceWidgetProvider { *; }
+# Keep the Glance widget receivers, their GlanceAppWidget subclasses, and the
+# widget configuration activity — all referenced by name from AndroidManifest.xml
+# and must survive R8 shrinking. A package wildcard is the most robust form
+# because it survives future renames inside the widget layer.
+-keep class com.quasarapps.dayssince.widget.** { *; }
 
 # Keep MainActivity — it is the launcher activity declared in the manifest.
 -keep class com.quasarapps.dayssince.MainActivity { *; }

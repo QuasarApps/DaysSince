@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Static preview shown in the widget picker. autoSize was unreliable across
+    launchers' picker rendering ("365" still wrapped to a second line in some
+    cases), so this uses a conservative fixed text size that fits comfortably
+    in any picker cell width.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_root"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_background"
+    android:background="@drawable/widget_preview_bg"
+    android:baselineAligned="false"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingHorizontal="14dp"
-    android:paddingVertical="10dp">
+    android:padding="10dp"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -17,32 +24,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/widget_days_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:maxLines="1"
+            android:text="365"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.85"
-            android:letterSpacing="0.08"
             android:text="DAYS"
-            android:textAllCaps="true"
             android:textColor="@android:color/white"
             android:textSize="11sp" />
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="10dp"
-        android:alpha="0.18"
-        android:background="@android:color/white"
-        android:contentDescription="@null" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -52,32 +48,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/widget_hours_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:maxLines="1"
+            android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.85"
-            android:letterSpacing="0.08"
-            android:text="HOURS"
-            android:textAllCaps="true"
+            android:text="HRS"
             android:textColor="@android:color/white"
             android:textSize="11sp" />
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="10dp"
-        android:alpha="0.18"
-        android:background="@android:color/white"
-        android:contentDescription="@null" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -87,24 +72,19 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/widget_minutes_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:maxLines="1"
+            android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.85"
-            android:letterSpacing="0.08"
             android:text="MIN"
-            android:textAllCaps="true"
             android:textColor="@android:color/white"
             android:textSize="11sp" />
     </LinearLayout>
-
 </LinearLayout>
-
