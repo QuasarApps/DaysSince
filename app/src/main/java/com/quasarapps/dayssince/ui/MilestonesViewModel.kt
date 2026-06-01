@@ -13,9 +13,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
-class MilestonesViewModel(app: Application) : AndroidViewModel(app) {
+class MilestonesViewModel internal constructor(
+    app: Application,
+    private val repo: MilestonesRepository,
+) : AndroidViewModel(app) {
 
-    private val repo = MilestonesRepository(app)
+    constructor(app: Application) : this(app, MilestonesRepository(app))
 
     val milestones: StateFlow<List<Milestone>> = repo.milestones
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
