@@ -28,10 +28,15 @@ data class WidgetBinding(
  * JSON object string mapping appWidgetId -> {id, transparent}. Old data that stored only the
  * milestone id as a bare string is decoded back into a [WidgetBinding] with transparent=false.
  */
-class MilestonesRepository(context: Context) {
+class MilestonesRepository internal constructor(
+    private val appContext: Context,
+    private val dataStore: DataStore<Preferences>,
+) {
 
-    private val appContext = context.applicationContext
-    private val dataStore get() = appContext.milestonesDataStore
+    constructor(context: Context) : this(
+        context.applicationContext,
+        context.applicationContext.milestonesDataStore,
+    )
 
     val milestones: Flow<List<Milestone>> = dataStore.data.map { prefs ->
         MilestoneJson.decode(prefs[KEY_MILESTONES]).sortedByDescending { it.createdAt }
