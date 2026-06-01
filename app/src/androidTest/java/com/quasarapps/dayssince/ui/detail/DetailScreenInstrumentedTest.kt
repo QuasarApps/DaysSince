@@ -42,9 +42,9 @@ class DetailScreenInstrumentedTest {
         onEdit: () -> Unit = {},
         onDelete: () -> Unit = {},
     ) {
-        // CountUpNumber and rememberElapsedDhm both animate / loop; freeze the clock so the test
-        // settles. (The animated day count stays at its start value, so assertions avoid it.)
-        composeRule.mainClock.autoAdvance = false
+        // We don't freeze the clock (real-device tests): CountUpNumber's animation is finite and
+        // rememberElapsedDhm's loop is delay-based, so waitForIdle settles. Assertions avoid the
+        // animated day count and target static labels/titles instead.
         composeRule.setContent {
             DaysSinceTheme(dynamicColor = false) {
                 DetailScreen(milestone = milestone, onBack = onBack, onEdit = onEdit, onDelete = onDelete)
@@ -87,7 +87,7 @@ class DetailScreenInstrumentedTest {
         var edited = false
         setContent(onEdit = { edited = true })
 
-        openOverflowMenu()
+        composeRule.onNodeWithContentDescription("More options").performClick()
         composeRule.onNodeWithText("Edit").performClick()
 
         assertTrue(edited)
@@ -98,12 +98,11 @@ class DetailScreenInstrumentedTest {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
-        openOverflowMenu()
+        composeRule.onNodeWithContentDescription("More options").performClick()
+        // Click the menu's "Delete" (unique: the dialog isn't open yet). Compose auto-syncs before
+        // the next assertion, so the menu's clock-driven exit animation finishes and its "Delete"
+        // node is gone before we touch the dialog's "Delete" confirm button.
         composeRule.onNodeWithText("Delete").performClick()
-        // The DropdownMenu's exit transition is clock-driven; with the clock frozen its "Delete"
-        // node would otherwise linger and collide with the dialog's "Delete" confirm button. Settle
-        // the transition so the menu item is gone before we target the dialog button.
-        settleTransitions()
 
         // The confirmation dialog appears; deletion only fires after confirming.
         composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
@@ -119,26 +118,10 @@ class DetailScreenInstrumentedTest {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
-        openOverflowMenu()
+        composeRule.onNodeWithContentDescription("More options").performClick()
         composeRule.onNodeWithText("Delete").performClick()
-        settleTransitions()
         composeRule.onNodeWithText("Cancel").performClick()
 
         assertTrue(!deleted)
-    }
-
-    /** Opens the overflow menu and lets its enter transition finish so items are hit-testable. */
-    private fun openOverflowMenu() {
-        composeRule.onNodeWithContentDescription("More options").performClick()
-        settleTransitions()
-    }
-
-    /**
-     * Advances the frozen test clock enough to finish dropdown/dialog transitions, but by less than
-     * the milestone "tick every minute" effect's minimum 1s delay so that loop stays dormant.
-     */
-    private fun settleTransitions() {
-        composeRule.mainClock.advanceTimeBy(500)
-        composeRule.waitForIdle()
     }
 }

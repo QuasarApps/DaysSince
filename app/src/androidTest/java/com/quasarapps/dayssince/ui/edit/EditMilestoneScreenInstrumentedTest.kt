@@ -40,9 +40,8 @@ class EditMilestoneScreenInstrumentedTest {
         onSave: (String, LocalDate, LocalTime, Int) -> Unit = { _, _, _, _ -> },
         onCancel: () -> Unit = {},
     ) {
-        // The preview strip's rememberElapsedDhm runs an infinite delay loop; freeze the clock so
-        // waitForIdle settles instead of advancing time forever.
-        composeRule.mainClock.autoAdvance = false
+        // No clock freezing on a real device: the preview strip's rememberElapsedDhm loop is
+        // delay-based (idle between ticks), so waitForIdle settles without it.
         composeRule.setContent {
             DaysSinceTheme(dynamicColor = false) {
                 EditMilestoneScreen(existing = existing, onSave = onSave, onCancel = onCancel)

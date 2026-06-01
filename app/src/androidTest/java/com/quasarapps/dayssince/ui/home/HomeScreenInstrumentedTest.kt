@@ -40,9 +40,10 @@ class HomeScreenInstrumentedTest {
         onAdd: () -> Unit = {},
         onOpen: (String) -> Unit = {},
     ) {
-        // The milestone cards' rememberElapsedDhm runs an infinite delay loop; freeze the clock so
-        // waitForIdle settles instead of advancing time forever.
-        composeRule.mainClock.autoAdvance = false
+        // Note: we deliberately do NOT freeze the test clock here. The milestone cards'
+        // rememberElapsedDhm loop is delay-based (it suspends between minute ticks, which counts as
+        // idle), so on a real device waitForIdle settles fine. Freezing the clock instead stalls
+        // layout/animation and makes nodes report as not-displayed.
         composeRule.setContent {
             DaysSinceTheme(dynamicColor = false) {
                 HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
@@ -74,8 +75,10 @@ class HomeScreenInstrumentedTest {
 
         composeRule.onNodeWithText("Sober").assertIsDisplayed()
         composeRule.onNodeWithText("Gym streak").assertIsDisplayed()
-        // The "New" FAB only appears once there is at least one milestone.
-        composeRule.onNodeWithText("New").assertIsDisplayed()
+        // The "New" FAB only appears once there is at least one milestone. Its label lives in the
+        // unmerged tree: ExtendedFloatingActionButton does not merge its text into the button's
+        // semantics node on this Compose version, so the default (merged) lookup can't see it.
+        composeRule.onNodeWithText("New", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
@@ -96,7 +99,8 @@ class HomeScreenInstrumentedTest {
         var added = false
         setContent(milestones = listOf(milestone("a", "Sober")), onAdd = { added = true })
 
-        composeRule.onNodeWithText("New").performClick()
+        // See populatedList_rendersTitlesAndFab: the FAB label is only in the unmerged tree.
+        composeRule.onNodeWithText("New", useUnmergedTree = true).performClick()
 
         assertTrue(added)
     }

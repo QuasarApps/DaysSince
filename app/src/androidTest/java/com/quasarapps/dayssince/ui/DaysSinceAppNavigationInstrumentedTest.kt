@@ -58,28 +58,30 @@ class DaysSinceAppNavigationInstrumentedTest {
 
     @Test
     fun addMilestone_fromEmptyState_persistsAndShowsCardOnHome() {
-        composeRule.mainClock.autoAdvance = false
+        // Real device: let the clock run. The nav fade transitions and the async DataStore write +
+        // recomposition all need real frames to progress; freezing the clock stalls them (and the
+        // delay-based minute-tick loop is idle between ticks, so it never blocks waitForIdle).
         composeRule.setContent { DaysSinceApp() }
-        composeRule.waitForIdle()
 
         // 1. Empty state.
         composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
 
-        // 2. Navigate to the add screen.
+        // 2. Navigate to the add screen (Compose auto-syncs through the fade transition).
         composeRule.onNodeWithText("Add your first milestone").performClick()
-        composeRule.mainClock.advanceTimeBy(750) // let the fade transition complete
-        composeRule.waitForIdle()
         composeRule.onNodeWithText("New milestone").assertIsDisplayed()
 
         // 3. Enter a title and save.
         composeRule.onNode(hasSetTextAction()).performTextInput(title)
         composeRule.onNodeWithText("Save").performClick()
-        composeRule.mainClock.advanceTimeBy(750)
 
         // 4. Back on home, the persisted milestone shows as a card (the "New" FAB only renders once
-        //    at least one milestone exists, so it's a reliable "populated home" signal).
+        //    at least one milestone exists, so it's a reliable "populated home" signal). Wait for
+        //    the async DataStore write to round-trip through the StateFlow. The FAB label is only in
+        //    the unmerged tree (ExtendedFloatingActionButton doesn't merge its text on this Compose
+        //    version), so query with useUnmergedTree = true.
         composeRule.waitUntil(timeoutMillis = 10_000) {
-            composeRule.onAllNodesWithText("New").fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithText("New", useUnmergedTree = true)
+                .fetchSemanticsNodes().isNotEmpty()
         }
         composeRule.onAllNodesWithText(title).onFirst().assertExists()
         composeRule.onNodeWithText("DAYS SINCE").assertExists()
