@@ -2,6 +2,7 @@ package com.quasarapps.dayssince.widget.glance
 
 import android.content.Context
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
+import androidx.glance.testing.unit.hasContentDescription
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
 import androidx.glance.testing.unit.hasTextEqualTo
 import androidx.test.core.app.ApplicationProvider
@@ -49,15 +50,11 @@ class WidgetContentInstrumentedTest {
         provideComposable { DaysWidgetContent(milestone = milestone) }
 
         onNode(hasTextEqualTo("DAYS")).assertExists()
-        // Content description leads with the day count and the milestone title.
-        onNode(
-            hasContentDescriptionEqualTo(
-                buildString {
-                    append(daysSince())
-                    append(" days since Sober, 1st of January 2020")
-                },
-            ),
-        ).assertExists()
+        // Assert the stable suffix as a substring rather than the full string: the leading day count
+        // is computed from "now" inside the composable, so an exact match could flake across a
+        // midnight boundary. (The day-count math itself is covered deterministically in
+        // DaysSinceInstrumentedTest with a fixed Clock.)
+        onNode(hasContentDescription("days since Sober, 1st of January 2020")).assertExists()
     }
 
     @Test
@@ -78,8 +75,4 @@ class WidgetContentInstrumentedTest {
         onNode(hasTextEqualTo("HRS")).assertExists()
         onNode(hasTextEqualTo("MIN")).assertExists()
     }
-
-    /** Mirrors the production calc so the expected content description stays in sync with "now". */
-    private fun daysSince(): Long =
-        com.quasarapps.dayssince.DaysSince.sincePickedDhm(milestone.date, milestone.time).days
 }

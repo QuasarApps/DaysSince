@@ -175,9 +175,9 @@ dependencies {
     androidTestImplementation(libs.androidx.glance.testing)
     androidTestImplementation(libs.androidx.glance.appwidget.testing)
 
-    // Compose UI tests on a device/emulator.
+    // Compose UI tests on a device/emulator. The stub ComponentActivity that createComposeRule()
+    // hosts content in comes from the debugImplementation(ui-test-manifest) above, merged into the
+    // app-under-test's debug manifest, so it does not need repeating here.
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    // Provides the stub ComponentActivity that createComposeRule() hosts content in.
-    androidTestImplementation(libs.androidx.compose.ui.test.manifest)
 }

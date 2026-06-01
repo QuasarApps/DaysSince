@@ -63,6 +63,20 @@ class MilestonesRepositoryInstrumentedTest {
         tempFile.delete()
     }
 
+    /**
+     * Writes the legacy single-counter prefs synchronously. [SelectedStartDateTime.persistDate] /
+     * [SelectedStartDateTime.persistTime] use SharedPreferences.apply() (async); committing here
+     * removes any chance the migration runs before the write lands on a real device.
+     */
+    private fun persistLegacyCommitted(date: LocalDate, time: LocalTime? = null) {
+        val editor = Prefs.get(appContext).edit()
+            .putString(SelectedStartDateTime.PREF_SELECTED_DATE, date.toString())
+        if (time != null) {
+            editor.putString(SelectedStartDateTime.PREF_SELECTED_TIME, time.toString())
+        }
+        editor.commit()
+    }
+
     private fun milestone(
         id: String,
         title: String = "T",
@@ -174,8 +188,7 @@ class MilestonesRepositoryInstrumentedTest {
     fun migrate_seedsAMilestone_fromStoredLegacyCounter() = runTest(dispatcher) {
         val date = LocalDate.of(2025, 6, 15)
         val time = LocalTime.of(7, 30)
-        SelectedStartDateTime.persistDate(appContext, date)
-        SelectedStartDateTime.persistTime(appContext, time)
+        persistLegacyCommitted(date, time)
 
         repo.migrateLegacyIfNeeded()
 
@@ -196,7 +209,7 @@ class MilestonesRepositoryInstrumentedTest {
     fun migrate_runsOnlyOnce_evenIfLegacyDataAppearsLater() = runTest(dispatcher) {
         repo.migrateLegacyIfNeeded()
 
-        SelectedStartDateTime.persistDate(appContext, LocalDate.of(2025, 6, 15))
+        persistLegacyCommitted(LocalDate.of(2025, 6, 15))
         repo.migrateLegacyIfNeeded()
 
         assertTrue(repo.snapshot().isEmpty())

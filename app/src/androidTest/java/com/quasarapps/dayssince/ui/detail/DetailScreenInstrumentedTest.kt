@@ -87,7 +87,7 @@ class DetailScreenInstrumentedTest {
         var edited = false
         setContent(onEdit = { edited = true })
 
-        composeRule.onNodeWithContentDescription("More options").performClick()
+        openOverflowMenu()
         composeRule.onNodeWithText("Edit").performClick()
 
         assertTrue(edited)
@@ -98,13 +98,18 @@ class DetailScreenInstrumentedTest {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
-        composeRule.onNodeWithContentDescription("More options").performClick()
+        openOverflowMenu()
         composeRule.onNodeWithText("Delete").performClick()
+        // The DropdownMenu's exit transition is clock-driven; with the clock frozen its "Delete"
+        // node would otherwise linger and collide with the dialog's "Delete" confirm button. Settle
+        // the transition so the menu item is gone before we target the dialog button.
+        settleTransitions()
 
         // The confirmation dialog appears; deletion only fires after confirming.
         composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
         assertTrue(!deleted)
 
+        // Now the only remaining "Delete" is the dialog's confirm button.
         composeRule.onNodeWithText("Delete").performClick()
         assertTrue(deleted)
     }
@@ -114,10 +119,26 @@ class DetailScreenInstrumentedTest {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
-        composeRule.onNodeWithContentDescription("More options").performClick()
+        openOverflowMenu()
         composeRule.onNodeWithText("Delete").performClick()
+        settleTransitions()
         composeRule.onNodeWithText("Cancel").performClick()
 
         assertTrue(!deleted)
+    }
+
+    /** Opens the overflow menu and lets its enter transition finish so items are hit-testable. */
+    private fun openOverflowMenu() {
+        composeRule.onNodeWithContentDescription("More options").performClick()
+        settleTransitions()
+    }
+
+    /**
+     * Advances the frozen test clock enough to finish dropdown/dialog transitions, but by less than
+     * the milestone "tick every minute" effect's minimum 1s delay so that loop stays dormant.
+     */
+    private fun settleTransitions() {
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.waitForIdle()
     }
 }

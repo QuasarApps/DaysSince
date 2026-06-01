@@ -46,6 +46,9 @@ class MilestoneJsonInstrumentedTest {
         // Missing date/time should fall back (today / midnight) rather than dropping the entry.
         val json = """[{"id":"x","title":"Half","accent":2}]"""
 
+        // Capture "today" right before decoding so the assertion can't flake if the test happens to
+        // straddle local midnight between this read and the decoder's own LocalDate.now() fallback.
+        val today = LocalDate.now()
         val decoded = MilestoneJson.decode(json)
 
         assertEquals(1, decoded.size)
@@ -54,7 +57,7 @@ class MilestoneJsonInstrumentedTest {
         assertEquals("Half", m.title)
         assertEquals(2, m.accent)
         assertEquals(LocalTime.MIDNIGHT, m.time)
-        assertEquals(LocalDate.now(), m.date)
+        assertEquals(today, m.date)
     }
 
     @Test
