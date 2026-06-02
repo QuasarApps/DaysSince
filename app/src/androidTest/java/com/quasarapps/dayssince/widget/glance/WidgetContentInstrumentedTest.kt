@@ -2,31 +2,36 @@ package com.quasarapps.dayssince.widget.glance
 
 import android.content.Context
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
-import androidx.glance.testing.unit.hasContentDescription
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
 import androidx.glance.testing.unit.hasTextEqualTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.quasarapps.dayssince.DaysSince
 import com.quasarapps.dayssince.data.Milestone
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.Clock
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
 
 /**
  * Unit tests for the Glance widget content composables ([DaysWidgetContent] /
  * [DaysHoursMinutesWidgetContent]) using `runGlanceAppWidgetUnitTest`.
  *
- * These assert the emitted Glance node tree (text + content descriptions) for both the
- * unconfigured ("set up") state and a bound milestone. A real [Context] is supplied because the
- * scaffold reads `LocalContext.current` and builds a launch [android.content.Intent].
+ * The composables take an injectable [Clock], so the rendered counts are deterministic here: each
+ * test computes the expected elapsed value from the same fixed clock and asserts that exact number
+ * (and the full content description) is emitted — not just the static labels.
+ *
+ * A real [Context] is supplied because the scaffold reads `LocalContext.current` and builds a
+ * launch [android.content.Intent].
  */
 @RunWith(AndroidJUnit4::class)
 class WidgetContentInstrumentedTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
 
-    // A far-past date so the day count is a stable, non-zero, multi-digit number.
     private val milestone = Milestone(
         id = "a",
         title = "Sober",
@@ -34,6 +39,12 @@ class WidgetContentInstrumentedTest {
         time = LocalTime.of(0, 0),
         accent = 1,
     )
+
+    // A fixed instant pins "now" so the day/hour/minute breakdown is stable. The composable applies
+    // the system default zone (as in production); we compute the expected value the same way, so the
+    // assertions stay correct regardless of the device's time zone.
+    private val clock = Clock.fixed(Instant.parse("2025-03-10T05:30:00Z"), ZoneId.of("UTC"))
+    private val expected = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
 
     @Test
     fun daysWidget_unconfigured_showsSetUpPrompt() = runGlanceAppWidgetUnitTest {
@@ -45,16 +56,16 @@ class WidgetContentInstrumentedTest {
     }
 
     @Test
-    fun daysWidget_boundMilestone_showsDaysLabelAndDescription() = runGlanceAppWidgetUnitTest {
+    fun daysWidget_boundMilestone_rendersDayCountAndDescription() = runGlanceAppWidgetUnitTest {
         setContext(context)
-        provideComposable { DaysWidgetContent(milestone = milestone) }
+        provideComposable { DaysWidgetContent(milestone = milestone, clock = clock) }
 
+        // The actual elapsed day count is rendered (not just the static "DAYS" label).
+        onNode(hasTextEqualTo(expected.days.toString())).assertExists()
         onNode(hasTextEqualTo("DAYS")).assertExists()
-        // Assert the stable suffix as a substring rather than the full string: the leading day count
-        // is computed from "now" inside the composable, so an exact match could flake across a
-        // midnight boundary. (The day-count math itself is covered deterministically in
-        // DaysSinceInstrumentedTest with a fixed Clock.)
-        onNode(hasContentDescription("days since Sober, 1st of January 2020")).assertExists()
+        onNode(
+            hasContentDescriptionEqualTo("${expected.days} days since Sober, 1st of January 2020"),
+        ).assertExists()
     }
 
     @Test
@@ -67,12 +78,21 @@ class WidgetContentInstrumentedTest {
     }
 
     @Test
-    fun dhmWidget_boundMilestone_showsDaysHoursMinutesLabels() = runGlanceAppWidgetUnitTest {
+    fun dhmWidget_boundMilestone_rendersDaysHoursMinutes() = runGlanceAppWidgetUnitTest {
         setContext(context)
-        provideComposable { DaysHoursMinutesWidgetContent(milestone = milestone) }
+        provideComposable { DaysHoursMinutesWidgetContent(milestone = milestone, clock = clock) }
 
+        // The visible day count is the real computed value...
+        onNode(hasTextEqualTo(expected.days.toString())).assertExists()
         onNode(hasTextEqualTo("DAYS")).assertExists()
         onNode(hasTextEqualTo("HRS")).assertExists()
         onNode(hasTextEqualTo("MIN")).assertExists()
+        // ...and the content description carries the full, correct d/h/m breakdown (this is what
+        // would fail if sincePickedDhm or the Stat wiring produced the wrong numbers).
+        onNode(
+            hasContentDescriptionEqualTo(
+                "Sober: ${expected.days} days, ${expected.hours} hours, ${expected.minutes} minutes",
+            ),
+        ).assertExists()
     }
 }

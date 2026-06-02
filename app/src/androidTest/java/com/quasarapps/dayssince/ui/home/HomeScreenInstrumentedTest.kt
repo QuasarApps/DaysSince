@@ -60,6 +60,15 @@ class HomeScreenInstrumentedTest {
     }
 
     @Test
+    fun emptyState_hidesFab() {
+        setContent(milestones = emptyList())
+
+        // The "New" FAB is gated behind milestones.isNotEmpty(); it must be absent on the empty
+        // state (the CTA button is the only way to add the first milestone).
+        composeRule.onNodeWithText("New", useUnmergedTree = true).assertDoesNotExist()
+    }
+
+    @Test
     fun emptyState_ctaInvokesOnAdd() {
         var added = false
         setContent(milestones = emptyList(), onAdd = { added = true })

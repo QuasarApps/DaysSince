@@ -32,6 +32,7 @@ import com.quasarapps.dayssince.MainActivity
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.theme.accentOrDefault
 import com.quasarapps.dayssince.util.EnglishDateFormat
+import java.time.Clock
 
 @Composable
 private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorProvider {
@@ -89,14 +90,20 @@ private fun WidgetScaffold(
 }
 
 @Composable
-internal fun DaysWidgetContent(milestone: Milestone?, transparent: Boolean = false) {
+internal fun DaysWidgetContent(
+    milestone: Milestone?,
+    transparent: Boolean = false,
+    // Injectable clock so the rendered count is deterministic under test; production uses the
+    // device's wall clock.
+    clock: Clock = Clock.systemDefaultZone(),
+) {
     if (milestone == null) {
         WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
             Text("Set up", style = TextStyle(color = fg, fontSize = 13.sp))
         }
         return
     }
-    val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time)
+    val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
     val description = "${dhm.days} days since ${milestone.title}, " +
         EnglishDateFormat.formatOrdinalDate(milestone.date)
     WidgetScaffold(milestone, transparent, description) { fg ->
@@ -112,14 +119,20 @@ internal fun DaysWidgetContent(milestone: Milestone?, transparent: Boolean = fal
 }
 
 @Composable
-internal fun DaysHoursMinutesWidgetContent(milestone: Milestone?, transparent: Boolean = false) {
+internal fun DaysHoursMinutesWidgetContent(
+    milestone: Milestone?,
+    transparent: Boolean = false,
+    // Injectable clock so the rendered breakdown is deterministic under test; production uses the
+    // device's wall clock.
+    clock: Clock = Clock.systemDefaultZone(),
+) {
     if (milestone == null) {
         WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
             Text("Tap to set up", style = TextStyle(color = fg, fontSize = 14.sp))
         }
         return
     }
-    val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time)
+    val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
     val description = "${milestone.title}: ${dhm.days} days, ${dhm.hours} hours, ${dhm.minutes} minutes"
     WidgetScaffold(milestone, transparent, description) { fg ->
         Row(verticalAlignment = Alignment.CenterVertically) {

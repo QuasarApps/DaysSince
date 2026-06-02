@@ -120,8 +120,12 @@ class DetailScreenInstrumentedTest {
 
         composeRule.onNodeWithContentDescription("More options").performClick()
         composeRule.onNodeWithText("Delete").performClick()
+        composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
+
         composeRule.onNodeWithText("Cancel").performClick()
 
+        // Cancel dismisses the dialog and deletes nothing.
+        composeRule.onNodeWithText("Delete milestone?").assertDoesNotExist()
         assertTrue(!deleted)
     }
 }
