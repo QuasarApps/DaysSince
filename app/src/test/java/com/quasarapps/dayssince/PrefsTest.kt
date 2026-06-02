@@ -2,22 +2,20 @@ package com.quasarapps.dayssince
 
 import android.content.Context
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
+/**
+ * [Prefs] is a thin wrapper whose only real responsibility is to hand back a *consistent* private
+ * SharedPreferences instance (same file across calls). These tests exercise that contract — storage
+ * that survives separate [Prefs.get] calls — rather than re-testing the framework's SharedPreferences.
+ */
 @RunWith(RobolectricTestRunner::class)
 class PrefsTest {
 
     private fun ctx(): Context = RuntimeEnvironment.getApplication()
-
-    @Test
-    fun prefs_get_returnsNonNullPrefs() {
-        val prefs = Prefs.get(ctx())
-        assertNotNull(prefs)
-    }
 
     @Test
     fun prefs_roundTripString() {
