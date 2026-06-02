@@ -17,6 +17,8 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.quasarapps.dayssince", appContext.packageName)
+        // The debug build applies an applicationIdSuffix (".debug"), so strip it before comparing
+        // against the base application id.
+        assertEquals("com.quasarapps.dayssince", appContext.packageName.removeSuffix(".debug"))
     }
 }
