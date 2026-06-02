@@ -1,6 +1,7 @@
 package com.quasarapps.dayssince.ui.theme
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
 import org.junit.Test
 
@@ -40,6 +41,7 @@ class AccentTest {
     fun milestoneAccents_haveDistinctNonBlankLabels() {
         val labels = MilestoneAccents.map { it.label }
         assertEquals("labels must be unique", labels.size, labels.toSet().size)
-        assert(labels.none { it.isBlank() }) { "no accent label may be blank" }
+        // JUnit assertion (not Kotlin `assert`, which is a no-op unless JVM -ea is set).
+        assertFalse("no accent label may be blank", labels.any { it.isBlank() })
     }
 }

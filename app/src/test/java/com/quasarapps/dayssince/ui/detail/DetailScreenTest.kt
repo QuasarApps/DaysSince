@@ -54,8 +54,10 @@ class DetailScreenTest {
     }
 
     /**
-     * Advances the frozen clock enough to finish dropdown/dialog transitions, but by less than the
-     * milestone "tick every minute" effect's minimum 1s delay so that loop stays dormant.
+     * Advances the frozen clock enough to finish a dropdown/dialog transition. A single 400ms call
+     * stays under the milestone "tick every minute" effect's minimum 1s delay, so one call won't
+     * wake that loop. (Tests that call this several times do cross 1s cumulatively and let the tick
+     * fire — harmless here, since none of these tests assert on the elapsed count.)
      */
     private fun settleTransitions() {
         composeRule.mainClock.advanceTimeBy(400)
