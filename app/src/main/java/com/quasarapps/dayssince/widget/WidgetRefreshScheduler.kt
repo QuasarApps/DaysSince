@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.Operation
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.quasarapps.dayssince.widget.glance.DaysHoursMinutesWidgetReceiver
@@ -35,9 +36,10 @@ object WidgetRefreshScheduler {
 
     /**
      * Ensures the periodic refresh is running. Idempotent ([ExistingPeriodicWorkPolicy.KEEP]) so it
-     * can be called from every `onUpdate` without resetting the schedule.
+     * can be called from every `onUpdate` without resetting the schedule. Returns the enqueue
+     * [Operation] (callers can ignore it; tests await it for determinism).
      */
-    fun ensureScheduled(context: Context) {
+    fun ensureScheduled(context: Context): Operation {
         // Don't wake the device to redraw a widget when power is scarce; a slightly stale count is
         // an acceptable trade. The widget catches up on the next run once the battery isn't low.
         val constraints = Constraints.Builder()
@@ -46,7 +48,7 @@ object WidgetRefreshScheduler {
         val request = PeriodicWorkRequestBuilder<WidgetRefreshWorker>(
             REFRESH_INTERVAL_MINUTES, TimeUnit.MINUTES,
         ).setConstraints(constraints).build()
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        return WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             WidgetRefreshWorker.UNIQUE_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
             request,

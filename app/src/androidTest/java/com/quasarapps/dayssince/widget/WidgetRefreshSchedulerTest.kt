@@ -33,7 +33,9 @@ class WidgetRefreshSchedulerTest {
 
     @Test
     fun ensureScheduled_enqueuesASingleUniquePeriodicWork() {
-        WidgetRefreshScheduler.ensureScheduled(context)
+        // Await the enqueue Operation so the query sees the committed write deterministically,
+        // rather than relying on WorkManager's internal task ordering.
+        WidgetRefreshScheduler.ensureScheduled(context).result.get()
 
         val infos = workManager
             .getWorkInfosForUniqueWork(WidgetRefreshWorker.UNIQUE_WORK_NAME)
@@ -43,8 +45,8 @@ class WidgetRefreshSchedulerTest {
 
     @Test
     fun ensureScheduled_isIdempotent_underKeepPolicy() {
-        WidgetRefreshScheduler.ensureScheduled(context)
-        WidgetRefreshScheduler.ensureScheduled(context)
+        WidgetRefreshScheduler.ensureScheduled(context).result.get()
+        WidgetRefreshScheduler.ensureScheduled(context).result.get()
 
         val infos = workManager
             .getWorkInfosForUniqueWork(WidgetRefreshWorker.UNIQUE_WORK_NAME)
