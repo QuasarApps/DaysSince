@@ -45,11 +45,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.quasarapps.dayssince.DaysSince
 import com.quasarapps.dayssince.MainActivity
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.data.MilestonesRepository
 import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
@@ -118,7 +120,7 @@ private fun WidgetConfigScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets.safeDrawing,
-        topBar = { TopAppBar(title = { Text("Choose a milestone") }) },
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.widget_config_title)) }) },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -137,18 +139,18 @@ private fun WidgetConfigScreen(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        text = "No milestones yet",
+                        text = stringResource(R.string.empty_title),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onBackground,
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "Open Days Since to add one, then place the widget again.",
+                        text = stringResource(R.string.widget_config_empty_subtitle),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Spacer(Modifier.height(24.dp))
-                    Button(onClick = onOpenApp) { Text("Open Days Since") }
+                    Button(onClick = onOpenApp) { Text(stringResource(R.string.widget_config_open_app)) }
                 }
             } else {
                 LazyColumn(
@@ -179,13 +181,13 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "Transparent background",
+                text = stringResource(R.string.widget_config_transparent_title),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(Modifier.height(2.dp))
             Text(
-                text = "Show just the number on your wallpaper.",
+                text = stringResource(R.string.widget_config_transparent_subtitle),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -225,7 +227,11 @@ private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = "$days days · since ${EnglishDateFormat.formatOrdinalDate(milestone.date)}",
+                    text = stringResource(
+                        R.string.widget_config_row_subtitle,
+                        days,
+                        EnglishDateFormat.formatOrdinalDate(milestone.date),
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,

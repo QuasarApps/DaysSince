@@ -3,4 +3,59 @@
          placeholder so the debug variant can override to "Days Since (debug)" without losing
          translatability of the release-variant string here. -->
     <string name="app_name">Days Since</string>
+
+    <!-- Shared actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Home screen -->
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">New</string>
+    <!-- Accessibility label for the add FAB (its visible "New" text is not exposed to TalkBack). -->
+    <string name="home_fab_content_description">Add milestone</string>
+    <string name="card_days_since_label">DAYS SINCE</string>
+    <!-- %1$s = ordinal date, %2$s = time. e.g. "On 1st of January 2026 at 9:00 AM" -->
+    <string name="card_on_date_at_time">On %1$s at %2$s</string>
+    <string name="empty_title">No milestones yet</string>
+    <string name="empty_subtitle">Track the days since something that matters to you.</string>
+    <string name="empty_cta">Add your first milestone</string>
+
+    <!-- Detail screen -->
+    <string name="detail_back_content_description">Back</string>
+    <string name="detail_more_options_content_description">More options</string>
+    <string name="detail_days_label">DAYS</string>
+    <string name="detail_hours_label">HOURS</string>
+    <string name="detail_minutes_label">MINUTES</string>
+    <!-- %1$s = ordinal date, %2$s = time. e.g. "since 15th of June 2025 at 9:30 AM" -->
+    <string name="detail_since_date_at_time">since %1$s at %2$s</string>
+    <string name="detail_edit_button">Edit milestone</string>
+    <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>
+    <string name="detail_delete_dialog_title">Delete milestone?</string>
+    <!-- %1$s = milestone title -->
+    <string name="detail_delete_dialog_message">This removes “%1$s” and any widgets using it.</string>
+    <string name="detail_missing">This milestone is no longer available.</string>
+    <string name="detail_go_back">Go back</string>
+
+    <!-- Add / edit milestone screen -->
+    <string name="edit_title_new">New milestone</string>
+    <string name="edit_title_edit">Edit milestone</string>
+    <string name="edit_title_field_label">Title</string>
+    <string name="edit_title_field_placeholder">e.g. Quit smoking</string>
+    <string name="edit_field_date">Date</string>
+    <string name="edit_field_time">Time</string>
+    <string name="edit_accent_header">Accent</string>
+    <!-- Fallback title used when the user leaves the title blank. -->
+    <string name="milestone_default_title">Milestone</string>
+
+    <!-- Widget configuration screen -->
+    <string name="widget_config_title">Choose a milestone</string>
+    <string name="widget_config_transparent_title">Transparent background</string>
+    <string name="widget_config_transparent_subtitle">Show just the number on your wallpaper.</string>
+    <string name="widget_config_empty_subtitle">Open Days Since to add one, then place the widget again.</string>
+    <string name="widget_config_open_app">Open Days Since</string>
+    <!-- %1$d = whole days, %2$s = ordinal date. e.g. "12 days · since 1st of January 2026" -->
+    <string name="widget_config_row_subtitle">%1$d days · since %2$s</string>
 </resources>
