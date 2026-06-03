@@ -3,6 +3,7 @@ package com.quasarapps.dayssince.widget
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -13,15 +14,19 @@ import java.util.concurrent.TimeUnit
 /**
  * Schedules the periodic [WidgetRefreshWorker] while at least one widget is placed.
  *
- * The system's `updatePeriodMillis` is floored at 30 minutes and WorkManager's periodic minimum is
- * 15 minutes, so 15 minutes is the freshest a *deferrable* refresh can be. That keeps the
- * Days·Hours·Minutes widget within ~15 min instead of the previous ~6 h, without the battery cost
- * of per-minute exact alarms. (The Days widget changes at most once a day, so this is ample for it.)
+ * "Days since" is the headline unit and changes at most once a day; the Days·Hours·Minutes widget's
+ * hours/minutes are a nice-to-have. So this favours battery over freshness — an hourly refresh that
+ * is skipped while the battery is low, rather than WorkManager's 15-minute floor or the battery cost
+ * of per-minute exact alarms. That still brings the DHM widget from ~6 h stale down to ~1 h, at a
+ * fraction of the wake-ups, and comfortably catches the once-a-day rollover that actually matters.
  */
 object WidgetRefreshScheduler {
 
-    /** Tunable: the refresh cadence. 15 min is WorkManager's periodic minimum. */
-    const val REFRESH_INTERVAL_MINUTES = 15L
+    /**
+     * Tunable refresh cadence. Hourly (not WorkManager's 15-minute minimum) because the day count is
+     * the headline unit and battery matters more than to-the-minute hour/minute freshness.
+     */
+    const val REFRESH_INTERVAL_MINUTES = 60L
 
     private val widgetProviders = listOf(
         DaysWidgetReceiver::class.java,
@@ -33,9 +38,14 @@ object WidgetRefreshScheduler {
      * can be called from every `onUpdate` without resetting the schedule.
      */
     fun ensureScheduled(context: Context) {
+        // Don't wake the device to redraw a widget when power is scarce; a slightly stale count is
+        // an acceptable trade. The widget catches up on the next run once the battery isn't low.
+        val constraints = Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .build()
         val request = PeriodicWorkRequestBuilder<WidgetRefreshWorker>(
             REFRESH_INTERVAL_MINUTES, TimeUnit.MINUTES,
-        ).build()
+        ).setConstraints(constraints).build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             WidgetRefreshWorker.UNIQUE_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
