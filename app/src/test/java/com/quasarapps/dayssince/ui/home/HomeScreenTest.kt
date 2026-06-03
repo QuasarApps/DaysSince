@@ -2,6 +2,7 @@ package com.quasarapps.dayssince.ui.home
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.quasarapps.dayssince.data.Milestone
@@ -80,6 +81,16 @@ class HomeScreenTest {
         // ExtendedFloatingActionButton doesn't merge its text into the button node, so the label
         // is only reachable via the unmerged tree.
         composeRule.onNodeWithText("New", useUnmergedTree = true).assertIsDisplayed()
+    }
+
+    @Test
+    fun fab_hasAccessibilityLabel_forTalkBack() {
+        // Regression guard for the a11y fix: the FAB's "New" text doesn't merge into the button's
+        // semantics node, so an explicit contentDescription keeps it from being an unlabeled
+        // "Button" for TalkBack.
+        setContent(milestones = listOf(milestone("a", "Sober")))
+
+        composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
     }
 
     @Test

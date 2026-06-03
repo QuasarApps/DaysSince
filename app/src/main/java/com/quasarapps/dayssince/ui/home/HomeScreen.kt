@@ -40,9 +40,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.LegibilityScrim
@@ -66,7 +70,7 @@ fun HomeScreen(
             // Small top bar keeps the title close to the top — much better in landscape than
             // the large variant which leaves a big empty band above the cards.
             TopAppBar(
-                title = { Text("Days Since", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.home_title), fontWeight = FontWeight.Bold) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             )
         },
@@ -76,13 +80,20 @@ fun HomeScreen(
                 // M3 1.2.x it doesn't add the END inset. In landscape the system nav bar sits
                 // on the right edge, so we add the End inset explicitly to shift the FAB left
                 // and keep it out from under the software buttons.
+                //
+                // ExtendedFloatingActionButton does not surface its "New" text to the button's
+                // (merged) semantics node, so set an explicit contentDescription — otherwise
+                // TalkBack announces an unlabeled "Button".
+                val fabContentDescription = stringResource(R.string.home_fab_content_description)
                 ExtendedFloatingActionButton(
                     onClick = onAdd,
                     icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
-                    text = { Text("New") },
-                    modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.safeDrawing.only(WindowInsetsSides.End),
-                    ),
+                    text = { Text(stringResource(R.string.home_fab_new)) },
+                    modifier = Modifier
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.End),
+                        )
+                        .semantics { contentDescription = fabContentDescription },
                 )
             }
         },
@@ -171,7 +182,7 @@ private fun MilestoneCard(
                 maxLines = 1,
             )
             Text(
-                text = "DAYS SINCE",
+                text = stringResource(R.string.card_days_since_label),
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White.copy(alpha = 0.85f),
             )
@@ -186,7 +197,11 @@ private fun MilestoneCard(
             )
             // Allow the date to wrap onto multiple lines instead of ellipsizing.
             Text(
-                text = "On ${EnglishDateFormat.formatOrdinalDate(milestone.date)} at $timeText",
+                text = stringResource(
+                    R.string.card_on_date_at_time,
+                    EnglishDateFormat.formatOrdinalDate(milestone.date),
+                    timeText,
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.White.copy(alpha = 0.85f),
             )
@@ -220,19 +235,19 @@ private fun EmptyState(
         }
         Spacer(Modifier.height(24.dp))
         Text(
-            text = "No milestones yet",
+            text = stringResource(R.string.empty_title),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "Track the days since something that matters to you.",
+            text = stringResource(R.string.empty_subtitle),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(28.dp))
         Button(onClick = onAdd) {
-            Text("Add your first milestone")
+            Text(stringResource(R.string.empty_cta))
         }
     }
 }

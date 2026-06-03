@@ -2,6 +2,7 @@ package com.quasarapps.dayssince.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,5 +68,37 @@ class MilestoneJsonInstrumentedTest {
         val decoded = MilestoneJson.decode(json)
 
         assertTrue(decoded.single().id.isNotBlank())
+    }
+
+    @Test
+    fun encode_writesStableAccentKey_andDecodeResolvesIt() {
+        // Derive the expected key from the registry so the test survives a palette reorder.
+        val index = 7
+        val expectedKey = AccentKeys.keyForIndex(index)
+        val json = MilestoneJson.encode(
+            listOf(Milestone("a", "T", LocalDate.of(2025, 1, 1), LocalTime.of(8, 0), accent = index)),
+        )
+
+        assertTrue(json.contains("\"accent\":\"$expectedKey\""))
+        assertFalse("raw index must not be serialized", json.contains("\"accent\":$index"))
+        assertEquals(index, MilestoneJson.decode(json).single().accent)
+    }
+
+    @Test
+    fun decode_legacyIntegerAccent_andUnknownKey() {
+        // Pre-key data stored the raw index as a number; still loads unchanged.
+        assertEquals(
+            5,
+            MilestoneJson.decode(
+                """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":5}]""",
+            ).single().accent,
+        )
+        // An accent key removed in a later release falls back to the default accent.
+        assertEquals(
+            AccentKeys.DEFAULT_INDEX,
+            MilestoneJson.decode(
+                """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":"removed"}]""",
+            ).single().accent,
+        )
     }
 }

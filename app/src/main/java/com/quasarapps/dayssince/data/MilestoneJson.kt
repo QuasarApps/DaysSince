@@ -23,7 +23,12 @@ internal object MilestoneJson {
                     put("title", m.title)
                     put("date", m.date.toString())
                     put("time", m.time.toString())
-                    put("accent", m.accent)
+                    // Persist a stable key rather than the list index, so reordering or inserting
+                    // accents in a later release doesn't silently recolor existing milestones.
+                    // (Downgrade caveat: an older build reading this data sees a string where it
+                    // expects an int and falls back to Dynamic. App downgrades aren't supported, so
+                    // this is acceptable.)
+                    put("accent", AccentKeys.keyForIndex(m.accent))
                     put("createdAt", m.createdAt)
                 }
             )
@@ -46,7 +51,13 @@ internal object MilestoneJson {
                     title = o.optString("title"),
                     date = date,
                     time = time,
-                    accent = o.optInt("accent", 0),
+                    // New data stores a stable string key; pre-existing data stored the raw list
+                    // index as a number. Accept both — the index path is preserved for upgrades.
+                    accent = when (val raw = o.opt("accent")) {
+                        is Number -> raw.toInt()
+                        is String -> AccentKeys.indexForKey(raw)
+                        else -> AccentKeys.DEFAULT_INDEX
+                    },
                     createdAt = o.optLong("createdAt", System.currentTimeMillis()),
                 )
             }

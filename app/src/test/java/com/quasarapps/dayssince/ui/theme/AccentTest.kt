@@ -1,5 +1,6 @@
 package com.quasarapps.dayssince.ui.theme
 
+import com.quasarapps.dayssince.data.AccentKeys
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
@@ -43,5 +44,21 @@ class AccentTest {
         assertEquals("labels must be unique", labels.size, labels.toSet().size)
         // JUnit assertion (not Kotlin `assert`, which is a no-op unless JVM -ea is set).
         assertFalse("no accent label may be blank", labels.any { it.isBlank() })
+    }
+
+    @Test
+    fun milestoneAccents_haveDistinctNonBlankStableKeys() {
+        val keys = MilestoneAccents.map { it.key }
+        // Keys are the persistence contract — they must be unique and stable.
+        assertEquals("keys must be unique", keys.size, keys.toSet().size)
+        assertFalse("no accent key may be blank", keys.any { it.isBlank() })
+    }
+
+    @Test
+    fun paletteKeys_matchTheDataLayerRegistryInOrder() {
+        // The persistence registry (data.AccentKeys) and the UI palette must agree on key *order* —
+        // index N in one has to be the same accent as index N in the other, or a stored accent
+        // would resolve to the wrong color. (Resolver behavior itself is covered by AccentKeysTest.)
+        assertEquals(AccentKeys.ordered, MilestoneAccents.map { it.key })
     }
 }

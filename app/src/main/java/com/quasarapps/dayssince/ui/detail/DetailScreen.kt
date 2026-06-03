@@ -37,10 +37,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.components.CountUpNumber
 import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
@@ -96,20 +98,28 @@ fun DetailScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.detail_back_content_description),
+                        tint = Color.White,
+                    )
                 }
                 Box {
                     IconButton(onClick = { menuOpen = true }) {
-                        Icon(Icons.Filled.MoreVert, contentDescription = "More options", tint = Color.White)
+                        Icon(
+                            Icons.Filled.MoreVert,
+                            contentDescription = stringResource(R.string.detail_more_options_content_description),
+                            tint = Color.White,
+                        )
                     }
                     DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                         DropdownMenuItem(
-                            text = { Text("Edit") },
+                            text = { Text(stringResource(R.string.action_edit)) },
                             onClick = { menuOpen = false; onEdit() },
                             leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null) },
                         )
                         DropdownMenuItem(
-                            text = { Text("Delete") },
+                            text = { Text(stringResource(R.string.action_delete)) },
                             onClick = { menuOpen = false; confirmDelete = true },
                             leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null) },
                         )
@@ -135,14 +145,14 @@ fun DetailScreen(
                     modifier = Modifier.fillMaxWidth(),
                 )
                 Text(
-                    text = "DAYS",
+                    text = stringResource(R.string.detail_days_label),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White.copy(alpha = 0.9f),
                 )
                 Spacer(Modifier.height(28.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    GlassStat(value = dhm.hours, label = "HOURS")
-                    GlassStat(value = dhm.minutes, label = "MINUTES")
+                    GlassStat(value = dhm.hours, label = stringResource(R.string.detail_hours_label))
+                    GlassStat(value = dhm.minutes, label = stringResource(R.string.detail_minutes_label))
                 }
             }
 
@@ -161,7 +171,11 @@ fun DetailScreen(
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
-                    text = "since ${EnglishDateFormat.formatOrdinalDate(milestone.date)} at $timeText",
+                    text = stringResource(
+                        R.string.detail_since_date_at_time,
+                        EnglishDateFormat.formatOrdinalDate(milestone.date),
+                        timeText,
+                    ),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.White.copy(alpha = 0.85f),
                     textAlign = TextAlign.Center,
@@ -170,11 +184,11 @@ fun DetailScreen(
                 FilledTonalButton(onClick = onEdit) {
                     Icon(Icons.Filled.Edit, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
-                    Text("Edit milestone")
+                    Text(stringResource(R.string.detail_edit_button))
                 }
                 Spacer(Modifier.height(10.dp))
                 Text(
-                    text = "Add a widget from your home screen to keep this in view.",
+                    text = stringResource(R.string.detail_widget_hint),
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White.copy(alpha = 0.7f),
                     textAlign = TextAlign.Center,
@@ -186,13 +200,19 @@ fun DetailScreen(
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text("Delete milestone?") },
-            text = { Text("This removes “${milestone.title}” and any widgets using it.") },
+            title = { Text(stringResource(R.string.detail_delete_dialog_title)) },
+            text = {
+                Text(stringResource(R.string.detail_delete_dialog_message, milestone.title))
+            },
             confirmButton = {
-                TextButton(onClick = { confirmDelete = false; onDelete() }) { Text("Delete") }
+                TextButton(onClick = { confirmDelete = false; onDelete() }) {
+                    Text(stringResource(R.string.action_delete))
+                }
             },
             dismissButton = {
-                TextButton(onClick = { confirmDelete = false }) { Text("Cancel") }
+                TextButton(onClick = { confirmDelete = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
             },
         )
     }
@@ -234,12 +254,12 @@ private fun MilestoneMissing(onBack: () -> Unit) {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "This milestone is no longer available.",
+                text = stringResource(R.string.detail_missing),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Spacer(Modifier.height(16.dp))
-            TextButton(onClick = onBack) { Text("Go back") }
+            TextButton(onClick = onBack) { Text(stringResource(R.string.detail_go_back)) }
         }
     }
 }

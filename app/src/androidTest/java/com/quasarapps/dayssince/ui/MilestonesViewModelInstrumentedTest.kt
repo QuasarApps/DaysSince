@@ -10,14 +10,12 @@ import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.data.MilestonesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -30,16 +28,20 @@ import java.time.LocalTime
 
 /**
  * On-device test for the title-normalization [MilestonesViewModel] layers on top of the repository
- * (trim + fall back to "Milestone" when blank). A test DataStore-backed repository is injected so
- * the asserted state is data that actually round-tripped through persistence on the device.
+ * (trim + fall back to "Milestone" when blank). A real temp-file DataStore-backed repository is
+ * injected so the asserted state is data that actually round-tripped through persistence.
+ *
+ * Unlike the Robolectric `MilestonesViewModelTest`, this does NOT use `Dispatchers.setMain` + test
+ * dispatchers: on a real device `Dispatchers.Main` is the live main looper that the instrumentation
+ * runner also uses, so swapping it in races ("Main is used concurrently with setting it"). Instead
+ * the view model runs on the real main dispatcher and we await the async write by collecting the
+ * repository's DataStore flow until it reaches the expected state.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class MilestonesViewModelInstrumentedTest {
 
-    private val scheduler = TestCoroutineScheduler()
-    private val dispatcher = UnconfinedTestDispatcher(scheduler)
-    private val dataStoreScope = CoroutineScope(dispatcher)
+    // DataStore's collector is a long-running job; give it its own scope on the IO dispatcher.
+    private val dataStoreScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private lateinit var app: Application
     private lateinit var dataStore: DataStore<Preferences>
@@ -52,7 +54,6 @@ class MilestonesViewModelInstrumentedTest {
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(dispatcher)
         app = ApplicationProvider.getApplicationContext()
 
         tempFile = File.createTempFile("dayssince_vm_androidtest_", ".preferences_pb", app.cacheDir)
@@ -64,25 +65,36 @@ class MilestonesViewModelInstrumentedTest {
 
     @After
     fun tearDown() {
-        Dispatchers.resetMain()
         dataStoreScope.cancel()
         tempFile.delete()
     }
 
-    @Test
-    fun addMilestone_blankTitle_fallsBackToMilestone() = runTest(dispatcher) {
-        viewModel.addMilestone(title = "   ", date = date, time = time, accent = 0)
-        advanceUntilIdle()
+    /** Blocks until the persisted milestone list satisfies [predicate], or times out. */
+    private fun awaitMilestones(predicate: (List<Milestone>) -> Boolean): List<Milestone> =
+        runBlocking { withTimeout(TIMEOUT_MS) { repo.milestones.first(predicate) } }
 
-        assertEquals("Milestone", repo.snapshot().single().title)
+    /** Blocks until milestone [id]'s title equals [expected], returning that title. */
+    private fun awaitTitle(id: String, expected: String): String =
+        runBlocking {
+            withTimeout(TIMEOUT_MS) {
+                repo.milestones
+                    .map { list -> list.firstOrNull { it.id == id }?.title }
+                    .first { it == expected }!!
+            }
+        }
+
+    @Test
+    fun addMilestone_blankTitle_fallsBackToMilestone() {
+        viewModel.addMilestone(title = "   ", date = date, time = time, accent = 0)
+
+        assertEquals("Milestone", awaitMilestones { it.isNotEmpty() }.single().title)
     }
 
     @Test
-    fun addMilestone_trimsSurroundingWhitespace() = runTest(dispatcher) {
+    fun addMilestone_trimsSurroundingWhitespace() {
         viewModel.addMilestone(title = "  Gym  ", date = date, time = time, accent = 2)
-        advanceUntilIdle()
 
-        val stored = repo.snapshot().single()
+        val stored = awaitMilestones { it.isNotEmpty() }.single()
         assertEquals("Gym", stored.title)
         assertEquals(2, stored.accent)
         assertEquals(date, stored.date)
@@ -90,24 +102,26 @@ class MilestonesViewModelInstrumentedTest {
     }
 
     @Test
-    fun updateMilestone_blankTitle_fallsBackToMilestone() = runTest(dispatcher) {
-        repo.upsert(Milestone(id = "a", title = "Original", date = date, time = time, createdAt = 1L))
+    fun updateMilestone_blankTitle_fallsBackToMilestone() {
+        runBlocking { repo.upsert(Milestone(id = "a", title = "Original", date = date, time = time, createdAt = 1L)) }
 
         viewModel.updateMilestone(
             Milestone(id = "a", title = "   ", date = date, time = time, createdAt = 1L),
         )
-        advanceUntilIdle()
 
-        assertEquals("Milestone", repo.getById("a")?.title)
+        assertEquals("Milestone", awaitTitle("a", "Milestone"))
     }
 
     @Test
-    fun deleteMilestone_removesIt() = runTest(dispatcher) {
-        repo.upsert(Milestone(id = "a", title = "Gym", date = date, time = time, createdAt = 1L))
+    fun deleteMilestone_removesIt() {
+        runBlocking { repo.upsert(Milestone(id = "a", title = "Gym", date = date, time = time, createdAt = 1L)) }
 
         viewModel.deleteMilestone("a")
-        advanceUntilIdle()
 
-        assertTrue(repo.snapshot().isEmpty())
+        assertTrue(awaitMilestones { it.isEmpty() }.isEmpty())
+    }
+
+    private companion object {
+        const val TIMEOUT_MS = 5_000L
     }
 }

@@ -54,8 +54,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.LegibilityScrim
@@ -93,15 +95,24 @@ fun EditMilestoneScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(if (existing == null) "New milestone" else "Edit milestone") },
+                title = {
+                    Text(
+                        stringResource(
+                            if (existing == null) R.string.edit_title_new else R.string.edit_title_edit,
+                        ),
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onCancel) {
-                        Icon(Icons.Filled.Close, contentDescription = "Cancel")
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = stringResource(R.string.action_cancel),
+                        )
                     }
                 },
                 actions = {
                     TextButton(onClick = { onSave(title, date, time, accent) }) {
-                        Text("Save")
+                        Text(stringResource(R.string.action_save))
                     }
                 },
             )
@@ -120,22 +131,22 @@ fun EditMilestoneScreen(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Title") },
-                placeholder = { Text("e.g. Quit smoking") },
+                label = { Text(stringResource(R.string.edit_title_field_label)) },
+                placeholder = { Text(stringResource(R.string.edit_title_field_placeholder)) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(Modifier.height(16.dp))
             FieldRow(
-                label = "Date",
+                label = stringResource(R.string.edit_field_date),
                 value = EnglishDateFormat.formatOrdinalDate(date),
                 icon = Icons.Filled.DateRange,
                 onClick = { showDatePicker = true },
             )
             Spacer(Modifier.height(12.dp))
             FieldRow(
-                label = "Time",
+                label = stringResource(R.string.edit_field_time),
                 value = time.format(timeFormatter),
                 icon = Icons.Filled.Schedule,
                 onClick = { showTimePicker = true },
@@ -143,7 +154,7 @@ fun EditMilestoneScreen(
 
             Spacer(Modifier.height(24.dp))
             Text(
-                text = "Accent",
+                text = stringResource(R.string.edit_accent_header),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -171,10 +182,10 @@ fun EditMilestoneScreen(
                         date = if (picked.isAfter(today)) today else picked
                     }
                     showDatePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.action_ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showDatePicker = false }) { Text(stringResource(R.string.action_cancel)) }
             },
         ) {
             DatePicker(state = state)
@@ -193,10 +204,10 @@ fun EditMilestoneScreen(
                 TextButton(onClick = {
                     time = LocalTime.of(state.hour, state.minute)
                     showTimePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.action_ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showTimePicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showTimePicker = false }) { Text(stringResource(R.string.action_cancel)) }
             },
             text = { TimePicker(state = state) },
         )
@@ -227,7 +238,7 @@ private fun PreviewStrip(title: String, date: LocalDate, time: LocalTime, accent
                 color = Color.White,
             )
             Text(
-                text = title.ifBlank { "Milestone" },
+                text = title.ifBlank { stringResource(R.string.milestone_default_title) },
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White,

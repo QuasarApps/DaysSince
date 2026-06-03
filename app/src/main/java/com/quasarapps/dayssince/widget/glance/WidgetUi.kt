@@ -29,6 +29,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.quasarapps.dayssince.DaysSince
 import com.quasarapps.dayssince.MainActivity
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.theme.accentOrDefault
 import com.quasarapps.dayssince.util.EnglishDateFormat
@@ -97,15 +98,20 @@ internal fun DaysWidgetContent(
     // device's wall clock.
     clock: Clock = Clock.systemDefaultZone(),
 ) {
+    val context = LocalContext.current
     if (milestone == null) {
-        WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
-            Text("Set up", style = TextStyle(color = fg, fontSize = 13.sp))
+        WidgetScaffold(null, transparent, context.getString(R.string.widget_setup_content_description)) { fg ->
+            Text(context.getString(R.string.widget_setup_short), style = TextStyle(color = fg, fontSize = 13.sp))
         }
         return
     }
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
-    val description = "${dhm.days} days since ${milestone.title}, " +
-        EnglishDateFormat.formatOrdinalDate(milestone.date)
+    val description = context.getString(
+        R.string.widget_days_content_description,
+        dhm.days,
+        milestone.title,
+        EnglishDateFormat.formatOrdinalDate(milestone.date),
+    )
     WidgetScaffold(milestone, transparent, description) { fg ->
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -113,7 +119,7 @@ internal fun DaysWidgetContent(
                 style = TextStyle(color = fg, fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 maxLines = 1,
             )
-            Text("DAYS", style = TextStyle(color = fg, fontSize = 11.sp))
+            Text(context.getString(R.string.widget_unit_days), style = TextStyle(color = fg, fontSize = 11.sp))
         }
     }
 }
@@ -126,21 +132,28 @@ internal fun DaysHoursMinutesWidgetContent(
     // device's wall clock.
     clock: Clock = Clock.systemDefaultZone(),
 ) {
+    val context = LocalContext.current
     if (milestone == null) {
-        WidgetScaffold(null, transparent, "Tap to choose a milestone") { fg ->
-            Text("Tap to set up", style = TextStyle(color = fg, fontSize = 14.sp))
+        WidgetScaffold(null, transparent, context.getString(R.string.widget_setup_content_description)) { fg ->
+            Text(context.getString(R.string.widget_setup_long), style = TextStyle(color = fg, fontSize = 14.sp))
         }
         return
     }
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
-    val description = "${milestone.title}: ${dhm.days} days, ${dhm.hours} hours, ${dhm.minutes} minutes"
+    val description = context.getString(
+        R.string.widget_dhm_content_description,
+        milestone.title,
+        dhm.days,
+        dhm.hours,
+        dhm.minutes,
+    )
     WidgetScaffold(milestone, transparent, description) { fg ->
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Stat(dhm.days, "DAYS", fg)
+            Stat(dhm.days, context.getString(R.string.widget_unit_days), fg)
             Spacer(GlanceModifier.width(12.dp))
-            Stat(dhm.hours, "HRS", fg)
+            Stat(dhm.hours, context.getString(R.string.widget_unit_hours), fg)
             Spacer(GlanceModifier.width(12.dp))
-            Stat(dhm.minutes, "MIN", fg)
+            Stat(dhm.minutes, context.getString(R.string.widget_unit_minutes), fg)
         }
     }
 }

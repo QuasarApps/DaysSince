@@ -3,4 +3,20 @@
     <string name="widget_days_description">Whole days since a milestone you choose.</string>
     <string name="widget_dhm_label">Days · Hours · Minutes</string>
     <string name="widget_dhm_description">Time since a milestone, in days, hours and minutes.</string>
+
+    <!-- Unconfigured (no milestone bound) prompts. -->
+    <string name="widget_setup_short">Set up</string>
+    <string name="widget_setup_long">Tap to set up</string>
+    <string name="widget_setup_content_description">Tap to choose a milestone</string>
+
+    <!-- In-widget unit labels. -->
+    <string name="widget_unit_days">DAYS</string>
+    <string name="widget_unit_hours">HRS</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <!-- Accessibility descriptions. -->
+    <!-- %1$d = days, %2$s = title, %3$s = ordinal date. -->
+    <string name="widget_days_content_description">%1$d days since %2$s, %3$s</string>
+    <!-- %1$s = title, %2$d = days, %3$d = hours, %4$d = minutes. -->
+    <string name="widget_dhm_content_description">%1$s: %2$d days, %3$d hours, %4$d minutes</string>
 </resources>

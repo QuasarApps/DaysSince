@@ -2,6 +2,7 @@ package com.quasarapps.dayssince.ui.detail
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -67,9 +68,13 @@ class DetailScreenInstrumentedTest {
     fun rendersTitleAndSinceLine() {
         setContent()
 
-        composeRule.onNodeWithText("Sober").assertIsDisplayed()
+        // "DAYS" sits in the vertically-centered hero, so it's on-screen in any orientation.
         composeRule.onNodeWithText("DAYS").assertIsDisplayed()
-        composeRule.onNodeWithText("since 15th of June 2025", substring = true).assertIsDisplayed()
+        // The title and since-line live in the bottom footer, which can clip below the fold in
+        // landscape. This test is about the content being rendered/wired correctly, not its
+        // viewport position, so assert existence rather than display.
+        composeRule.onNodeWithText("Sober").assertExists()
+        composeRule.onNodeWithText("since 15th of June 2025", substring = true).assertExists()
     }
 
     @Test
@@ -99,16 +104,19 @@ class DetailScreenInstrumentedTest {
         setContent(onDelete = { deleted = true })
 
         composeRule.onNodeWithContentDescription("More options").performClick()
-        // Click the menu's "Delete" (unique: the dialog isn't open yet). Compose auto-syncs before
-        // the next assertion, so the menu's clock-driven exit animation finishes and its "Delete"
-        // node is gone before we touch the dialog's "Delete" confirm button.
+        // Click the menu's "Delete" (unique: the dialog isn't open yet).
         composeRule.onNodeWithText("Delete").performClick()
 
         // The confirmation dialog appears; deletion only fires after confirming.
         composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
         assertTrue(!deleted)
 
-        // Now the only remaining "Delete" is the dialog's confirm button.
+        // The dropdown's "Delete" item and the dialog's "Delete" confirm button briefly coexist
+        // while the menu animates out. Wait until exactly one "Delete" remains so the click is
+        // unambiguous on a slow emulator (see issue #24) before pressing the confirm button.
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithText("Delete").fetchSemanticsNodes().size == 1
+        }
         composeRule.onNodeWithText("Delete").performClick()
         assertTrue(deleted)
     }
