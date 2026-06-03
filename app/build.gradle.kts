@@ -27,9 +27,15 @@ val signingKeyPassword = signingValue("keyPassword", "DAYSSINCE_KEY_PASSWORD")
 
 // Version is overridable from the environment so CI/release automation can stamp a unique,
 // monotonically-increasing versionCode (e.g. from the CI run number or a release tag) instead of
-// relying on a human to bump a hardcoded literal. Local/dev builds fall back to the baseline.
-val appVersionCode = System.getenv("DAYSSINCE_VERSION_CODE")?.toIntOrNull() ?: 1
-val appVersionName = System.getenv("DAYSSINCE_VERSION_NAME") ?: "1.0.0"
+// relying on a human to bump a hardcoded literal. Unset -> baseline; but a value that is *set yet
+// invalid* fails the build loudly rather than silently shipping/colliding the baseline `1`.
+val appVersionCode = System.getenv("DAYSSINCE_VERSION_CODE")?.let { raw ->
+    raw.toIntOrNull()?.takeIf { it > 0 }
+        ?: error("DAYSSINCE_VERSION_CODE must be a positive integer, but was: '$raw'")
+} ?: 1
+val appVersionName = System.getenv("DAYSSINCE_VERSION_NAME")?.let { raw ->
+    raw.ifBlank { error("DAYSSINCE_VERSION_NAME is set but blank") }
+} ?: "1.0.0"
 
 val signingValues = listOf(
     signingStoreFile, signingStorePassword, signingKeyAlias, signingKeyPassword,

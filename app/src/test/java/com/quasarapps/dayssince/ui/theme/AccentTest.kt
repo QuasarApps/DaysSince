@@ -1,5 +1,6 @@
 package com.quasarapps.dayssince.ui.theme
 
+import com.quasarapps.dayssince.data.AccentKeys
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
@@ -54,24 +55,10 @@ class AccentTest {
     }
 
     @Test
-    fun accentKeyAndIndex_roundTripForEveryAccent() {
-        MilestoneAccents.indices.forEach { index ->
-            assertEquals(index, accentIndexForKey(accentKey(index)))
-        }
-    }
-
-    @Test
-    fun accentIndexForKey_unknownOrNull_fallsBackToDynamic() {
-        assertEquals(DYNAMIC_ACCENT, accentIndexForKey("no-such-accent"))
-        assertEquals(DYNAMIC_ACCENT, accentIndexForKey(null))
-        assertEquals(DYNAMIC_ACCENT, accentIndexForKey(""))
-    }
-
-    @Test
-    fun accentKey_returnsTheStableKeyForKnownIndices() {
-        assertEquals("dynamic", accentKey(0))
-        assertEquals("indigo", accentKey(1))
-        // Out-of-range falls back to the default accent's key (index 1).
-        assertEquals("indigo", accentKey(99))
+    fun paletteKeys_matchTheDataLayerRegistryInOrder() {
+        // The persistence registry (data.AccentKeys) and the UI palette must agree on key *order* —
+        // index N in one has to be the same accent as index N in the other, or a stored accent
+        // would resolve to the wrong color. (Resolver behavior itself is covered by AccentKeysTest.)
+        assertEquals(AccentKeys.ordered, MilestoneAccents.map { it.key })
     }
 }

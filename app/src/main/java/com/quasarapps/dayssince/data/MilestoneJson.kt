@@ -1,8 +1,5 @@
 package com.quasarapps.dayssince.data
 
-import com.quasarapps.dayssince.ui.theme.DYNAMIC_ACCENT
-import com.quasarapps.dayssince.ui.theme.accentIndexForKey
-import com.quasarapps.dayssince.ui.theme.accentKey
 import org.json.JSONArray
 import org.json.JSONObject
 import java.time.LocalDate
@@ -28,7 +25,10 @@ internal object MilestoneJson {
                     put("time", m.time.toString())
                     // Persist a stable key rather than the list index, so reordering or inserting
                     // accents in a later release doesn't silently recolor existing milestones.
-                    put("accent", accentKey(m.accent))
+                    // (Downgrade caveat: an older build reading this data sees a string where it
+                    // expects an int and falls back to Dynamic. App downgrades aren't supported, so
+                    // this is acceptable.)
+                    put("accent", AccentKeys.keyForIndex(m.accent))
                     put("createdAt", m.createdAt)
                 }
             )
@@ -55,8 +55,8 @@ internal object MilestoneJson {
                     // index as a number. Accept both — the index path is preserved for upgrades.
                     accent = when (val raw = o.opt("accent")) {
                         is Number -> raw.toInt()
-                        is String -> accentIndexForKey(raw)
-                        else -> DYNAMIC_ACCENT
+                        is String -> AccentKeys.indexForKey(raw)
+                        else -> AccentKeys.DEFAULT_INDEX
                     },
                     createdAt = o.optLong("createdAt", System.currentTimeMillis()),
                 )

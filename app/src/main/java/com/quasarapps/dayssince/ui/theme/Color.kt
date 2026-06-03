@@ -86,15 +86,3 @@ val MilestoneAccents: List<Accent> = listOf(
 
 fun accentOrDefault(index: Int): Accent =
     MilestoneAccents.getOrElse(index) { MilestoneAccents[1] }
-
-/** Stable persistence key for the accent at [index] (falls back to the default if out of range). */
-fun accentKey(index: Int): String = accentOrDefault(index).key
-
-/**
- * Resolves a stable accent [key] back to its current list index, or [DYNAMIC_ACCENT] if the key is
- * null/unknown (e.g. an accent that was removed in a later release).
- */
-fun accentIndexForKey(key: String?): Int {
-    val index = MilestoneAccents.indexOfFirst { it.key == key }
-    return if (index >= 0) index else DYNAMIC_ACCENT
-}

@@ -6,6 +6,12 @@ on:
   push:
     branches: [develop, main]
 
+# Cancel superseded runs for the same ref (e.g. rapid pushes to a PR) so the slow emulator job
+# isn't queued up multiple times over.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   debug:
     name: debug build + tests
@@ -88,7 +94,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
-          target: google_apis
+          # The app has no Google Play Services dependency, so the lighter `default` system image
+          # boots faster than `google_apis`.
+          target: default
           arch: x86_64
           disable-animations: true
           script: ./gradlew :app:connectedDebugAndroidTest --no-daemon --stacktrace

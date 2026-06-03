@@ -1,6 +1,7 @@
 package com.quasarapps.dayssince.data
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -79,23 +80,26 @@ class MilestoneJsonTest {
 
     @Test
     fun encode_writesStableAccentKey_notTheListIndex() {
+        // Derive the expected key from the registry so this stays correct if the palette is
+        // reordered — hardcoding "index 3 == rose" would defeat the purpose of stable keys.
+        val index = 3
+        val expectedKey = AccentKeys.keyForIndex(index)
         val json = MilestoneJson.encode(
-            listOf(
-                Milestone("a", "T", LocalDate.of(2025, 1, 1), LocalTime.of(8, 0), accent = 3),
-            ),
+            listOf(Milestone("a", "T", LocalDate.of(2025, 1, 1), LocalTime.of(8, 0), accent = index)),
         )
 
-        // accent index 3 == "rose"; the index must NOT be serialized as a bare number.
-        assertTrue(json.contains("\"accent\":\"rose\""))
+        assertTrue("expected stable key in JSON", json.contains("\"accent\":\"$expectedKey\""))
+        // The bare numeric index must NOT be serialized.
+        assertFalse("raw index must not be serialized", json.contains("\"accent\":$index"))
     }
 
     @Test
-    fun decode_stableKey_resolvesToCurrentIndex() {
-        // The point of the key: it maps to the accent with that key regardless of list position,
-        // so reordering the palette later won't recolor existing milestones.
-        val json = """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":"slate"}]"""
+    fun decode_stableKey_resolvesToItsCurrentIndex() {
+        // A key maps to whatever index currently holds it, so reordering won't recolor milestones.
+        val key = "slate"
+        val json = """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":"$key"}]"""
 
-        assertEquals(7, MilestoneJson.decode(json).single().accent)
+        assertEquals(AccentKeys.indexForKey(key), MilestoneJson.decode(json).single().accent)
     }
 
     @Test
@@ -107,15 +111,15 @@ class MilestoneJsonTest {
     }
 
     @Test
-    fun decode_unknownAccentKey_fallsBackToDynamic() {
+    fun decode_unknownAccentKey_fallsBackToDefault() {
         val json = """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":"removed"}]"""
 
-        assertEquals(0, MilestoneJson.decode(json).single().accent)
+        assertEquals(AccentKeys.DEFAULT_INDEX, MilestoneJson.decode(json).single().accent)
     }
 
     @Test
     fun encodeThenDecode_roundTripsAccentThroughItsKey() {
-        val list = (0 until 8).map {
+        val list = AccentKeys.ordered.indices.map {
             Milestone("id$it", "T$it", LocalDate.of(2025, 1, 1), LocalTime.of(8, 0), accent = it, createdAt = it.toLong())
         }
 
