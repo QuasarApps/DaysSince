@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
-import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.provideContent
 import com.quasarapps.dayssince.data.MilestonesRepository
 
@@ -20,6 +19,6 @@ class DaysWidget : GlanceAppWidget() {
     }
 }
 
-class DaysWidgetReceiver : GlanceAppWidgetReceiver() {
+class DaysWidgetReceiver : MilestoneGlanceWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = DaysWidget()
 }

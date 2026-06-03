@@ -156,6 +156,9 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
 
+    // Periodic background refresh for placed widgets.
+    implementation(libs.androidx.work.runtime.ktx)
+
     debugImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -175,6 +178,9 @@ dependencies {
     // On-device test infrastructure: ApplicationProvider, ActivityScenario(Rule), runner/rules.
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.rules)
+
+    // WorkManager test helpers (TestListenableWorkerBuilder) for the widget refresh worker.
+    androidTestImplementation(libs.androidx.work.testing)
 
     // Coroutine test helpers (runTest, test dispatchers) for repository / view-model tests.
     androidTestImplementation(libs.kotlinx.coroutines.test)
