@@ -58,7 +58,13 @@ val FallbackDarkColors = darkColorScheme(
  * scheme at draw time (see Gradients.kt), so the placeholder stops here are only used if the
  * dynamic scheme is somehow unavailable.
  */
+/**
+ * @param key a stable identifier persisted with a milestone. Unlike the list position (which
+ *   silently remaps a milestone's color if the palette is ever reordered) and [label] (which is
+ *   user-facing and may be localized), [key] never changes once shipped.
+ */
 data class Accent(
+    val key: String,
     val label: String,
     val start: Color,
     val end: Color,
@@ -68,15 +74,27 @@ data class Accent(
 const val DYNAMIC_ACCENT = 0
 
 val MilestoneAccents: List<Accent> = listOf(
-    Accent("Dynamic", Color(0xFF5B5FE0), Color(0xFFE05B97)),
-    Accent("Indigo", Color(0xFF4F46E5), Color(0xFF7C3AED)),
-    Accent("Violet", Color(0xFF7C3AED), Color(0xFFC026D3)),
-    Accent("Rose", Color(0xFFE11D48), Color(0xFFFB7185)),
-    Accent("Sunset", Color(0xFFF97316), Color(0xFFE11D48)),
-    Accent("Emerald", Color(0xFF059669), Color(0xFF14B8A6)),
-    Accent("Ocean", Color(0xFF0EA5E9), Color(0xFF6366F1)),
-    Accent("Slate", Color(0xFF334155), Color(0xFF0F172A)),
+    Accent("dynamic", "Dynamic", Color(0xFF5B5FE0), Color(0xFFE05B97)),
+    Accent("indigo", "Indigo", Color(0xFF4F46E5), Color(0xFF7C3AED)),
+    Accent("violet", "Violet", Color(0xFF7C3AED), Color(0xFFC026D3)),
+    Accent("rose", "Rose", Color(0xFFE11D48), Color(0xFFFB7185)),
+    Accent("sunset", "Sunset", Color(0xFFF97316), Color(0xFFE11D48)),
+    Accent("emerald", "Emerald", Color(0xFF059669), Color(0xFF14B8A6)),
+    Accent("ocean", "Ocean", Color(0xFF0EA5E9), Color(0xFF6366F1)),
+    Accent("slate", "Slate", Color(0xFF334155), Color(0xFF0F172A)),
 )
 
 fun accentOrDefault(index: Int): Accent =
     MilestoneAccents.getOrElse(index) { MilestoneAccents[1] }
+
+/** Stable persistence key for the accent at [index] (falls back to the default if out of range). */
+fun accentKey(index: Int): String = accentOrDefault(index).key
+
+/**
+ * Resolves a stable accent [key] back to its current list index, or [DYNAMIC_ACCENT] if the key is
+ * null/unknown (e.g. an accent that was removed in a later release).
+ */
+fun accentIndexForKey(key: String?): Int {
+    val index = MilestoneAccents.indexOfFirst { it.key == key }
+    return if (index >= 0) index else DYNAMIC_ACCENT
+}

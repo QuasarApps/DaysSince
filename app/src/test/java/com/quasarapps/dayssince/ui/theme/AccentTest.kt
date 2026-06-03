@@ -44,4 +44,34 @@ class AccentTest {
         // JUnit assertion (not Kotlin `assert`, which is a no-op unless JVM -ea is set).
         assertFalse("no accent label may be blank", labels.any { it.isBlank() })
     }
+
+    @Test
+    fun milestoneAccents_haveDistinctNonBlankStableKeys() {
+        val keys = MilestoneAccents.map { it.key }
+        // Keys are the persistence contract — they must be unique and stable.
+        assertEquals("keys must be unique", keys.size, keys.toSet().size)
+        assertFalse("no accent key may be blank", keys.any { it.isBlank() })
+    }
+
+    @Test
+    fun accentKeyAndIndex_roundTripForEveryAccent() {
+        MilestoneAccents.indices.forEach { index ->
+            assertEquals(index, accentIndexForKey(accentKey(index)))
+        }
+    }
+
+    @Test
+    fun accentIndexForKey_unknownOrNull_fallsBackToDynamic() {
+        assertEquals(DYNAMIC_ACCENT, accentIndexForKey("no-such-accent"))
+        assertEquals(DYNAMIC_ACCENT, accentIndexForKey(null))
+        assertEquals(DYNAMIC_ACCENT, accentIndexForKey(""))
+    }
+
+    @Test
+    fun accentKey_returnsTheStableKeyForKnownIndices() {
+        assertEquals("dynamic", accentKey(0))
+        assertEquals("indigo", accentKey(1))
+        // Out-of-range falls back to the default accent's key (index 1).
+        assertEquals("indigo", accentKey(99))
+    }
 }

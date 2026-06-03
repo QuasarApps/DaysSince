@@ -68,4 +68,33 @@ class MilestoneJsonInstrumentedTest {
 
         assertTrue(decoded.single().id.isNotBlank())
     }
+
+    @Test
+    fun encode_writesStableAccentKey_andDecodeResolvesIt() {
+        val json = MilestoneJson.encode(
+            listOf(Milestone("a", "T", LocalDate.of(2025, 1, 1), LocalTime.of(8, 0), accent = 7)),
+        )
+
+        // accent index 7 == "slate"; persisted as a stable key, not a bare index.
+        assertTrue(json.contains("\"accent\":\"slate\""))
+        assertEquals(7, MilestoneJson.decode(json).single().accent)
+    }
+
+    @Test
+    fun decode_legacyIntegerAccent_andUnknownKey() {
+        // Pre-key data stored the raw index as a number; still loads unchanged.
+        assertEquals(
+            5,
+            MilestoneJson.decode(
+                """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":5}]""",
+            ).single().accent,
+        )
+        // An accent key removed in a later release falls back to Dynamic (0).
+        assertEquals(
+            0,
+            MilestoneJson.decode(
+                """[{"id":"x","title":"T","date":"2025-01-01","time":"08:00","accent":"removed"}]""",
+            ).single().accent,
+        )
+    }
 }
