@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kover)
 }
 
@@ -117,10 +118,8 @@ android {
         compose = true
     }
 
-    composeOptions {
-        // Bumped to a Kotlin 1.9.x compatible Compose compiler version
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
+    // composeOptions { kotlinCompilerExtensionVersion } is no longer needed: the Compose compiler
+    // is applied as the org.jetbrains.kotlin.plugin.compose Gradle plugin (Kotlin 2.0+).
 
     testOptions {
         unitTests {
