@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.quasarapps.dayssince.SelectedStartDateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -29,14 +28,10 @@ data class WidgetBinding(
  * milestone id as a bare string is decoded back into a [WidgetBinding] with transparent=false.
  */
 class MilestonesRepository internal constructor(
-    private val appContext: Context,
     private val dataStore: DataStore<Preferences>,
 ) {
 
-    constructor(context: Context) : this(
-        context.applicationContext,
-        context.applicationContext.milestonesDataStore,
-    )
+    constructor(context: Context) : this(context.applicationContext.milestonesDataStore)
 
     val milestones: Flow<List<Milestone>> = dataStore.data.map { prefs ->
         MilestoneJson.decode(prefs[KEY_MILESTONES]).sortedByDescending { it.createdAt }
@@ -94,37 +89,9 @@ class MilestonesRepository internal constructor(
             .firstOrNull { it.id == binding.milestoneId }
     }
 
-    /**
-     * One-time migration of the old single-counter prefs into a first milestone, so upgrading
-     * users keep their counter.
-     *
-     * Only seeds when those prefs were *actually saved* ([SelectedStartDateTime.hasStored]) —
-     * a brand-new install has no legacy data and should land on the empty state instead of a
-     * phantom "0 days" milestone.
-     */
-    suspend fun migrateLegacyIfNeeded() {
-        dataStore.edit { prefs ->
-            if (prefs[KEY_MIGRATED] == "1") return@edit
-            val noMilestonesYet = MilestoneJson.decode(prefs[KEY_MILESTONES]).isEmpty()
-            if (noMilestonesYet && SelectedStartDateTime.hasStored(appContext)) {
-                val legacy = SelectedStartDateTime.load(appContext)
-                val seeded = Milestone(
-                    id = Milestone.newId(),
-                    title = "Milestone",
-                    date = legacy.date,
-                    time = legacy.time,
-                    accent = 0,
-                )
-                prefs[KEY_MILESTONES] = MilestoneJson.encode(listOf(seeded))
-            }
-            prefs[KEY_MIGRATED] = "1"
-        }
-    }
-
     companion object {
         private val KEY_MILESTONES = stringPreferencesKey("milestones_json")
         private val KEY_BINDINGS = stringPreferencesKey("widget_bindings_json")
-        private val KEY_MIGRATED = stringPreferencesKey("legacy_migrated")
 
         internal fun encodeBindings(map: Map<Int, WidgetBinding>): String {
             val o = JSONObject()

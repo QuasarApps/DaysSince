@@ -23,10 +23,6 @@ class MilestonesViewModel internal constructor(
     val milestones: StateFlow<List<Milestone>> = repo.milestones
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    // The legacy single-counter migration runs in DaysSinceApplication.onCreate so it
-    // fires once per process regardless of whether the user enters via MainActivity or
-    // the widget config picker — see DaysSinceApplication for the rationale.
-
     fun addMilestone(title: String, date: LocalDate, time: LocalTime, accent: Int) {
         viewModelScope.launch {
             repo.upsert(

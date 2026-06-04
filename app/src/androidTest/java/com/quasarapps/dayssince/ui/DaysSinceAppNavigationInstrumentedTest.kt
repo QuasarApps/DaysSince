@@ -11,7 +11,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.quasarapps.dayssince.Prefs
 import com.quasarapps.dayssince.data.MilestonesRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -43,9 +42,8 @@ class DaysSinceAppNavigationInstrumentedTest {
 
     @Before
     fun resetStore() {
-        // Drop any legacy single-counter prefs and every persisted milestone so we start on the
-        // empty state regardless of what else has run on this device.
-        Prefs.get(appContext).edit().clear().commit()
+        // Delete every persisted milestone so we start on the empty state regardless of what else
+        // has run on this device.
         val repo = MilestonesRepository(appContext)
         runBlocking { repo.snapshot().forEach { repo.delete(it.id) } }
     }

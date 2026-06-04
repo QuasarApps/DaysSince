@@ -82,14 +82,6 @@ named `dayssince_store`, with two keys:
 - `milestones_json` — JSON array of `Milestone` objects.
 - `widget_bindings_json` — JSON map of `appWidgetId → {milestoneId, transparent}`.
 
-There is a one-time migration that folds the old single-counter
-SharedPreferences (`dayssince_prefs`) into a first `Milestone` row, so users
-of an earlier internal build keep their counter on upgrade. It runs from
-`DaysSinceApplication.onCreate` on every cold start (idempotent — a
-`legacy_migrated` flag in DataStore short-circuits subsequent calls), so
-the migrated state is in place before either the launcher activity or the
-widget config picker reads it.
-
 ---
 
 ## Widgets
@@ -148,8 +140,6 @@ Notable test files:
 - `MilestonesRepositoryBindingsTest` — widget binding serialisation,
   including the legacy bare-string format from before the transparent flag
   was added.
-- `SelectedStartDateTimeTest` — legacy single-counter fallback handling.
-- `PrefsTest` — SharedPreferences round-trip.
 
 CI assembles the debug variant and runs the JVM tests on every push and
 pull request — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
