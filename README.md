@@ -71,7 +71,10 @@ widget/
   glance/DaysWidget         1×1 Glance widget
   glance/DaysHoursMinutes…  wide Glance widget
   glance/WidgetUi           shared Glance scaffold, colours, and click target
+  glance/MilestoneGlance…   base receiver that arms/cancels the refresh schedule
   MilestoneWidgets          updateAll() helper called after milestone changes
+  WidgetRefreshWorker       periodic worker that re-renders placed widgets
+  WidgetRefreshScheduler    schedules/cancels the hourly refresh (WorkManager)
 
 util/EnglishDateFormat      "1st of January 2026" formatting
 ```
@@ -98,12 +101,21 @@ They share:
 - A tap target that opens `MainActivity` deep-linked to the bound
   milestone's detail screen.
 
-Update cadence is driven by `appwidget-provider` `updatePeriodMillis`
-(6 h for the days-only widget, 30 min for the d/h/m widget — the platform
-minimum) plus an explicit `updateAll()` after every milestone or binding
-change. The minutes value on the wide widget will lag real time by up to
-30 minutes between system-driven updates; the app itself ticks once per
-minute aligned to the minute boundary while it's in the foreground.
+Update cadence has three layers:
+
+- An explicit `updateAll()` immediately after every milestone or binding change.
+- A **WorkManager** periodic job (`WidgetRefreshWorker`) that re-renders every
+  placed widget about **once an hour**, skipped while the battery is low. It's
+  scheduled while any widget is placed and cancelled once the last is removed.
+  An hour is the deliberate battery-vs-freshness trade: *days* is the headline
+  unit and only changes once a day, so the wide widget's hours/minutes are a
+  nice-to-have rather than worth more frequent wake-ups.
+- The platform's `updatePeriodMillis` (6 h for the days widget, 30 min for the
+  d/h/m widget) as a backstop — it's coalesced/deferred by the system, so the
+  WorkManager job is what makes the refresh reliable.
+
+In the foreground the app itself ticks once per minute, aligned to the minute
+boundary, so the in-app detail screen stays live to the minute.
 
 ---
 
@@ -111,7 +123,8 @@ minute aligned to the minute boundary while it's in the foreground.
 
 ### Android Studio
 
-1. Open the project root in Android Studio Iguana or newer.
+1. Open the project root in Android Studio Ladybug (2024.2) or newer
+   (required by AGP 8.7 / the Kotlin 2.0 Compose compiler plugin).
 2. Allow Gradle sync.
 3. Run the `app` configuration on an emulator or device.
 
@@ -141,8 +154,17 @@ Notable test files:
   including the legacy bare-string format from before the transparent flag
   was added.
 
-CI assembles the debug variant and runs the JVM tests on every push and
-pull request — see [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+The `androidTest` source set also holds on-device tests (Compose UI, Glance
+widgets, the DataStore repository, and an end-to-end navigation flow), run with
+`connectedDebugAndroidTest` on a device or emulator.
+
+On every push and pull request, CI runs three jobs — see
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+
+- **debug build + tests** — `assembleDebug` + `testDebugUnitTest`.
+- **release build + lint** — `assembleRelease` + `lintRelease`.
+- **instrumentation tests** — `connectedDebugAndroidTest` on an emulator
+  (API 30).
 
 ---
 
