@@ -122,9 +122,28 @@ android {
     // is applied as the org.jetbrains.kotlin.plugin.compose Gradle plugin (Kotlin 2.0+).
 
     testOptions {
+        // Zero out device animation scales before instrumentation runs (the AGP-native equivalent
+        // of the old emulator-runner's `disable-animations: true`). Keeps the popup/dialog-layer
+        // Compose tests — e.g. the DetailScreen dropdown→dialog flow — stable on the emulator.
+        animationsDisabled = true
+
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
+        }
+
+        // Gradle Managed Device: AGP provisions/boots/tears down the emulator, so the instrumentation
+        // suite runs with the same `./gradlew :app:pixel2api30DebugAndroidTest` command locally and in
+        // CI. `aosp-atd` is an Automated Test Device image — headless- and CI-optimised, and matches
+        // the app (no Google Play Services dependency).
+        managedDevices {
+            localDevices {
+                create("pixel2api30") {
+                    device = "Pixel 2"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd"
+                }
+            }
         }
     }
 }
