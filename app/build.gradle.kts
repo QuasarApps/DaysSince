@@ -122,6 +122,11 @@ android {
     // is applied as the org.jetbrains.kotlin.plugin.compose Gradle plugin (Kotlin 2.0+).
 
     testOptions {
+        // Zero out device animation scales before instrumentation runs (the AGP-native equivalent
+        // of the old emulator-runner's `disable-animations: true`). Keeps the popup/dialog-layer
+        // Compose tests — e.g. the DetailScreen dropdown→dialog flow — stable on the emulator.
+        animationsDisabled = true
+
         unitTests {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
