@@ -90,6 +90,29 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # Cache the AVD and a booted snapshot so most runs skip the slow cold create/boot.
+      - name: AVD cache
+        uses: actions/cache@v5
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-30-default-x86_64
+
+      # On a cache miss, create the AVD and boot once to generate a reusable snapshot.
+      - name: Create AVD snapshot
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: default
+          arch: x86_64
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
       - name: connectedDebugAndroidTest
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -98,6 +121,9 @@ jobs:
           # boots faster than `google_apis`.
           target: default
           arch: x86_64
+          # Reuse the cached AVD/snapshot; don't re-save it so the cache stays stable.
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: ./gradlew :app:connectedDebugAndroidTest --no-daemon --stacktrace
 
