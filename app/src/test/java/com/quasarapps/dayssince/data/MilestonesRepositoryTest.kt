@@ -1,11 +1,8 @@
 package com.quasarapps.dayssince.data
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import com.quasarapps.dayssince.Prefs
-import com.quasarapps.dayssince.SelectedStartDateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -15,12 +12,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
@@ -44,19 +39,14 @@ class MilestonesRepositoryTest {
     // doesn't trip runTest's "lingering coroutines" check. Shares the scheduler for one clock.
     private val dataStoreScope = CoroutineScope(dispatcher)
 
-    private lateinit var appContext: Context
     private lateinit var dataStore: DataStore<Preferences>
     private lateinit var repo: MilestonesRepository
 
     @Before
     fun setUp() {
-        appContext = RuntimeEnvironment.getApplication()
-        // Migration reads/writes the legacy single-counter SharedPreferences; start clean.
-        Prefs.get(appContext).edit().clear().commit()
-
         val file = File.createTempFile("dayssince_test_", ".preferences_pb").also { it.delete() }
         dataStore = PreferenceDataStoreFactory.create(scope = dataStoreScope) { file }
-        repo = MilestonesRepository(appContext, dataStore)
+        repo = MilestonesRepository(dataStore)
     }
 
     @After
@@ -174,53 +164,5 @@ class MilestonesRepositoryTest {
 
         assertEquals("ghost", repo.bindingForWidget(7)?.milestoneId)
         assertNull(repo.milestoneForWidget(7))
-    }
-
-    // ---- legacy migration ----
-
-    @Test
-    fun migrate_seedsAMilestone_fromStoredLegacyCounter() = runTest(dispatcher) {
-        val date = LocalDate.of(2025, 6, 15)
-        val time = LocalTime.of(7, 30)
-        SelectedStartDateTime.persistDate(appContext, date)
-        SelectedStartDateTime.persistTime(appContext, time)
-
-        repo.migrateLegacyIfNeeded()
-
-        val seeded = repo.snapshot().single()
-        assertEquals(date, seeded.date)
-        assertEquals(time, seeded.time)
-        assertEquals("Milestone", seeded.title)
-    }
-
-    @Test
-    fun migrate_doesNotSeed_onFreshInstallWithNoLegacyData() = runTest(dispatcher) {
-        // setUp() already cleared the legacy prefs, so hasStored() is false here.
-        repo.migrateLegacyIfNeeded()
-
-        assertTrue(repo.snapshot().isEmpty())
-    }
-
-    @Test
-    fun migrate_doesNotSeed_whenMilestonesAlreadyExist() = runTest(dispatcher) {
-        SelectedStartDateTime.persistDate(appContext, LocalDate.of(2025, 6, 15))
-        repo.upsert(milestone("existing"))
-
-        repo.migrateLegacyIfNeeded()
-
-        val ids = repo.snapshot().map { it.id }
-        assertEquals(listOf("existing"), ids)
-    }
-
-    @Test
-    fun migrate_runsOnlyOnce_evenIfLegacyDataAppearsLater() = runTest(dispatcher) {
-        // First run with no legacy data sets the "migrated" flag without seeding.
-        repo.migrateLegacyIfNeeded()
-
-        // Legacy data shows up afterwards; a second run must not retroactively seed it.
-        SelectedStartDateTime.persistDate(appContext, LocalDate.of(2025, 6, 15))
-        repo.migrateLegacyIfNeeded()
-
-        assertTrue(repo.snapshot().isEmpty())
     }
 }

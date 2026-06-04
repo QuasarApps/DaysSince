@@ -59,7 +59,7 @@ class MilestonesViewModelInstrumentedTest {
         tempFile = File.createTempFile("dayssince_vm_androidtest_", ".preferences_pb", app.cacheDir)
             .also { it.delete() }
         dataStore = PreferenceDataStoreFactory.create(scope = dataStoreScope) { tempFile }
-        repo = MilestonesRepository(app, dataStore)
+        repo = MilestonesRepository(dataStore)
         viewModel = MilestonesViewModel(app, repo)
     }
 

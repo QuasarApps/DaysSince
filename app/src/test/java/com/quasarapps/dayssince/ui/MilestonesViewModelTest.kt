@@ -55,7 +55,7 @@ class MilestonesViewModelTest {
 
         val file = File.createTempFile("dayssince_vm_", ".preferences_pb").also { it.delete() }
         dataStore = PreferenceDataStoreFactory.create(scope = dataStoreScope) { file }
-        repo = MilestonesRepository(app, dataStore)
+        repo = MilestonesRepository(dataStore)
         viewModel = MilestonesViewModel(app, repo)
     }
 

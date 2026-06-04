@@ -6,8 +6,6 @@
     See https://developer.android.com/guide/topics/data/autobackup
 -->
 <full-backup-content>
-    <!-- Legacy single-counter SharedPreferences (kept around for one-time migration). -->
-    <include domain="sharedpref" path="dayssince_prefs.xml" />
-    <!-- Current DataStore (Preferences): milestones list + widget bindings. -->
+    <!-- DataStore (Preferences): milestones list + widget bindings. -->
     <include domain="file" path="datastore/dayssince_store.preferences_pb" />
 </full-backup-content>

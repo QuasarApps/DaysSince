@@ -6,8 +6,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.quasarapps.dayssince.Prefs
-import com.quasarapps.dayssince.SelectedStartDateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -17,7 +15,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,33 +45,17 @@ class MilestonesRepositoryInstrumentedTest {
     @Before
     fun setUp() {
         appContext = ApplicationProvider.getApplicationContext()
-        // Migration reads/writes the legacy single-counter SharedPreferences; start clean.
-        Prefs.get(appContext).edit().clear().commit()
 
         tempFile = File.createTempFile("dayssince_androidtest_", ".preferences_pb", appContext.cacheDir)
             .also { it.delete() }
         dataStore = PreferenceDataStoreFactory.create(scope = dataStoreScope) { tempFile }
-        repo = MilestonesRepository(appContext, dataStore)
+        repo = MilestonesRepository(dataStore)
     }
 
     @After
     fun tearDown() {
         dataStoreScope.cancel()
         tempFile.delete()
-    }
-
-    /**
-     * Writes the legacy single-counter prefs synchronously. [SelectedStartDateTime.persistDate] /
-     * [SelectedStartDateTime.persistTime] use SharedPreferences.apply() (async); committing here
-     * removes any chance the migration runs before the write lands on a real device.
-     */
-    private fun persistLegacyCommitted(date: LocalDate, time: LocalTime? = null) {
-        val editor = Prefs.get(appContext).edit()
-            .putString(SelectedStartDateTime.PREF_SELECTED_DATE, date.toString())
-        if (time != null) {
-            editor.putString(SelectedStartDateTime.PREF_SELECTED_TIME, time.toString())
-        }
-        editor.commit()
     }
 
     private fun milestone(
@@ -180,38 +161,5 @@ class MilestonesRepositoryInstrumentedTest {
 
         assertEquals("ghost", repo.bindingForWidget(7)?.milestoneId)
         assertNull(repo.milestoneForWidget(7))
-    }
-
-    // ---- legacy migration ----
-
-    @Test
-    fun migrate_seedsAMilestone_fromStoredLegacyCounter() = runTest(dispatcher) {
-        val date = LocalDate.of(2025, 6, 15)
-        val time = LocalTime.of(7, 30)
-        persistLegacyCommitted(date, time)
-
-        repo.migrateLegacyIfNeeded()
-
-        val seeded = repo.snapshot().single()
-        assertEquals(date, seeded.date)
-        assertEquals(time, seeded.time)
-        assertEquals("Milestone", seeded.title)
-    }
-
-    @Test
-    fun migrate_doesNotSeed_onFreshInstallWithNoLegacyData() = runTest(dispatcher) {
-        repo.migrateLegacyIfNeeded()
-
-        assertTrue(repo.snapshot().isEmpty())
-    }
-
-    @Test
-    fun migrate_runsOnlyOnce_evenIfLegacyDataAppearsLater() = runTest(dispatcher) {
-        repo.migrateLegacyIfNeeded()
-
-        persistLegacyCommitted(LocalDate.of(2025, 6, 15))
-        repo.migrateLegacyIfNeeded()
-
-        assertTrue(repo.snapshot().isEmpty())
     }
 }
