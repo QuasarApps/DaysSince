@@ -91,6 +91,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      # GMD's setup task downloads the ATD system image via sdkmanager, which is licence-gated.
+      # Accept all SDK licences up front so the install isn't blocked. (`yes` gets SIGPIPE once
+      # sdkmanager stops reading, so the pipe's non-zero exit is expected and ignored.)
+      - name: Accept Android SDK licences
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
       # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
       # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
       # fragility that a booted-snapshot cache is prone to.
