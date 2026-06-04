@@ -97,13 +97,19 @@ jobs:
       - name: Accept Android SDK licences
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
+      # Runner default env vars (ANDROID_SDK_ROOT) aren't available in the ${{ env.* }} expression
+      # context, so re-export the SDK root into the job env. Without this the cache `path` below
+      # resolves to "/system-images/..." and silently no-ops, re-downloading the image every run.
+      - name: Expose SDK path
+        run: echo "SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+
       # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
       # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
       # fragility that a booted-snapshot cache is prone to.
       - name: Cache ATD system image
         uses: actions/cache@v5
         with:
-          path: ${{ env.ANDROID_HOME }}/system-images/android-30/aosp_atd
+          path: ${{ env.SDK_ROOT }}/system-images/android-30/aosp_atd
           key: gmd-system-image-aosp-atd-30
 
       - name: Instrumentation tests (Gradle Managed Device)
