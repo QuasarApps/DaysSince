@@ -64,9 +64,10 @@ jobs:
           path: app/build/reports/lint-results-release.*
           if-no-files-found: ignore
 
-  # Run the androidTest (instrumentation) suite on an emulator. Kept as its own job because it is
-  # slower and heavier than the JVM jobs, so a flake here doesn't block the fast unit feedback.
-  # Animations are disabled on the emulator to keep Compose UI assertions stable.
+  # Run the androidTest (instrumentation) suite on a Gradle Managed Device (GMD). The device is
+  # declared in app/build.gradle.kts, so AGP provisions/boots/tears down the emulator and the exact
+  # same `:app:pixel2api30DebugAndroidTest` command runs here and locally. Kept as its own job so its
+  # slowness doesn't gate the fast JVM jobs.
   instrumentation:
     name: instrumentation tests
     runs-on: ubuntu-latest
@@ -90,21 +91,22 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: connectedDebugAndroidTest
-        uses: reactivecircus/android-emulator-runner@v2
+      # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
+      # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
+      # fragility that a booted-snapshot cache is prone to.
+      - name: Cache ATD system image
+        uses: actions/cache@v5
         with:
-          api-level: 30
-          # The app has no Google Play Services dependency, so the lighter `default` system image
-          # boots faster than `google_apis`.
-          target: default
-          arch: x86_64
-          disable-animations: true
-          script: ./gradlew :app:connectedDebugAndroidTest --no-daemon --stacktrace
+          path: ${{ env.ANDROID_HOME }}/system-images/android-30/aosp_atd
+          key: gmd-system-image-aosp-atd-30
+
+      - name: Instrumentation tests (Gradle Managed Device)
+        run: ./gradlew :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
 
       - name: Upload instrumentation test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: android-test-report
-          path: app/build/reports/androidTests/connected/**
+          path: app/build/reports/androidTests/**
           if-no-files-found: ignore

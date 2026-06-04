@@ -126,6 +126,20 @@ android {
             isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
+
+        // Gradle Managed Device: AGP provisions/boots/tears down the emulator, so the instrumentation
+        // suite runs with the same `./gradlew :app:pixel2api30DebugAndroidTest` command locally and in
+        // CI. `aosp-atd` is an Automated Test Device image — headless- and CI-optimised, and matches
+        // the app (no Google Play Services dependency).
+        managedDevices {
+            localDevices {
+                create("pixel2api30") {
+                    device = "Pixel 2"
+                    apiLevel = 30
+                    systemImageSource = "aosp-atd"
+                }
+            }
+        }
     }
 }
 
