@@ -74,7 +74,7 @@ class DetailScreenInstrumentedTest {
         // landscape. This test is about the content being rendered/wired correctly, not its
         // viewport position, so assert existence rather than display.
         composeRule.onNodeWithText("Sober").assertExists()
-        composeRule.onNodeWithText("since 15th of June 2025", substring = true).assertExists()
+        composeRule.onNodeWithText("since June 15, 2025", substring = true).assertExists()
     }
 
     @Test

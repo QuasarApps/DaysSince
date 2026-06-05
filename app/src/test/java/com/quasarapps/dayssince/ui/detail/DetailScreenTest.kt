@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -20,8 +21,13 @@ import java.time.LocalTime
  *
  * Mirrors the on-device coverage for fast CI feedback: the missing-milestone fallback, the
  * hero/footer content, and the overflow-menu actions including the delete confirmation gate.
+ *
+ * Pinned to en-US: the assertions check English copy and en-US long dates (e.g. "June 15, 2025"),
+ * which the screen formats from the active configuration locale. Without this the test would depend
+ * on the host's default locale and break wherever that isn't English.
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(qualifiers = "en-rUS")
 class DetailScreenTest {
 
     @get:Rule
@@ -81,7 +87,7 @@ class DetailScreenTest {
 
         composeRule.onNodeWithText("Sober").assertIsDisplayed()
         composeRule.onNodeWithText("DAYS").assertIsDisplayed()
-        composeRule.onNodeWithText("since 15th of June 2025", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText("since June 15, 2025", substring = true).assertIsDisplayed()
     }
 
     @Test

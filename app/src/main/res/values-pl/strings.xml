@@ -1,0 +1,59 @@
+<resources>
+    <string name="accent_dynamic">Dynamiczny</string>
+    <string name="accent_indigo">Indygo</string>
+    <string name="accent_violet">Fioletowy</string>
+    <string name="accent_rose">Różowy</string>
+    <string name="accent_sunset">Zachód słońca</string>
+    <string name="accent_emerald">Szmaragdowy</string>
+    <string name="accent_ocean">Ocean</string>
+    <string name="accent_slate">Łupek</string>
+
+    <string name="action_save">Zapisz</string>
+    <string name="action_cancel">Anuluj</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Edytuj</string>
+    <string name="action_delete">Usuń</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Nowy</string>
+    <string name="home_fab_content_description">Dodaj wydarzenie</string>
+    <string name="card_days_since_label">DNI OD</string>
+    <string name="card_on_date_at_time">%1$s o %2$s</string>
+    <string name="empty_title">Brak wydarzeń</string>
+    <string name="empty_subtitle">Licz dni od czegoś, co jest dla Ciebie ważne.</string>
+    <string name="empty_cta">Dodaj pierwsze wydarzenie</string>
+
+    <string name="detail_back_content_description">Wstecz</string>
+    <string name="detail_more_options_content_description">Więcej opcji</string>
+    <string name="detail_days_label">DNI</string>
+    <string name="detail_hours_label">GODZINY</string>
+    <string name="detail_minutes_label">MINUTY</string>
+    <string name="detail_since_date_at_time">od %1$s o %2$s</string>
+    <string name="detail_edit_button">Edytuj wydarzenie</string>
+    <string name="detail_widget_hint">Dodaj widżet do ekranu głównego, aby mieć to na widoku.</string>
+    <string name="detail_delete_dialog_title">Usunąć wydarzenie?</string>
+    <string name="detail_delete_dialog_message">Spowoduje to usunięcie „%1$s” oraz wszystkich widżetów, które go używają.</string>
+    <string name="detail_missing">To wydarzenie nie jest już dostępne.</string>
+    <string name="detail_go_back">Wróć</string>
+
+    <string name="edit_title_new">Nowe wydarzenie</string>
+    <string name="edit_title_edit">Edytuj wydarzenie</string>
+    <string name="edit_title_field_label">Tytuł</string>
+    <string name="edit_title_field_placeholder">np. Rzucić palenie</string>
+    <string name="edit_field_date">Data</string>
+    <string name="edit_field_time">Godzina</string>
+    <string name="edit_accent_header">Kolor</string>
+    <string name="milestone_default_title">Wydarzenie</string>
+
+    <string name="widget_config_title">Wybierz wydarzenie</string>
+    <string name="widget_config_transparent_title">Przezroczyste tło</string>
+    <string name="widget_config_transparent_subtitle">Pokaż tylko liczbę na tapecie.</string>
+    <string name="widget_config_empty_subtitle">Otwórz Days Since, aby dodać wydarzenie, a potem umieść widżet ponownie.</string>
+    <string name="widget_config_open_app">Otwórz Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d dzień · od %2$s</item>
+        <item quantity="few">%1$d dni · od %2$s</item>
+        <item quantity="many">%1$d dni · od %2$s</item>
+        <item quantity="other">%1$d dnia · od %2$s</item>
+    </plurals>
+</resources>

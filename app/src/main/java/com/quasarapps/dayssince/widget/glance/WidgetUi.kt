@@ -32,7 +32,7 @@ import com.quasarapps.dayssince.MainActivity
 import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.theme.accentOrDefault
-import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import java.time.Clock
 
 @Composable
@@ -106,11 +106,14 @@ internal fun DaysWidgetContent(
         return
     }
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
+    val locale = context.resources.configuration.locales[0]
+    val daysFragment =
+        context.resources.getQuantityString(R.plurals.widget_a11y_days, dhm.days.toInt(), dhm.days)
     val description = context.getString(
         R.string.widget_days_content_description,
-        dhm.days,
+        daysFragment,
         milestone.title,
-        EnglishDateFormat.formatOrdinalDate(milestone.date),
+        LocalizedDateFormat.formatLongDate(milestone.date, locale),
     )
     WidgetScaffold(milestone, transparent, description) { fg ->
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -140,12 +143,13 @@ internal fun DaysHoursMinutesWidgetContent(
         return
     }
     val dhm = DaysSince.sincePickedDhm(milestone.date, milestone.time, clock)
+    val res = context.resources
     val description = context.getString(
         R.string.widget_dhm_content_description,
         milestone.title,
-        dhm.days,
-        dhm.hours,
-        dhm.minutes,
+        res.getQuantityString(R.plurals.widget_a11y_days, dhm.days.toInt(), dhm.days),
+        res.getQuantityString(R.plurals.widget_a11y_hours, dhm.hours.toInt(), dhm.hours),
+        res.getQuantityString(R.plurals.widget_a11y_minutes, dhm.minutes.toInt(), dhm.minutes),
     )
     WidgetScaffold(milestone, transparent, description) { fg ->
         Row(verticalAlignment = Alignment.CenterVertically) {

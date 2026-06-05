@@ -1,0 +1,36 @@
+<resources>
+    <string name="widget_days_label">Дней прошло</string>
+    <string name="widget_days_description">Полные дни с выбранного вами события.</string>
+    <string name="widget_dhm_label">Дни · Часы · Минуты</string>
+    <string name="widget_dhm_description">Время с события: дни, часы и минуты.</string>
+
+    <string name="widget_setup_short">Настроить</string>
+    <string name="widget_setup_long">Нажмите, чтобы настроить</string>
+    <string name="widget_setup_content_description">Нажмите, чтобы выбрать событие</string>
+
+    <string name="widget_unit_days">ДНИ</string>
+    <string name="widget_unit_hours">Ч</string>
+    <string name="widget_unit_minutes">МИН</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="other">%d дня</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d час</item>
+        <item quantity="few">%d часа</item>
+        <item quantity="many">%d часов</item>
+        <item quantity="other">%d часа</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минуты</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s с %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

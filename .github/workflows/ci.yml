@@ -106,11 +106,27 @@ jobs:
       # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
       # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
       # fragility that a booted-snapshot cache is prone to.
+      #
+      # Key suffix `-v2`: a hosted-runner tooling bump left AGP's managed-device setup
+      # (`:app:<device>Setup`) failing with `MissingValueException` against the previously-cached
+      # image. Busting the key forces a fresh image download under the current tooling.
       - name: Cache ATD system image
         uses: actions/cache@v5
         with:
           path: ${{ env.SDK_ROOT }}/system-images/android-30/aosp_atd
-          key: gmd-system-image-aosp-atd-30
+          key: gmd-system-image-aosp-atd-30-v2
+
+      # Install the emulator runtime, platform-tools and the ATD system image up front instead of
+      # relying on AGP's managed-device setup to auto-resolve them. When a runner tooling update
+      # leaves one of those components unresolved, AGP's setup task throws an opaque
+      # `MissingValueException`; installing them explicitly here keeps the setup deterministic.
+      # (Pixel 2 + aosp-atd on a 64-bit runner resolves to the x86_64 image, with an x86 fallback.)
+      - name: Install emulator + ATD system image
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          "$SDKMANAGER" "emulator" "platform-tools"
+          "$SDKMANAGER" "system-images;android-30;aosp_atd;x86_64" \
+            || "$SDKMANAGER" "system-images;android-30;aosp_atd;x86"
 
       - name: Instrumentation tests (Gradle Managed Device)
         run: ./gradlew :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace

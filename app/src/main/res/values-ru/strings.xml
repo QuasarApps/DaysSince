@@ -1,0 +1,59 @@
+<resources>
+    <string name="accent_dynamic">Динамический</string>
+    <string name="accent_indigo">Индиго</string>
+    <string name="accent_violet">Фиолетовый</string>
+    <string name="accent_rose">Розовый</string>
+    <string name="accent_sunset">Закат</string>
+    <string name="accent_emerald">Изумрудный</string>
+    <string name="accent_ocean">Океан</string>
+    <string name="accent_slate">Сланец</string>
+
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_ok">ОК</string>
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Новое</string>
+    <string name="home_fab_content_description">Добавить событие</string>
+    <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>
+    <string name="card_on_date_at_time">%1$s в %2$s</string>
+    <string name="empty_title">Пока нет событий</string>
+    <string name="empty_subtitle">Считайте дни с момента чего-то важного для вас.</string>
+    <string name="empty_cta">Добавьте первое событие</string>
+
+    <string name="detail_back_content_description">Назад</string>
+    <string name="detail_more_options_content_description">Ещё</string>
+    <string name="detail_days_label">ДНИ</string>
+    <string name="detail_hours_label">ЧАСЫ</string>
+    <string name="detail_minutes_label">МИНУТЫ</string>
+    <string name="detail_since_date_at_time">с %1$s в %2$s</string>
+    <string name="detail_edit_button">Изменить событие</string>
+    <string name="detail_widget_hint">Добавьте виджет на главный экран, чтобы это было всегда на виду.</string>
+    <string name="detail_delete_dialog_title">Удалить событие?</string>
+    <string name="detail_delete_dialog_message">Будет удалено «%1$s» и все использующие его виджеты.</string>
+    <string name="detail_missing">Это событие больше недоступно.</string>
+    <string name="detail_go_back">Назад</string>
+
+    <string name="edit_title_new">Новое событие</string>
+    <string name="edit_title_edit">Изменить событие</string>
+    <string name="edit_title_field_label">Название</string>
+    <string name="edit_title_field_placeholder">напр. Бросить курить</string>
+    <string name="edit_field_date">Дата</string>
+    <string name="edit_field_time">Время</string>
+    <string name="edit_accent_header">Цвет</string>
+    <string name="milestone_default_title">Событие</string>
+
+    <string name="widget_config_title">Выберите событие</string>
+    <string name="widget_config_transparent_title">Прозрачный фон</string>
+    <string name="widget_config_transparent_subtitle">Показывать только число на обоях.</string>
+    <string name="widget_config_empty_subtitle">Откройте Days Since, чтобы добавить событие, затем снова разместите виджет.</string>
+    <string name="widget_config_open_app">Открыть Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d день · с %2$s</item>
+        <item quantity="few">%1$d дня · с %2$s</item>
+        <item quantity="many">%1$d дней · с %2$s</item>
+        <item quantity="other">%1$d дня · с %2$s</item>
+    </plurals>
+</resources>

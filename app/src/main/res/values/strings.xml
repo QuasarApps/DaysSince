@@ -1,8 +1,19 @@
 <resources>
-    <!-- Canonical app name. The launcher label routes through the `${appLabel}` manifest
-         placeholder so the debug variant can override to "Days Since (debug)" without losing
-         translatability of the release-variant string here. -->
-    <string name="app_name">Days Since</string>
+    <!-- Canonical app name. Kept as a brand name (translatable="false") so it reads "Days Since" in
+         every locale. The launcher label routes through the `${appLabel}` manifest placeholder so
+         the debug variant can override to "Days Since (debug)"; the release variant resolves it back
+         to this string. -->
+    <string name="app_name" translatable="false">Days Since</string>
+
+    <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
+    <string name="accent_dynamic">Dynamic</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_violet">Violet</string>
+    <string name="accent_rose">Rose</string>
+    <string name="accent_sunset">Sunset</string>
+    <string name="accent_emerald">Emerald</string>
+    <string name="accent_ocean">Ocean</string>
+    <string name="accent_slate">Slate</string>
 
     <!-- Shared actions -->
     <string name="action_save">Save</string>
@@ -16,8 +27,10 @@
     <string name="home_fab_new">New</string>
     <!-- Accessibility label for the add FAB (its visible "New" text is not exposed to TalkBack). -->
     <string name="home_fab_content_description">Add milestone</string>
+    <!-- translator: standalone caption shown under a large standalone number; not adjacent to it,
+         so no number agreement is needed. -->
     <string name="card_days_since_label">DAYS SINCE</string>
-    <!-- %1$s = ordinal date, %2$s = time. e.g. "On 1st of January 2026 at 9:00 AM" -->
+    <!-- %1$s = localized long date, %2$s = localized time. e.g. "On January 1, 2026 at 9:00 AM" -->
     <string name="card_on_date_at_time">On %1$s at %2$s</string>
     <string name="empty_title">No milestones yet</string>
     <string name="empty_subtitle">Track the days since something that matters to you.</string>
@@ -26,10 +39,13 @@
     <!-- Detail screen -->
     <string name="detail_back_content_description">Back</string>
     <string name="detail_more_options_content_description">More options</string>
+    <!-- translator: the next three are standalone unit captions under large standalone numbers
+         (a dashboard-style readout); they are not placed next to the number, so no plural
+         agreement is needed. -->
     <string name="detail_days_label">DAYS</string>
     <string name="detail_hours_label">HOURS</string>
     <string name="detail_minutes_label">MINUTES</string>
-    <!-- %1$s = ordinal date, %2$s = time. e.g. "since 15th of June 2025 at 9:30 AM" -->
+    <!-- %1$s = localized long date, %2$s = localized time. e.g. "since June 15, 2025 at 9:30 AM" -->
     <string name="detail_since_date_at_time">since %1$s at %2$s</string>
     <string name="detail_edit_button">Edit milestone</string>
     <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>
@@ -56,6 +72,10 @@
     <string name="widget_config_transparent_subtitle">Show just the number on your wallpaper.</string>
     <string name="widget_config_empty_subtitle">Open Days Since to add one, then place the widget again.</string>
     <string name="widget_config_open_app">Open Days Since</string>
-    <!-- %1$d = whole days, %2$s = ordinal date. e.g. "12 days · since 1st of January 2026" -->
-    <string name="widget_config_row_subtitle">%1$d days · since %2$s</string>
+    <!-- %1$d = whole days, %2$s = localized long date. e.g. "12 days · since January 1, 2026".
+         The count is passed both as the quantity selector and as %1$d. -->
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d day · since %2$s</item>
+        <item quantity="other">%1$d days · since %2$s</item>
+    </plurals>
 </resources>

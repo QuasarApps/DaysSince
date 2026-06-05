@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,7 +48,7 @@ import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.components.CountUpNumber
 import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.accentBrush
-import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -68,8 +69,12 @@ fun DetailScreen(
     var menuOpen by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
 
-    val timeText = remember(milestone.time) {
-        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+    val locale = LocalConfiguration.current.locales[0]
+    val timeText = remember(milestone.time, locale) {
+        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
+    }
+    val dateText = remember(milestone.date, locale) {
+        LocalizedDateFormat.formatLongDate(milestone.date, locale)
     }
 
     Box(
@@ -173,7 +178,7 @@ fun DetailScreen(
                 Text(
                     text = stringResource(
                         R.string.detail_since_date_at_time,
-                        EnglishDateFormat.formatOrdinalDate(milestone.date),
+                        dateText,
                         timeText,
                     ),
                     style = MaterialTheme.typography.bodyLarge,

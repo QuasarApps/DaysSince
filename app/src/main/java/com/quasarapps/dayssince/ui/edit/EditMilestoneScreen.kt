@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -63,7 +64,7 @@ import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.LegibilityScrim
 import com.quasarapps.dayssince.ui.theme.MilestoneAccents
 import com.quasarapps.dayssince.ui.theme.accentBrush
-import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
@@ -89,7 +90,10 @@ fun EditMilestoneScreen(
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
-    val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+    val locale = LocalConfiguration.current.locales[0]
+    val timeFormatter = remember(locale) {
+        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -140,7 +144,7 @@ fun EditMilestoneScreen(
             Spacer(Modifier.height(16.dp))
             FieldRow(
                 label = stringResource(R.string.edit_field_date),
-                value = EnglishDateFormat.formatOrdinalDate(date),
+                value = LocalizedDateFormat.formatLongDate(date, locale),
                 icon = Icons.Filled.DateRange,
                 onClick = { showDatePicker = true },
             )
@@ -304,7 +308,11 @@ private fun AccentPicker(selected: Int, onSelect: (Int) -> Unit) {
                 contentAlignment = Alignment.Center,
             ) {
                 if (isSelected) {
-                    Icon(Icons.Filled.Check, contentDescription = accent.label, tint = Color.White)
+                    Icon(
+                        Icons.Filled.Check,
+                        contentDescription = stringResource(accent.labelRes),
+                        tint = Color.White,
+                    )
                 }
             }
         }

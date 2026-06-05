@@ -45,6 +45,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,7 +58,7 @@ import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.data.MilestonesRepository
 import com.quasarapps.dayssince.ui.theme.DaysSinceTheme
 import com.quasarapps.dayssince.ui.theme.accentBrush
-import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import kotlinx.coroutines.launch
 
 /**
@@ -200,6 +202,10 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
 @Composable
 private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
     val days = DaysSince.sincePickedDhm(milestone.date, milestone.time).days
+    val locale = LocalConfiguration.current.locales[0]
+    val dateText = remember(milestone.date, locale) {
+        LocalizedDateFormat.formatLongDate(milestone.date, locale)
+    }
     Surface(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,
@@ -227,10 +233,11 @@ private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = stringResource(
-                        R.string.widget_config_row_subtitle,
+                    text = pluralStringResource(
+                        R.plurals.widget_config_row_subtitle,
+                        days.toInt(),
                         days,
-                        EnglishDateFormat.formatOrdinalDate(milestone.date),
+                        dateText,
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -1,0 +1,42 @@
+<resources>
+    <string name="widget_days_label">الأيام منذ</string>
+    <string name="widget_days_description">الأيام الكاملة منذ حدث تختاره.</string>
+    <string name="widget_dhm_label">أيام · ساعات · دقائق</string>
+    <string name="widget_dhm_description">الوقت منذ حدث، بالأيام والساعات والدقائق.</string>
+
+    <string name="widget_setup_short">إعداد</string>
+    <string name="widget_setup_long">انقر للإعداد</string>
+    <string name="widget_setup_content_description">انقر لاختيار حدث</string>
+
+    <string name="widget_unit_days">أيام</string>
+    <string name="widget_unit_hours">ساعة</string>
+    <string name="widget_unit_minutes">دقيقة</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="zero">%d يوم</item>
+        <item quantity="one">%d يوم</item>
+        <item quantity="two">%d يومين</item>
+        <item quantity="few">%d أيام</item>
+        <item quantity="many">%d يومًا</item>
+        <item quantity="other">%d يوم</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="zero">%d ساعة</item>
+        <item quantity="one">%d ساعة</item>
+        <item quantity="two">%d ساعتين</item>
+        <item quantity="few">%d ساعات</item>
+        <item quantity="many">%d ساعة</item>
+        <item quantity="other">%d ساعة</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="zero">%d دقيقة</item>
+        <item quantity="one">%d دقيقة</item>
+        <item quantity="two">%d دقيقتين</item>
+        <item quantity="few">%d دقائق</item>
+        <item quantity="many">%d دقيقة</item>
+        <item quantity="other">%d دقيقة</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s منذ %2$s، %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s، %3$s، %4$s</string>
+</resources>

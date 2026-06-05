@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Locales the app ships translations for, surfaced to the system per-app language picker
+    (Settings → Apps → Days Since → Language) on Android 13+. Referenced from the manifest as
+    android:localeConfig.
+
+    Declared manually rather than via AGP's androidResources.generateLocaleConfig: that flag breaks
+    the Gradle Managed Device setup task (MissingValueException at :app:<device>Setup), which is how
+    CI runs the instrumentation suite. Keep this list in sync with the res/values-<locale>/ folders;
+    en-US is the default (unqualified res/values/).
+-->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en-US" />
+    <locale android:name="ar" />
+    <locale android:name="de" />
+    <locale android:name="es" />
+    <locale android:name="fr" />
+    <locale android:name="it" />
+    <locale android:name="iw" />
+    <locale android:name="pl" />
+    <locale android:name="pt" />
+    <locale android:name="ru" />
+</locale-config>

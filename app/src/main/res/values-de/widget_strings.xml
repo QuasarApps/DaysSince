@@ -1,0 +1,30 @@
+<resources>
+    <string name="widget_days_label">Tage seit</string>
+    <string name="widget_days_description">Ganze Tage seit einem von dir gewählten Meilenstein.</string>
+    <string name="widget_dhm_label">Tage · Stunden · Minuten</string>
+    <string name="widget_dhm_description">Zeit seit einem Meilenstein, in Tagen, Stunden und Minuten.</string>
+
+    <string name="widget_setup_short">Einrichten</string>
+    <string name="widget_setup_long">Zum Einrichten tippen</string>
+    <string name="widget_setup_content_description">Tippen, um einen Meilenstein zu wählen</string>
+
+    <string name="widget_unit_days">TAGE</string>
+    <string name="widget_unit_hours">STD</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d Tag</item>
+        <item quantity="other">%d Tage</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d Stunde</item>
+        <item quantity="other">%d Stunden</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d Minute</item>
+        <item quantity="other">%d Minuten</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s seit %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

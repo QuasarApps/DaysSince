@@ -1,5 +1,6 @@
 package com.quasarapps.dayssince.ui.theme
 
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.AccentKeys
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -16,7 +17,7 @@ class AccentTest {
     @Test
     fun dynamicAccentIsIndexZero() {
         assertEquals(0, DYNAMIC_ACCENT)
-        assertEquals("Dynamic", MilestoneAccents[DYNAMIC_ACCENT].label)
+        assertEquals(R.string.accent_dynamic, MilestoneAccents[DYNAMIC_ACCENT].labelRes)
     }
 
     @Test
@@ -39,11 +40,12 @@ class AccentTest {
     }
 
     @Test
-    fun milestoneAccents_haveDistinctNonBlankLabels() {
-        val labels = MilestoneAccents.map { it.label }
-        assertEquals("labels must be unique", labels.size, labels.toSet().size)
+    fun milestoneAccents_haveDistinctNonZeroLabelResources() {
+        val labels = MilestoneAccents.map { it.labelRes }
+        assertEquals("label resources must be unique", labels.size, labels.toSet().size)
         // JUnit assertion (not Kotlin `assert`, which is a no-op unless JVM -ea is set).
-        assertFalse("no accent label may be blank", labels.any { it.isBlank() })
+        // 0 is the "no resource" sentinel — every accent must point at a real string.
+        assertFalse("no accent label resource may be 0", labels.any { it == 0 })
     }
 
     @Test

@@ -1,0 +1,58 @@
+<resources>
+    <string name="accent_dynamic">Dinámico</string>
+    <string name="accent_indigo">Índigo</string>
+    <string name="accent_violet">Violeta</string>
+    <string name="accent_rose">Rosa</string>
+    <string name="accent_sunset">Atardecer</string>
+    <string name="accent_emerald">Esmeralda</string>
+    <string name="accent_ocean">Océano</string>
+    <string name="accent_slate">Pizarra</string>
+
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_ok">Aceptar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Eliminar</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Nuevo</string>
+    <string name="home_fab_content_description">Añadir hito</string>
+    <string name="card_days_since_label">DÍAS DESDE</string>
+    <string name="card_on_date_at_time">El %1$s a las %2$s</string>
+    <string name="empty_title">Aún no hay hitos</string>
+    <string name="empty_subtitle">Lleva la cuenta de los días desde algo que te importa.</string>
+    <string name="empty_cta">Añade tu primer hito</string>
+
+    <string name="detail_back_content_description">Atrás</string>
+    <string name="detail_more_options_content_description">Más opciones</string>
+    <string name="detail_days_label">DÍAS</string>
+    <string name="detail_hours_label">HORAS</string>
+    <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_since_date_at_time">desde el %1$s a las %2$s</string>
+    <string name="detail_edit_button">Editar hito</string>
+    <string name="detail_widget_hint">Añade un widget desde tu pantalla de inicio para tenerlo siempre a la vista.</string>
+    <string name="detail_delete_dialog_title">¿Eliminar hito?</string>
+    <string name="detail_delete_dialog_message">Esto elimina «%1$s» y los widgets que lo usen.</string>
+    <string name="detail_missing">Este hito ya no está disponible.</string>
+    <string name="detail_go_back">Volver</string>
+
+    <string name="edit_title_new">Nuevo hito</string>
+    <string name="edit_title_edit">Editar hito</string>
+    <string name="edit_title_field_label">Título</string>
+    <string name="edit_title_field_placeholder">p. ej. Dejar de fumar</string>
+    <string name="edit_field_date">Fecha</string>
+    <string name="edit_field_time">Hora</string>
+    <string name="edit_accent_header">Color</string>
+    <string name="milestone_default_title">Hito</string>
+
+    <string name="widget_config_title">Elige un hito</string>
+    <string name="widget_config_transparent_title">Fondo transparente</string>
+    <string name="widget_config_transparent_subtitle">Muestra solo el número sobre tu fondo de pantalla.</string>
+    <string name="widget_config_empty_subtitle">Abre Days Since para añadir uno y vuelve a colocar el widget.</string>
+    <string name="widget_config_open_app">Abrir Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d día · desde %2$s</item>
+        <item quantity="many">%1$d de días · desde %2$s</item>
+        <item quantity="other">%1$d días · desde %2$s</item>
+    </plurals>
+</resources>

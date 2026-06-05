@@ -1,13 +1,16 @@
 package com.quasarapps.dayssince.widget.glance
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
 import androidx.glance.testing.unit.hasTextEqualTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.quasarapps.dayssince.DaysSince
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.Clock
@@ -15,6 +18,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Locale
 
 /**
  * Unit tests for the Glance widget content composables ([DaysWidgetContent] /
@@ -30,7 +34,16 @@ import java.time.ZoneId
 @RunWith(AndroidJUnit4::class)
 class WidgetContentInstrumentedTest {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
+    // Pin the rendering context to English so these assertions (which check the literal English
+    // unit labels and prompts) are deterministic on any device — including ones whose system
+    // language is non-English, where the Glance test harness would otherwise render the localized
+    // strings. The bound-milestone tests build their expected strings from this same context, so
+    // they stay correct regardless of which locale is pinned here.
+    private val context: Context = run {
+        val base = ApplicationProvider.getApplicationContext<Context>()
+        val config = Configuration(base.resources.configuration).apply { setLocale(Locale.ENGLISH) }
+        base.createConfigurationContext(config)
+    }
 
     private val milestone = Milestone(
         id = "a",
@@ -63,9 +76,20 @@ class WidgetContentInstrumentedTest {
         // The actual elapsed day count is rendered (not just the static "DAYS" label).
         onNode(hasTextEqualTo(expected.days.toString())).assertExists()
         onNode(hasTextEqualTo("DAYS")).assertExists()
-        onNode(
-            hasContentDescriptionEqualTo("${expected.days} days since Sober, 1st of January 2020"),
-        ).assertExists()
+        // Build the expectation from the same resources/formatter the composable uses, so the
+        // assertion stays correct regardless of plural form, locale date style, or device language.
+        val res = context.resources
+        val daysFragment =
+            res.getQuantityString(R.plurals.widget_a11y_days, expected.days.toInt(), expected.days)
+        val dateText =
+            LocalizedDateFormat.formatLongDate(milestone.date, res.configuration.locales[0])
+        val expectedDescription = context.getString(
+            R.string.widget_days_content_description,
+            daysFragment,
+            "Sober",
+            dateText,
+        )
+        onNode(hasContentDescriptionEqualTo(expectedDescription)).assertExists()
     }
 
     @Test
@@ -89,10 +113,18 @@ class WidgetContentInstrumentedTest {
         onNode(hasTextEqualTo("MIN")).assertExists()
         // ...and the content description carries the full, correct d/h/m breakdown (this is what
         // would fail if sincePickedDhm or the Stat wiring produced the wrong numbers).
-        onNode(
-            hasContentDescriptionEqualTo(
-                "Sober: ${expected.days} days, ${expected.hours} hours, ${expected.minutes} minutes",
+        val res = context.resources
+        val expectedDescription = context.getString(
+            R.string.widget_dhm_content_description,
+            "Sober",
+            res.getQuantityString(R.plurals.widget_a11y_days, expected.days.toInt(), expected.days),
+            res.getQuantityString(R.plurals.widget_a11y_hours, expected.hours.toInt(), expected.hours),
+            res.getQuantityString(
+                R.plurals.widget_a11y_minutes,
+                expected.minutes.toInt(),
+                expected.minutes,
             ),
-        ).assertExists()
+        )
+        onNode(hasContentDescriptionEqualTo(expectedDescription)).assertExists()
     }
 }
