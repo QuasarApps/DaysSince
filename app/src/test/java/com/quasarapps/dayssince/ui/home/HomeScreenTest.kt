@@ -13,6 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -21,8 +22,12 @@ import java.time.LocalTime
  *
  * Mirrors the on-device coverage for fast CI feedback: empty-state vs. populated-list branches,
  * the FAB gating, and the add / open click contracts.
+ *
+ * Pinned to en-US so the English-copy assertions don't depend on the host's default locale (the app
+ * now ships translations, so a non-English default would otherwise load localized strings).
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(qualifiers = "en-rUS")
 class HomeScreenTest {
 
     @get:Rule

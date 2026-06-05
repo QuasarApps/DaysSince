@@ -17,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -25,8 +26,12 @@ import java.time.LocalTime
  *
  * Covers the screen's contract: it prefills from an existing milestone, distinguishes the new vs.
  * edit header, and hands the (possibly edited) values back through onSave / onCancel.
+ *
+ * Pinned to en-US so the English-copy and date-field assertions don't depend on the host's default
+ * locale (the app now ships translations).
  */
 @RunWith(RobolectricTestRunner::class)
+@Config(qualifiers = "en-rUS")
 class EditMilestoneScreenTest {
 
     @get:Rule

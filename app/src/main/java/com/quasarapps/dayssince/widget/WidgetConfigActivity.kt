@@ -203,7 +203,9 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
 private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
     val days = DaysSince.sincePickedDhm(milestone.date, milestone.time).days
     val locale = LocalConfiguration.current.locales[0]
-    val dateText = LocalizedDateFormat.formatLongDate(milestone.date, locale)
+    val dateText = remember(milestone.date, locale) {
+        LocalizedDateFormat.formatLongDate(milestone.date, locale)
+    }
     Surface(
         onClick = onClick,
         shape = MaterialTheme.shapes.large,

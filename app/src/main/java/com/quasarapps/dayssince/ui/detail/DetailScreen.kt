@@ -70,8 +70,8 @@ fun DetailScreen(
     var confirmDelete by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
-    val timeText = remember(milestone.time) {
-        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+    val timeText = remember(milestone.time, locale) {
+        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
     }
     val dateText = remember(milestone.date, locale) {
         LocalizedDateFormat.formatLongDate(milestone.date, locale)

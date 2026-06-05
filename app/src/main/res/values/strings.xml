@@ -1,7 +1,8 @@
 <resources>
-    <!-- Canonical app name. The launcher label routes through the `${appLabel}` manifest
-         placeholder so the debug variant can override to "Days Since (debug)" without losing
-         translatability of the release-variant string here. -->
+    <!-- Canonical app name. Kept as a brand name (translatable="false") so it reads "Days Since" in
+         every locale. The launcher label routes through the `${appLabel}` manifest placeholder so
+         the debug variant can override to "Days Since (debug)"; the release variant resolves it back
+         to this string. -->
     <string name="app_name" translatable="false">Days Since</string>
 
     <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->

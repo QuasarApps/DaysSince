@@ -159,8 +159,8 @@ private fun MilestoneCard(
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
     val brush = accentBrush(milestone.accent)
     val locale = LocalConfiguration.current.locales[0]
-    val timeText = remember(milestone.time) {
-        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+    val timeText = remember(milestone.time, locale) {
+        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
     }
     val dateText = remember(milestone.date, locale) {
         LocalizedDateFormat.formatLongDate(milestone.date, locale)

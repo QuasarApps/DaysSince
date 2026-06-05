@@ -91,7 +91,9 @@ fun EditMilestoneScreen(
     var showTimePicker by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
-    val timeFormatter = remember { DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT) }
+    val timeFormatter = remember(locale) {
+        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)
+    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
