@@ -6,6 +6,9 @@ on:
   push:
     branches: [develop, main]
 
+permissions:
+  contents: read
+
 # Cancel superseded runs for the same ref (e.g. rapid pushes to a PR) so the slow emulator job
 # isn't queued up multiple times over.
 concurrency:
@@ -104,7 +107,6 @@ jobs:
         run: |
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
-          echo "SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
 
       # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
       # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
@@ -112,7 +114,7 @@ jobs:
       - name: Cache ATD system image
         uses: actions/cache@v5
         with:
-          path: ${{ env.SDK_ROOT }}/system-images/android-30/aosp_atd
+          path: ${{ env.ANDROID_SDK_ROOT }}/system-images/android-30/aosp_atd
           key: gmd-system-image-aosp-atd-30
 
       - name: Instrumentation tests (Gradle Managed Device)
