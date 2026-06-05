@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Días desde</string>
+    <string name="widget_days_label">Días Desde</string>
     <string name="widget_days_description">Días completos desde un hito que elijas.</string>
     <string name="widget_dhm_label">Días · Horas · Minutos</string>
     <string name="widget_dhm_description">Tiempo desde un hito, en días, horas y minutos.</string>

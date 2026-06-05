@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dias desde</string>
+    <string name="app_name">Dias Desde</string>
 
     <string name="accent_dynamic">Dinâmico</string>
     <string name="accent_indigo">Índigo</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Editar</string>
     <string name="action_delete">Excluir</string>
 
-    <string name="home_title">Dias desde</string>
+    <string name="home_title">Dias Desde</string>
     <string name="home_fab_new">Novo</string>
     <string name="home_fab_content_description">Adicionar marco</string>
     <string name="card_days_since_label">DIAS DESDE</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Дней прошло</string>
+    <string name="widget_days_label">Дней Прошло</string>
     <string name="widget_days_description">Полные дни с выбранного вами события.</string>
     <string name="widget_dhm_label">Дни · Часы · Минуты</string>
     <string name="widget_dhm_description">Время с события: дни, часы и минуты.</string>

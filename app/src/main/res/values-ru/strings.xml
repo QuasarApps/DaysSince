@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Дней прошло</string>
+    <string name="app_name">Дней Прошло</string>
 
     <string name="accent_dynamic">Динамический</string>
     <string name="accent_indigo">Индиго</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
 
-    <string name="home_title">Дней прошло</string>
+    <string name="home_title">Дней Прошло</string>
     <string name="home_fab_new">Новое</string>
     <string name="home_fab_content_description">Добавить событие</string>
     <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>

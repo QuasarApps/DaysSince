@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Jours depuis</string>
+    <string name="widget_days_label">Jours Depuis</string>
     <string name="widget_days_description">Jours entiers depuis un événement de votre choix.</string>
     <string name="widget_dhm_label">Jours · Heures · Minutes</string>
     <string name="widget_dhm_description">Temps depuis un événement, en jours, heures et minutes.</string>
