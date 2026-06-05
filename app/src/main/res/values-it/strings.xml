@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Giorni da</string>
+
     <string name="accent_dynamic">Dinamico</string>
     <string name="accent_indigo">Indaco</string>
     <string name="accent_violet">Viola</string>
@@ -14,7 +16,7 @@
     <string name="action_edit">Modifica</string>
     <string name="action_delete">Elimina</string>
 
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Giorni da</string>
     <string name="home_fab_new">Nuovo</string>
     <string name="home_fab_content_description">Aggiungi evento</string>
     <string name="card_days_since_label">GIORNI DA</string>
@@ -29,7 +31,6 @@
     <string name="detail_hours_label">ORE</string>
     <string name="detail_minutes_label">MINUTI</string>
     <string name="detail_since_date_at_time">dal %1$s alle %2$s</string>
-    <string name="detail_edit_button">Modifica evento</string>
     <string name="detail_widget_hint">Aggiungi un widget dalla schermata Home per tenerlo sempre in vista.</string>
     <string name="detail_delete_dialog_title">Eliminare l\'evento?</string>
     <string name="detail_delete_dialog_message">Verrà rimosso «%1$s» e tutti i widget che lo usano.</string>

@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Tage seit</string>
+
     <string name="accent_dynamic">Dynamisch</string>
     <string name="accent_indigo">Indigo</string>
     <string name="accent_violet">Violett</string>
@@ -14,7 +16,7 @@
     <string name="action_edit">Bearbeiten</string>
     <string name="action_delete">Löschen</string>
 
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Tage seit</string>
     <string name="home_fab_new">Neu</string>
     <string name="home_fab_content_description">Meilenstein hinzufügen</string>
     <string name="card_days_since_label">TAGE SEIT</string>
@@ -29,7 +31,6 @@
     <string name="detail_hours_label">STUNDEN</string>
     <string name="detail_minutes_label">MINUTEN</string>
     <string name="detail_since_date_at_time">seit %1$s um %2$s</string>
-    <string name="detail_edit_button">Meilenstein bearbeiten</string>
     <string name="detail_widget_hint">Füge ein Widget zu deinem Startbildschirm hinzu, um dies im Blick zu behalten.</string>
     <string name="detail_delete_dialog_title">Meilenstein löschen?</string>
     <string name="detail_delete_dialog_message">Dadurch werden „%1$s“ und alle Widgets entfernt, die ihn verwenden.</string>

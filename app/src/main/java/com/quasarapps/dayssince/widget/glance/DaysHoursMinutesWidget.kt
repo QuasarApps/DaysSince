@@ -7,7 +7,7 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.provideContent
 import com.quasarapps.dayssince.data.MilestonesRepository
 
-/** Wide widget: days / hours / minutes since the bound milestone. */
+/** 2x2 widget: days / hours / minutes since the bound milestone. */
 class DaysHoursMinutesWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val appWidgetId = GlanceAppWidgetManager(context).getAppWidgetId(id)

@@ -1,9 +1,8 @@
 <resources>
-    <!-- Canonical app name. Kept as a brand name (translatable="false") so it reads "Days Since" in
-         every locale. The launcher label routes through the `${appLabel}` manifest placeholder so
-         the debug variant can override to "Days Since (debug)"; the release variant resolves it back
-         to this string. -->
-    <string name="app_name" translatable="false">Days Since</string>
+    <!-- Canonical app name, localized per-locale (see values-<lang>/strings.xml). The launcher label
+         routes through the `${appLabel}` manifest placeholder so the debug variant can override to
+         "Days Since (debug)"; the release variant resolves it back to this string. -->
+    <string name="app_name">Days Since</string>
 
     <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
     <string name="accent_dynamic">Dynamic</string>
@@ -47,7 +46,6 @@
     <string name="detail_minutes_label">MINUTES</string>
     <!-- %1$s = localized long date, %2$s = localized time. e.g. "since June 15, 2025 at 9:30 AM" -->
     <string name="detail_since_date_at_time">since %1$s at %2$s</string>
-    <string name="detail_edit_button">Edit milestone</string>
     <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>
     <string name="detail_delete_dialog_title">Delete milestone?</string>
     <!-- %1$s = milestone title -->

@@ -152,11 +152,12 @@ internal fun DaysHoursMinutesWidgetContent(
         res.getQuantityString(R.plurals.widget_a11y_minutes, dhm.minutes.toInt(), dhm.minutes),
     )
     WidgetScaffold(milestone, transparent, description) { fg ->
+        // Three stats in a row, sized to fit a 2x2 footprint (vs. the old wide 3x1 strip).
         Row(verticalAlignment = Alignment.CenterVertically) {
             Stat(dhm.days, context.getString(R.string.widget_unit_days), fg)
-            Spacer(GlanceModifier.width(12.dp))
+            Spacer(GlanceModifier.width(6.dp))
             Stat(dhm.hours, context.getString(R.string.widget_unit_hours), fg)
-            Spacer(GlanceModifier.width(12.dp))
+            Spacer(GlanceModifier.width(6.dp))
             Stat(dhm.minutes, context.getString(R.string.widget_unit_minutes), fg)
         }
     }
@@ -167,9 +168,9 @@ private fun Stat(value: Long, label: String, fg: ColorProvider) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value.toString(),
-            style = TextStyle(color = fg, fontSize = 32.sp, fontWeight = FontWeight.Bold),
+            style = TextStyle(color = fg, fontSize = 22.sp, fontWeight = FontWeight.Bold),
             maxLines = 1,
         )
-        Text(label, style = TextStyle(color = fg, fontSize = 12.sp))
+        Text(label, style = TextStyle(color = fg, fontSize = 10.sp))
     }
 }

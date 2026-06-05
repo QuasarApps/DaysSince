@@ -29,7 +29,7 @@
             android:maxLines="1"
             android:text="365"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/widget_unit_days"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,7 +53,7 @@
             android:maxLines="1"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:text="@string/widget_unit_hours"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,7 +77,7 @@
             android:maxLines="1"
             android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -85,6 +85,6 @@
             android:layout_height="wrap_content"
             android:text="@string/widget_unit_minutes"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>
