@@ -152,7 +152,7 @@ internal fun DaysHoursMinutesWidgetContent(
         res.getQuantityString(R.plurals.widget_a11y_minutes, dhm.minutes.toInt(), dhm.minutes),
     )
     WidgetScaffold(milestone, transparent, description) { fg ->
-        // Three stats in a row, sized to fit a 2x2 footprint (vs. the old wide 3x1 strip).
+        // Three stats in a row, sized to fit a 2x1 footprint (narrower than the old 3x1 strip).
         Row(verticalAlignment = Alignment.CenterVertically) {
             Stat(dhm.days, context.getString(R.string.widget_unit_days), fg)
             Spacer(GlanceModifier.width(6.dp))

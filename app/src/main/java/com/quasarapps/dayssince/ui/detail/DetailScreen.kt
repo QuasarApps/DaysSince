@@ -167,15 +167,8 @@ fun DetailScreen(
                     GlassStat(value = dhm.hours, label = stringResource(R.string.detail_hours_label))
                     GlassStat(value = dhm.minutes, label = stringResource(R.string.detail_minutes_label))
                 }
-            }
-
-            Spacer(Modifier.weight(1f))
-
-            // Footer
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
+                // "since <date> at <time>" sits just under the hours/minutes, as part of the hero.
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = stringResource(
                         R.string.detail_since_date_at_time,
@@ -186,7 +179,15 @@ fun DetailScreen(
                     color = Color.White.copy(alpha = 0.85f),
                     textAlign = TextAlign.Center,
                 )
-                Spacer(Modifier.height(10.dp))
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            // Footer
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Text(
                     text = stringResource(R.string.detail_widget_hint),
                     style = MaterialTheme.typography.bodySmall,
