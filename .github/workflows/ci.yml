@@ -6,22 +6,28 @@ on:
   push:
     branches: [develop, main]
 
+# Cancel superseded runs for the same ref (e.g. rapid pushes to a PR) so the slow emulator job
+# isn't queued up multiple times over.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   debug:
     name: debug build + tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: assembleDebug + unit tests
         run: ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon --stacktrace
@@ -36,24 +42,86 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: assembleRelease + lintRelease
         run: ./gradlew :app:assembleRelease :app:lintRelease --no-daemon --stacktrace
 
       - name: Upload release lint report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lint-release-report
           path: app/build/reports/lint-results-release.*
+          if-no-files-found: ignore
+
+  # Run the androidTest (instrumentation) suite on a Gradle Managed Device (GMD). The device is
+  # declared in app/build.gradle.kts, so AGP provisions/boots/tears down the emulator and the exact
+  # same `:app:pixel2api30DebugAndroidTest` command runs here and locally. Kept as its own job so its
+  # slowness doesn't gate the fast JVM jobs.
+  instrumentation:
+    name: instrumentation tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # The emulator needs hardware acceleration; expose /dev/kvm to the runner.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # GMD's setup task downloads the ATD system image via sdkmanager, which is licence-gated.
+      # Use ANDROID_SDK_ROOT (present on runners) instead of ANDROID_HOME (not always exported),
+      # then accept all licences up front so installs aren't blocked. (`yes` gets SIGPIPE once
+      # sdkmanager stops reading, so the pipe's non-zero exit is expected and ignored.)
+      - name: Accept Android SDK licences
+        run: yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      # Re-export SDK env vars for later steps. The cache `path` uses `${{ env.* }}` (not runner
+      # defaults), and AGP managed-device setup still consults ANDROID_HOME on some code paths.
+      - name: Expose SDK path
+        run: |
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+          echo "SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+
+      # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
+      # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
+      # fragility that a booted-snapshot cache is prone to.
+      - name: Cache ATD system image
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.SDK_ROOT }}/system-images/android-30/aosp_atd
+          key: gmd-system-image-aosp-atd-30
+
+      - name: Instrumentation tests (Gradle Managed Device)
+        run: ./gradlew :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
+
+      - name: Upload instrumentation test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-test-report
+          path: app/build/reports/androidTests/**
           if-no-files-found: ignore
