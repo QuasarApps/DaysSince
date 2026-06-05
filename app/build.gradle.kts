@@ -70,6 +70,13 @@ android {
         versionName = appVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Locale note: the English-baseline instrumented UI tests assert literal English copy and
+        // en-US dates, so they must run with the app in English. The CI Gradle Managed Device
+        // (`pixel2api30`, below) is en-US, so CI needs nothing extra. To run the connected suite on
+        // a physical device whose system language is NOT English, pin the debug app to English
+        // first (Android 13+):
+        //   adb shell cmd locale set-app-locales com.quasarapps.dayssince.debug --locales en-US
+        // Tests that exercise other locales set their own configuration and are unaffected.
     }
 
     signingConfigs {

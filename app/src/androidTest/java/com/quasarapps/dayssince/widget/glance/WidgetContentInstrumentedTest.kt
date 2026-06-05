@@ -1,6 +1,7 @@
 package com.quasarapps.dayssince.widget.glance
 
 import android.content.Context
+import android.content.res.Configuration
 import androidx.glance.appwidget.testing.unit.runGlanceAppWidgetUnitTest
 import androidx.glance.testing.unit.hasContentDescriptionEqualTo
 import androidx.glance.testing.unit.hasTextEqualTo
@@ -17,6 +18,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import java.util.Locale
 
 /**
  * Unit tests for the Glance widget content composables ([DaysWidgetContent] /
@@ -32,7 +34,16 @@ import java.time.ZoneId
 @RunWith(AndroidJUnit4::class)
 class WidgetContentInstrumentedTest {
 
-    private val context: Context = ApplicationProvider.getApplicationContext()
+    // Pin the rendering context to English so these assertions (which check the literal English
+    // unit labels and prompts) are deterministic on any device — including ones whose system
+    // language is non-English, where the Glance test harness would otherwise render the localized
+    // strings. The bound-milestone tests build their expected strings from this same context, so
+    // they stay correct regardless of which locale is pinned here.
+    private val context: Context = run {
+        val base = ApplicationProvider.getApplicationContext<Context>()
+        val config = Configuration(base.resources.configuration).apply { setLocale(Locale.ENGLISH) }
+        base.createConfigurationContext(config)
+    }
 
     private val milestone = Milestone(
         id = "a",
