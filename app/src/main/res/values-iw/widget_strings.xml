@@ -1,0 +1,33 @@
+<resources>
+    <string name="widget_days_label">ימים מאז</string>
+    <string name="widget_days_description">ימים מלאים מאז אירוע שתבחר.</string>
+    <string name="widget_dhm_label">ימים · שעות · דקות</string>
+    <string name="widget_dhm_description">הזמן שחלף מאז אירוע, בימים, שעות ודקות.</string>
+
+    <string name="widget_setup_short">הגדרה</string>
+    <string name="widget_setup_long">הקש כדי להגדיר</string>
+    <string name="widget_setup_content_description">הקש כדי לבחור אירוע</string>
+
+    <string name="widget_unit_days">ימים</string>
+    <string name="widget_unit_hours">שעות</string>
+    <string name="widget_unit_minutes">דקות</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d יום</item>
+        <item quantity="two">%d ימים</item>
+        <item quantity="other">%d ימים</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d שעה</item>
+        <item quantity="two">%d שעות</item>
+        <item quantity="other">%d שעות</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d דקה</item>
+        <item quantity="two">%d דקות</item>
+        <item quantity="other">%d דקות</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s מאז %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

@@ -1,0 +1,58 @@
+<resources>
+    <string name="accent_dynamic">Dynamique</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_violet">Violet</string>
+    <string name="accent_rose">Rose</string>
+    <string name="accent_sunset">Coucher de soleil</string>
+    <string name="accent_emerald">Émeraude</string>
+    <string name="accent_ocean">Océan</string>
+    <string name="accent_slate">Ardoise</string>
+
+    <string name="action_save">Enregistrer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Modifier</string>
+    <string name="action_delete">Supprimer</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Nouveau</string>
+    <string name="home_fab_content_description">Ajouter un événement</string>
+    <string name="card_days_since_label">JOURS DEPUIS</string>
+    <string name="card_on_date_at_time">Le %1$s à %2$s</string>
+    <string name="empty_title">Aucun événement pour l\'instant</string>
+    <string name="empty_subtitle">Comptez les jours depuis quelque chose qui compte pour vous.</string>
+    <string name="empty_cta">Ajoutez votre premier événement</string>
+
+    <string name="detail_back_content_description">Retour</string>
+    <string name="detail_more_options_content_description">Plus d\'options</string>
+    <string name="detail_days_label">JOURS</string>
+    <string name="detail_hours_label">HEURES</string>
+    <string name="detail_minutes_label">MINUTES</string>
+    <string name="detail_since_date_at_time">depuis le %1$s à %2$s</string>
+    <string name="detail_edit_button">Modifier l\'événement</string>
+    <string name="detail_widget_hint">Ajoutez un widget depuis votre écran d\'accueil pour le garder en vue.</string>
+    <string name="detail_delete_dialog_title">Supprimer l\'événement ?</string>
+    <string name="detail_delete_dialog_message">Cela supprime « %1$s » et tous les widgets qui l\'utilisent.</string>
+    <string name="detail_missing">Cet événement n\'est plus disponible.</string>
+    <string name="detail_go_back">Retour</string>
+
+    <string name="edit_title_new">Nouvel événement</string>
+    <string name="edit_title_edit">Modifier l\'événement</string>
+    <string name="edit_title_field_label">Titre</string>
+    <string name="edit_title_field_placeholder">ex. Arrêter de fumer</string>
+    <string name="edit_field_date">Date</string>
+    <string name="edit_field_time">Heure</string>
+    <string name="edit_accent_header">Couleur</string>
+    <string name="milestone_default_title">Événement</string>
+
+    <string name="widget_config_title">Choisir un événement</string>
+    <string name="widget_config_transparent_title">Fond transparent</string>
+    <string name="widget_config_transparent_subtitle">Afficher seulement le nombre sur votre fond d\'écran.</string>
+    <string name="widget_config_empty_subtitle">Ouvrez Days Since pour en ajouter un, puis replacez le widget.</string>
+    <string name="widget_config_open_app">Ouvrir Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d jour · depuis %2$s</item>
+        <item quantity="many">%1$d de jours · depuis %2$s</item>
+        <item quantity="other">%1$d jours · depuis %2$s</item>
+    </plurals>
+</resources>

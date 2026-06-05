@@ -1,0 +1,58 @@
+<resources>
+    <string name="accent_dynamic">Dinâmico</string>
+    <string name="accent_indigo">Índigo</string>
+    <string name="accent_violet">Violeta</string>
+    <string name="accent_rose">Rosa</string>
+    <string name="accent_sunset">Pôr do sol</string>
+    <string name="accent_emerald">Esmeralda</string>
+    <string name="accent_ocean">Oceano</string>
+    <string name="accent_slate">Ardósia</string>
+
+    <string name="action_save">Salvar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Excluir</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Novo</string>
+    <string name="home_fab_content_description">Adicionar marco</string>
+    <string name="card_days_since_label">DIAS DESDE</string>
+    <string name="card_on_date_at_time">Em %1$s às %2$s</string>
+    <string name="empty_title">Ainda não há marcos</string>
+    <string name="empty_subtitle">Acompanhe os dias desde algo importante para você.</string>
+    <string name="empty_cta">Adicione seu primeiro marco</string>
+
+    <string name="detail_back_content_description">Voltar</string>
+    <string name="detail_more_options_content_description">Mais opções</string>
+    <string name="detail_days_label">DIAS</string>
+    <string name="detail_hours_label">HORAS</string>
+    <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_since_date_at_time">desde %1$s às %2$s</string>
+    <string name="detail_edit_button">Editar marco</string>
+    <string name="detail_widget_hint">Adicione um widget à tela inicial para manter isso à vista.</string>
+    <string name="detail_delete_dialog_title">Excluir marco?</string>
+    <string name="detail_delete_dialog_message">Isso remove “%1$s” e todos os widgets que o utilizam.</string>
+    <string name="detail_missing">Este marco não está mais disponível.</string>
+    <string name="detail_go_back">Voltar</string>
+
+    <string name="edit_title_new">Novo marco</string>
+    <string name="edit_title_edit">Editar marco</string>
+    <string name="edit_title_field_label">Título</string>
+    <string name="edit_title_field_placeholder">ex.: Parar de fumar</string>
+    <string name="edit_field_date">Data</string>
+    <string name="edit_field_time">Hora</string>
+    <string name="edit_accent_header">Cor</string>
+    <string name="milestone_default_title">Marco</string>
+
+    <string name="widget_config_title">Escolha um marco</string>
+    <string name="widget_config_transparent_title">Fundo transparente</string>
+    <string name="widget_config_transparent_subtitle">Mostre apenas o número no seu papel de parede.</string>
+    <string name="widget_config_empty_subtitle">Abra o Days Since para adicionar um e posicione o widget novamente.</string>
+    <string name="widget_config_open_app">Abrir o Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d dia · desde %2$s</item>
+        <item quantity="many">%1$d de dias · desde %2$s</item>
+        <item quantity="other">%1$d dias · desde %2$s</item>
+    </plurals>
+</resources>

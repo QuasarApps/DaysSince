@@ -1,0 +1,58 @@
+<resources>
+    <string name="accent_dynamic">דינמי</string>
+    <string name="accent_indigo">אינדיגו</string>
+    <string name="accent_violet">סגול</string>
+    <string name="accent_rose">ורוד</string>
+    <string name="accent_sunset">שקיעה</string>
+    <string name="accent_emerald">אזמרגד</string>
+    <string name="accent_ocean">אוקיינוס</string>
+    <string name="accent_slate">צפחה</string>
+
+    <string name="action_save">שמירה</string>
+    <string name="action_cancel">ביטול</string>
+    <string name="action_ok">אישור</string>
+    <string name="action_edit">עריכה</string>
+    <string name="action_delete">מחיקה</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">חדש</string>
+    <string name="home_fab_content_description">הוספת אירוע</string>
+    <string name="card_days_since_label">ימים מאז</string>
+    <string name="card_on_date_at_time">ב-%1$s בשעה %2$s</string>
+    <string name="empty_title">אין עדיין אירועים</string>
+    <string name="empty_subtitle">עקוב אחר הימים מאז משהו שחשוב לך.</string>
+    <string name="empty_cta">הוסף את האירוע הראשון שלך</string>
+
+    <string name="detail_back_content_description">חזרה</string>
+    <string name="detail_more_options_content_description">אפשרויות נוספות</string>
+    <string name="detail_days_label">ימים</string>
+    <string name="detail_hours_label">שעות</string>
+    <string name="detail_minutes_label">דקות</string>
+    <string name="detail_since_date_at_time">מאז %1$s בשעה %2$s</string>
+    <string name="detail_edit_button">עריכת אירוע</string>
+    <string name="detail_widget_hint">הוסף ווידג\'ט ממסך הבית כדי לשמור על זה לנגד עיניך.</string>
+    <string name="detail_delete_dialog_title">למחוק את האירוע?</string>
+    <string name="detail_delete_dialog_message">פעולה זו תסיר את ”%1$s“ וכל ווידג\'ט שמשתמש בו.</string>
+    <string name="detail_missing">האירוע הזה אינו זמין יותר.</string>
+    <string name="detail_go_back">חזרה</string>
+
+    <string name="edit_title_new">אירוע חדש</string>
+    <string name="edit_title_edit">עריכת אירוע</string>
+    <string name="edit_title_field_label">כותרת</string>
+    <string name="edit_title_field_placeholder">לדוגמה: להפסיק לעשן</string>
+    <string name="edit_field_date">תאריך</string>
+    <string name="edit_field_time">שעה</string>
+    <string name="edit_accent_header">צבע</string>
+    <string name="milestone_default_title">אירוע</string>
+
+    <string name="widget_config_title">בחר אירוע</string>
+    <string name="widget_config_transparent_title">רקע שקוף</string>
+    <string name="widget_config_transparent_subtitle">הצג רק את המספר על הטפט שלך.</string>
+    <string name="widget_config_empty_subtitle">פתח את Days Since כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
+    <string name="widget_config_open_app">פתח את Days Since</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d יום · מאז %2$s</item>
+        <item quantity="two">%1$d ימים · מאז %2$s</item>
+        <item quantity="other">%1$d ימים · מאז %2$s</item>
+    </plurals>
+</resources>

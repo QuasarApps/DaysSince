@@ -1,0 +1,33 @@
+<resources>
+    <string name="widget_days_label">Días desde</string>
+    <string name="widget_days_description">Días completos desde un hito que elijas.</string>
+    <string name="widget_dhm_label">Días · Horas · Minutos</string>
+    <string name="widget_dhm_description">Tiempo desde un hito, en días, horas y minutos.</string>
+
+    <string name="widget_setup_short">Configurar</string>
+    <string name="widget_setup_long">Toca para configurar</string>
+    <string name="widget_setup_content_description">Toca para elegir un hito</string>
+
+    <string name="widget_unit_days">DÍAS</string>
+    <string name="widget_unit_hours">H</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d día</item>
+        <item quantity="many">%d de días</item>
+        <item quantity="other">%d días</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="many">%d de horas</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d de minutos</item>
+        <item quantity="other">%d minutos</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s desde %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

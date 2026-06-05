@@ -7,7 +7,9 @@ import androidx.glance.testing.unit.hasTextEqualTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.quasarapps.dayssince.DaysSince
+import com.quasarapps.dayssince.R
 import com.quasarapps.dayssince.data.Milestone
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.time.Clock
@@ -63,9 +65,20 @@ class WidgetContentInstrumentedTest {
         // The actual elapsed day count is rendered (not just the static "DAYS" label).
         onNode(hasTextEqualTo(expected.days.toString())).assertExists()
         onNode(hasTextEqualTo("DAYS")).assertExists()
-        onNode(
-            hasContentDescriptionEqualTo("${expected.days} days since Sober, 1st of January 2020"),
-        ).assertExists()
+        // Build the expectation from the same resources/formatter the composable uses, so the
+        // assertion stays correct regardless of plural form, locale date style, or device language.
+        val res = context.resources
+        val daysFragment =
+            res.getQuantityString(R.plurals.widget_a11y_days, expected.days.toInt(), expected.days)
+        val dateText =
+            LocalizedDateFormat.formatLongDate(milestone.date, res.configuration.locales[0])
+        val expectedDescription = context.getString(
+            R.string.widget_days_content_description,
+            daysFragment,
+            "Sober",
+            dateText,
+        )
+        onNode(hasContentDescriptionEqualTo(expectedDescription)).assertExists()
     }
 
     @Test
@@ -89,10 +102,18 @@ class WidgetContentInstrumentedTest {
         onNode(hasTextEqualTo("MIN")).assertExists()
         // ...and the content description carries the full, correct d/h/m breakdown (this is what
         // would fail if sincePickedDhm or the Stat wiring produced the wrong numbers).
-        onNode(
-            hasContentDescriptionEqualTo(
-                "Sober: ${expected.days} days, ${expected.hours} hours, ${expected.minutes} minutes",
+        val res = context.resources
+        val expectedDescription = context.getString(
+            R.string.widget_dhm_content_description,
+            "Sober",
+            res.getQuantityString(R.plurals.widget_a11y_days, expected.days.toInt(), expected.days),
+            res.getQuantityString(R.plurals.widget_a11y_hours, expected.hours.toInt(), expected.hours),
+            res.getQuantityString(
+                R.plurals.widget_a11y_minutes,
+                expected.minutes.toInt(),
+                expected.minutes,
             ),
-        ).assertExists()
+        )
+        onNode(hasContentDescriptionEqualTo(expectedDescription)).assertExists()
     }
 }

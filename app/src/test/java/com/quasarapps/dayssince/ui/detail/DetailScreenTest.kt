@@ -81,7 +81,7 @@ class DetailScreenTest {
 
         composeRule.onNodeWithText("Sober").assertIsDisplayed()
         composeRule.onNodeWithText("DAYS").assertIsDisplayed()
-        composeRule.onNodeWithText("since 15th of June 2025", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText("since June 15, 2025", substring = true).assertIsDisplayed()
     }
 
     @Test

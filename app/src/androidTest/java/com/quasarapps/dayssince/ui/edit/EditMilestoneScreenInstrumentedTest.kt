@@ -69,7 +69,7 @@ class EditMilestoneScreenInstrumentedTest {
         // assertIsDisplayed() — on a short screen the swatch may be below the fold.
         composeRule.onNodeWithContentDescription("Violet").assertExists()
         // The picked date is shown in the Date field (also use assertExists for the same reason).
-        composeRule.onNodeWithText("15th of June 2025").assertExists()
+        composeRule.onNodeWithText("June 15, 2025").assertExists()
     }
 
     @Test

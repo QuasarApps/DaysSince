@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -51,7 +52,7 @@ import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.ui.components.rememberElapsedDhm
 import com.quasarapps.dayssince.ui.theme.LegibilityScrim
 import com.quasarapps.dayssince.ui.theme.accentBrush
-import com.quasarapps.dayssince.util.EnglishDateFormat
+import com.quasarapps.dayssince.util.LocalizedDateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -157,8 +158,12 @@ private fun MilestoneCard(
 ) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
     val brush = accentBrush(milestone.accent)
+    val locale = LocalConfiguration.current.locales[0]
     val timeText = remember(milestone.time) {
         milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+    }
+    val dateText = remember(milestone.date, locale) {
+        LocalizedDateFormat.formatLongDate(milestone.date, locale)
     }
 
     Box(
@@ -199,7 +204,7 @@ private fun MilestoneCard(
             Text(
                 text = stringResource(
                     R.string.card_on_date_at_time,
-                    EnglishDateFormat.formatOrdinalDate(milestone.date),
+                    dateText,
                     timeText,
                 ),
                 style = MaterialTheme.typography.bodySmall,

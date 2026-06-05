@@ -1,8 +1,10 @@
 package com.quasarapps.dayssince.ui.theme
 
+import androidx.annotation.StringRes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
+import com.quasarapps.dayssince.R
 
 /*
  * Brand fallback palette. Used on API < 31 (no Material You) and in @Preview, where dynamic
@@ -60,12 +62,14 @@ val FallbackDarkColors = darkColorScheme(
  */
 /**
  * @param key a stable identifier persisted with a milestone. Unlike the list position (which
- *   silently remaps a milestone's color if the palette is ever reordered) and [label] (which is
- *   user-facing and may be localized), [key] never changes once shipped.
+ *   silently remaps a milestone's color if the palette is ever reordered) and [labelRes] (whose
+ *   resolved text is user-facing and localized), [key] never changes once shipped.
+ * @param labelRes a string resource for the human-readable, localized accent name. Used as the
+ *   accessibility label in the accent picker; resolve with `stringResource`/`getString`.
  */
 data class Accent(
     val key: String,
-    val label: String,
+    @StringRes val labelRes: Int,
     val start: Color,
     val end: Color,
     val onAccent: Color = Color.White,
@@ -74,14 +78,14 @@ data class Accent(
 const val DYNAMIC_ACCENT = 0
 
 val MilestoneAccents: List<Accent> = listOf(
-    Accent("dynamic", "Dynamic", Color(0xFF5B5FE0), Color(0xFFE05B97)),
-    Accent("indigo", "Indigo", Color(0xFF4F46E5), Color(0xFF7C3AED)),
-    Accent("violet", "Violet", Color(0xFF7C3AED), Color(0xFFC026D3)),
-    Accent("rose", "Rose", Color(0xFFE11D48), Color(0xFFFB7185)),
-    Accent("sunset", "Sunset", Color(0xFFF97316), Color(0xFFE11D48)),
-    Accent("emerald", "Emerald", Color(0xFF059669), Color(0xFF14B8A6)),
-    Accent("ocean", "Ocean", Color(0xFF0EA5E9), Color(0xFF6366F1)),
-    Accent("slate", "Slate", Color(0xFF334155), Color(0xFF0F172A)),
+    Accent("dynamic", R.string.accent_dynamic, Color(0xFF5B5FE0), Color(0xFFE05B97)),
+    Accent("indigo", R.string.accent_indigo, Color(0xFF4F46E5), Color(0xFF7C3AED)),
+    Accent("violet", R.string.accent_violet, Color(0xFF7C3AED), Color(0xFFC026D3)),
+    Accent("rose", R.string.accent_rose, Color(0xFFE11D48), Color(0xFFFB7185)),
+    Accent("sunset", R.string.accent_sunset, Color(0xFFF97316), Color(0xFFE11D48)),
+    Accent("emerald", R.string.accent_emerald, Color(0xFF059669), Color(0xFF14B8A6)),
+    Accent("ocean", R.string.accent_ocean, Color(0xFF0EA5E9), Color(0xFF6366F1)),
+    Accent("slate", R.string.accent_slate, Color(0xFF334155), Color(0xFF0F172A)),
 )
 
 fun accentOrDefault(index: Int): Accent =

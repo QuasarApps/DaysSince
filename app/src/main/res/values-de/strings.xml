@@ -1,0 +1,57 @@
+<resources>
+    <string name="accent_dynamic">Dynamisch</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_violet">Violett</string>
+    <string name="accent_rose">Rosé</string>
+    <string name="accent_sunset">Sonnenuntergang</string>
+    <string name="accent_emerald">Smaragd</string>
+    <string name="accent_ocean">Ozean</string>
+    <string name="accent_slate">Schiefer</string>
+
+    <string name="action_save">Speichern</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Bearbeiten</string>
+    <string name="action_delete">Löschen</string>
+
+    <string name="home_title">Days Since</string>
+    <string name="home_fab_new">Neu</string>
+    <string name="home_fab_content_description">Meilenstein hinzufügen</string>
+    <string name="card_days_since_label">TAGE SEIT</string>
+    <string name="card_on_date_at_time">Am %1$s um %2$s</string>
+    <string name="empty_title">Noch keine Meilensteine</string>
+    <string name="empty_subtitle">Zähle die Tage seit etwas, das dir wichtig ist.</string>
+    <string name="empty_cta">Ersten Meilenstein hinzufügen</string>
+
+    <string name="detail_back_content_description">Zurück</string>
+    <string name="detail_more_options_content_description">Weitere Optionen</string>
+    <string name="detail_days_label">TAGE</string>
+    <string name="detail_hours_label">STUNDEN</string>
+    <string name="detail_minutes_label">MINUTEN</string>
+    <string name="detail_since_date_at_time">seit %1$s um %2$s</string>
+    <string name="detail_edit_button">Meilenstein bearbeiten</string>
+    <string name="detail_widget_hint">Füge ein Widget zu deinem Startbildschirm hinzu, um dies im Blick zu behalten.</string>
+    <string name="detail_delete_dialog_title">Meilenstein löschen?</string>
+    <string name="detail_delete_dialog_message">Dadurch werden „%1$s“ und alle Widgets entfernt, die ihn verwenden.</string>
+    <string name="detail_missing">Dieser Meilenstein ist nicht mehr verfügbar.</string>
+    <string name="detail_go_back">Zurück</string>
+
+    <string name="edit_title_new">Neuer Meilenstein</string>
+    <string name="edit_title_edit">Meilenstein bearbeiten</string>
+    <string name="edit_title_field_label">Titel</string>
+    <string name="edit_title_field_placeholder">z. B. Mit dem Rauchen aufhören</string>
+    <string name="edit_field_date">Datum</string>
+    <string name="edit_field_time">Uhrzeit</string>
+    <string name="edit_accent_header">Farbe</string>
+    <string name="milestone_default_title">Meilenstein</string>
+
+    <string name="widget_config_title">Meilenstein auswählen</string>
+    <string name="widget_config_transparent_title">Transparenter Hintergrund</string>
+    <string name="widget_config_transparent_subtitle">Nur die Zahl auf deinem Hintergrundbild anzeigen.</string>
+    <string name="widget_config_empty_subtitle">Öffne Days Since, um einen hinzuzufügen, und platziere das Widget erneut.</string>
+    <string name="widget_config_open_app">Days Since öffnen</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d Tag · seit %2$s</item>
+        <item quantity="other">%1$d Tage · seit %2$s</item>
+    </plurals>
+</resources>

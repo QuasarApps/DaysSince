@@ -118,6 +118,14 @@ android {
         compose = true
     }
 
+    androidResources {
+        // Emit res/xml/_generated_res_locale_config from the locales we ship translations for, and
+        // wire it into the manifest as android:localeConfig. This is what makes the per-app language
+        // entry appear in the system Settings → App → Language picker (Android 13+). The app's
+        // default (unqualified) locale is declared in res/resources.properties.
+        generateLocaleConfig = true
+    }
+
     // composeOptions { kotlinCompilerExtensionVersion } is no longer needed: the Compose compiler
     // is applied as the org.jetbrains.kotlin.plugin.compose Gradle plugin (Kotlin 2.0+).
 
