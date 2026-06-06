@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -99,14 +100,6 @@ class MilestonesRepositoryInstrumentedTest {
     }
 
     @Test
-    fun getById_returnsMatchOrNull() = runTest(dispatcher) {
-        repo.upsert(milestone("a"))
-
-        assertEquals("a", repo.getById("a")?.id)
-        assertNull(repo.getById("missing"))
-    }
-
-    @Test
     fun delete_removesOnlyTheTargetedMilestone() = runTest(dispatcher) {
         repo.upsert(milestone("a", createdAt = 100L))
         repo.upsert(milestone("b", createdAt = 200L))
@@ -134,14 +127,16 @@ class MilestonesRepositoryInstrumentedTest {
     // ---- widget bindings ----
 
     @Test
-    fun bindWidget_thenBindingAndMilestoneLookupsResolve() = runTest(dispatcher) {
+    fun bindWidget_thenBindingAndRenderDataResolve() = runTest(dispatcher) {
         repo.upsert(milestone("a", title = "Gym"))
         repo.bindWidget(appWidgetId = 7, milestoneId = "a", transparent = true)
 
         val binding = repo.bindingForWidget(7)
         assertEquals("a", binding?.milestoneId)
         assertEquals(true, binding?.transparent)
-        assertEquals("Gym", repo.milestoneForWidget(7)?.title)
+        val render = repo.widgetRenderDataFlow(7).first()
+        assertEquals("Gym", render.milestone?.title)
+        assertEquals(true, render.transparent)
     }
 
     @Test
@@ -152,14 +147,14 @@ class MilestonesRepositoryInstrumentedTest {
         repo.unbindWidget(7)
 
         assertNull(repo.bindingForWidget(7))
-        assertNull(repo.milestoneForWidget(7))
+        assertNull(repo.widgetRenderDataFlow(7).first().milestone)
     }
 
     @Test
-    fun milestoneForWidget_isNull_whenBindingPointsAtMissingMilestone() = runTest(dispatcher) {
+    fun widgetRenderData_milestoneIsNull_whenBindingPointsAtMissingMilestone() = runTest(dispatcher) {
         repo.bindWidget(appWidgetId = 7, milestoneId = "ghost")
 
         assertEquals("ghost", repo.bindingForWidget(7)?.milestoneId)
-        assertNull(repo.milestoneForWidget(7))
+        assertNull(repo.widgetRenderDataFlow(7).first().milestone)
     }
 }

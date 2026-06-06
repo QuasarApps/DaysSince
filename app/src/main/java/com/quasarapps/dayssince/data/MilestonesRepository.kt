@@ -46,8 +46,6 @@ class MilestonesRepository internal constructor(
 
     suspend fun snapshot(): List<Milestone> = milestones.first()
 
-    suspend fun getById(id: String): Milestone? = snapshot().firstOrNull { it.id == id }
-
     suspend fun upsert(milestone: Milestone) {
         dataStore.edit { prefs ->
             val current = MilestoneJson.decode(prefs[KEY_MILESTONES]).toMutableList()
@@ -87,13 +85,6 @@ class MilestonesRepository internal constructor(
     suspend fun bindingForWidget(appWidgetId: Int): WidgetBinding? {
         val prefs = dataStore.data.first()
         return decodeBindings(prefs[KEY_BINDINGS])[appWidgetId]
-    }
-
-    suspend fun milestoneForWidget(appWidgetId: Int): Milestone? {
-        val binding = bindingForWidget(appWidgetId) ?: return null
-        val prefs = dataStore.data.first()
-        return MilestoneJson.decode(prefs[KEY_MILESTONES])
-            .firstOrNull { it.id == binding.milestoneId }
     }
 
     /**
