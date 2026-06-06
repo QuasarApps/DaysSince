@@ -5,6 +5,8 @@ import android.content.ComponentName
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.Operation
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -51,6 +53,26 @@ object WidgetRefreshScheduler {
         return WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             WidgetRefreshWorker.UNIQUE_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
+            request,
+        )
+    }
+
+    /** Unique name for the one-off, data-changed refresh (kept separate from the periodic work). */
+    const val IMMEDIATE_WORK_NAME = "milestone_widget_refresh_now"
+
+    /**
+     * Enqueues a one-off refresh after a milestone change so placed widgets re-render promptly.
+     *
+     * Routed through WorkManager (rather than only an in-process `updateAll`) so the refresh still
+     * runs if the app is backgrounded or its process is torn down right after the edit.
+     * [ExistingWorkPolicy.REPLACE] collapses rapid successive edits into a single refresh of the
+     * latest data.
+     */
+    fun refreshNow(context: Context): Operation {
+        val request = OneTimeWorkRequestBuilder<WidgetRefreshWorker>().build()
+        return WorkManager.getInstance(context).enqueueUniqueWork(
+            IMMEDIATE_WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
             request,
         )
     }
