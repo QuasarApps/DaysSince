@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Dias Desde</string>
+    <string name="widget_days_label">Dias desde</string>
     <string name="widget_days_description">Dias completos desde um marco que você escolher.</string>
     <string name="widget_dhm_label">Dias · Horas · Minutos</string>
     <string name="widget_dhm_description">Tempo desde um marco, em dias, horas e minutos.</string>

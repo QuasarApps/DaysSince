@@ -1,6 +1,6 @@
 <resources>
-    <string name="widget_days_label">Tage Seit</string>
-    <string name="widget_days_description">Ganze Tage Seit einem von dir gewählten Meilenstein.</string>
+    <string name="widget_days_label">Tage seit</string>
+    <string name="widget_days_description">Ganze Tage seit einem von dir gewählten Meilenstein.</string>
     <string name="widget_dhm_label">Tage · Stunden · Minuten</string>
     <string name="widget_dhm_description">Zeit seit einem Meilenstein, in Tagen, Stunden und Minuten.</string>
 

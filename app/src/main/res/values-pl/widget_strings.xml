@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Dni Od</string>
+    <string name="widget_days_label">Dni od</string>
     <string name="widget_days_description">Pełne dni od wybranego wydarzenia.</string>
     <string name="widget_dhm_label">Dni · Godziny · Minuty</string>
     <string name="widget_dhm_description">Czas od wydarzenia w dniach, godzinach i minutach.</string>

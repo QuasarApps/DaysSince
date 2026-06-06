@@ -1,5 +1,5 @@
 <resources>
-    <string name="widget_days_label">Giorni Da</string>
+    <string name="widget_days_label">Giorni da</string>
     <string name="widget_days_description">Giorni interi da un evento che scegli.</string>
     <string name="widget_dhm_label">Giorni · Ore · Minuti</string>
     <string name="widget_dhm_description">Tempo da un evento, in giorni, ore e minuti.</string>
