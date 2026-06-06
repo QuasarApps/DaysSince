@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.json.JSONObject
@@ -18,6 +19,12 @@ private val Context.milestonesDataStore: DataStore<Preferences> by
 data class WidgetBinding(
     val milestoneId: String,
     val transparent: Boolean = false,
+)
+
+/** What a widget needs to render: the (possibly absent) bound milestone and its transparent flag. */
+data class WidgetRenderData(
+    val milestone: Milestone?,
+    val transparent: Boolean,
 )
 
 /**
@@ -38,8 +45,6 @@ class MilestonesRepository internal constructor(
     }
 
     suspend fun snapshot(): List<Milestone> = milestones.first()
-
-    suspend fun getById(id: String): Milestone? = snapshot().firstOrNull { it.id == id }
 
     suspend fun upsert(milestone: Milestone) {
         dataStore.edit { prefs ->
@@ -82,12 +87,20 @@ class MilestonesRepository internal constructor(
         return decodeBindings(prefs[KEY_BINDINGS])[appWidgetId]
     }
 
-    suspend fun milestoneForWidget(appWidgetId: Int): Milestone? {
-        val binding = bindingForWidget(appWidgetId) ?: return null
-        val prefs = dataStore.data.first()
-        return MilestoneJson.decode(prefs[KEY_MILESTONES])
-            .firstOrNull { it.id == binding.milestoneId }
-    }
+    /**
+     * Reactive render state for a placed widget: the bound milestone (or null if unbound/missing)
+     * and its transparent flag. Emits on every relevant data change so a widget that collects it
+     * re-renders with fresh data — this is what makes an edited milestone show up on the widget
+     * immediately, rather than only the milestone captured when the widget was first composed.
+     */
+    fun widgetRenderDataFlow(appWidgetId: Int): Flow<WidgetRenderData> =
+        dataStore.data.map { prefs ->
+            val binding = decodeBindings(prefs[KEY_BINDINGS])[appWidgetId]
+            val milestone = binding?.let { b ->
+                MilestoneJson.decode(prefs[KEY_MILESTONES]).firstOrNull { it.id == b.milestoneId }
+            }
+            WidgetRenderData(milestone, binding?.transparent ?: false)
+        }.distinctUntilChanged()
 
     companion object {
         private val KEY_MILESTONES = stringPreferencesKey("milestones_json")

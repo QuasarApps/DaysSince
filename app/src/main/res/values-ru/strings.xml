@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Дней Прошло</string>
+
     <string name="accent_dynamic">Динамический</string>
     <string name="accent_indigo">Индиго</string>
     <string name="accent_violet">Фиолетовый</string>
@@ -14,7 +16,7 @@
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
 
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Дней Прошло</string>
     <string name="home_fab_new">Новое</string>
     <string name="home_fab_content_description">Добавить событие</string>
     <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>
@@ -29,7 +31,6 @@
     <string name="detail_hours_label">ЧАСЫ</string>
     <string name="detail_minutes_label">МИНУТЫ</string>
     <string name="detail_since_date_at_time">с %1$s в %2$s</string>
-    <string name="detail_edit_button">Изменить событие</string>
     <string name="detail_widget_hint">Добавьте виджет на главный экран, чтобы это было всегда на виду.</string>
     <string name="detail_delete_dialog_title">Удалить событие?</string>
     <string name="detail_delete_dialog_message">Будет удалено «%1$s» и все использующие его виджеты.</string>

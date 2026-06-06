@@ -47,6 +47,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,6 +74,17 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+// LocalDate/LocalTime aren't Parcelable/Serializable-friendly for the saver bundle, so persist them
+// as primitives (epoch day / nano-of-day) across configuration changes.
+private val LocalDateSaver = Saver<LocalDate, Long>(
+    save = { it.toEpochDay() },
+    restore = { LocalDate.ofEpochDay(it) },
+)
+private val LocalTimeSaver = Saver<LocalTime, Long>(
+    save = { it.toNanoOfDay() },
+    restore = { LocalTime.ofNanoOfDay(it) },
+)
+
 @Composable
 fun EditMilestoneScreen(
     existing: Milestone?,
@@ -80,15 +93,24 @@ fun EditMilestoneScreen(
 ) {
     val context = LocalContext.current
 
-    var title by remember { mutableStateOf(existing?.title ?: "") }
-    var date by remember { mutableStateOf(existing?.date ?: LocalDate.now()) }
-    var time by remember {
+    // rememberSaveable so a configuration change (e.g. rotation) doesn't wipe what the user has
+    // entered. LocalDate/LocalTime aren't Parcelable, so they go through small Savers below.
+    //
+    // Keyed on existing?.id: in the edit route `existing` is Flow-backed and can be null on the
+    // first composition, then resolve once milestones load. Keying re-initializes the fields from
+    // the milestone when it arrives (and when switching ids) while still surviving rotation for the
+    // same milestone (the id is stable across the config change).
+    var title by rememberSaveable(existing?.id) { mutableStateOf(existing?.title ?: "") }
+    var date by rememberSaveable(existing?.id, stateSaver = LocalDateSaver) {
+        mutableStateOf(existing?.date ?: LocalDate.now())
+    }
+    var time by rememberSaveable(existing?.id, stateSaver = LocalTimeSaver) {
         mutableStateOf(existing?.time ?: LocalTime.now().withSecond(0).withNano(0))
     }
-    var accent by remember { mutableIntStateOf(existing?.accent ?: 0) }
+    var accent by rememberSaveable(existing?.id) { mutableIntStateOf(existing?.accent ?: 0) }
 
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
+    var showDatePicker by rememberSaveable { mutableStateOf(false) }
+    var showTimePicker by rememberSaveable { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
     val timeFormatter = remember(locale) {

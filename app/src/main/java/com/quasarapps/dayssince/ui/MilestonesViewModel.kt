@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.quasarapps.dayssince.data.Milestone
 import com.quasarapps.dayssince.data.MilestonesRepository
 import com.quasarapps.dayssince.widget.MilestoneWidgets
+import com.quasarapps.dayssince.widget.WidgetRefreshScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -34,21 +35,33 @@ class MilestonesViewModel internal constructor(
                     accent = accent,
                 )
             )
-            MilestoneWidgets.refreshAll(getApplication())
+            refreshWidgets()
         }
     }
 
     fun updateMilestone(milestone: Milestone) {
         viewModelScope.launch {
             repo.upsert(milestone.copy(title = milestone.title.trim().ifBlank { "Milestone" }))
-            MilestoneWidgets.refreshAll(getApplication())
+            refreshWidgets()
         }
     }
 
     fun deleteMilestone(id: String) {
         viewModelScope.launch {
             repo.delete(id)
-            MilestoneWidgets.refreshAll(getApplication())
+            refreshWidgets()
         }
+    }
+
+    /**
+     * Pushes the latest data to placed widgets after a change. Updates in-process for an instant
+     * redraw, then enqueues a WorkManager backstop so the refresh still happens if the app is
+     * backgrounded / its process is torn down right after the edit. The backstop is guarded because
+     * WorkManager isn't initialized in plain (non-instrumented) unit tests.
+     */
+    private suspend fun refreshWidgets() {
+        val app = getApplication<Application>()
+        MilestoneWidgets.refreshAll(app)
+        runCatching { WidgetRefreshScheduler.refreshNow(app) }
     }
 }

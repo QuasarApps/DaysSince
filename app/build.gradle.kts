@@ -92,13 +92,14 @@ android {
 
     buildTypes {
         debug {
-            // Let a debug build coexist with an installed release build on the same device,
-            // and show up as "Days Since (debug)" on the launcher so it's obvious which is
-            // which during development. The release variant resolves `${appLabel}` to
-            // `@string/app_name`, so translations in values-*/strings.xml still apply.
+            // The `.debug` applicationId suffix lets a debug build coexist with an installed release
+            // build on the same device. The launcher label resolves `${appLabel}` to
+            // `@string/app_name` (same as release) so the debug build's name is localized too — a
+            // hardcoded "Days Since (debug)" here would override every translation and show English
+            // on non-English devices.
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            manifestPlaceholders["appLabel"] = "Days Since (debug)"
+            manifestPlaceholders["appLabel"] = "@string/app_name"
         }
         release {
             isMinifyEnabled = true

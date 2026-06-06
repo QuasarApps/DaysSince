@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Días Desde</string>
+
     <string name="accent_dynamic">Dinámico</string>
     <string name="accent_indigo">Índigo</string>
     <string name="accent_violet">Violeta</string>
@@ -14,7 +16,7 @@
     <string name="action_edit">Editar</string>
     <string name="action_delete">Eliminar</string>
 
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Días Desde</string>
     <string name="home_fab_new">Nuevo</string>
     <string name="home_fab_content_description">Añadir hito</string>
     <string name="card_days_since_label">DÍAS DESDE</string>
@@ -29,7 +31,6 @@
     <string name="detail_hours_label">HORAS</string>
     <string name="detail_minutes_label">MINUTOS</string>
     <string name="detail_since_date_at_time">desde el %1$s a las %2$s</string>
-    <string name="detail_edit_button">Editar hito</string>
     <string name="detail_widget_hint">Añade un widget desde tu pantalla de inicio para tenerlo siempre a la vista.</string>
     <string name="detail_delete_dialog_title">¿Eliminar hito?</string>
     <string name="detail_delete_dialog_message">Esto elimina «%1$s» y los widgets que lo usen.</string>

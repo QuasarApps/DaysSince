@@ -1,4 +1,6 @@
 <resources>
+    <string name="app_name">Jours Depuis</string>
+
     <string name="accent_dynamic">Dynamique</string>
     <string name="accent_indigo">Indigo</string>
     <string name="accent_violet">Violet</string>
@@ -14,7 +16,7 @@
     <string name="action_edit">Modifier</string>
     <string name="action_delete">Supprimer</string>
 
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Jours Depuis</string>
     <string name="home_fab_new">Nouveau</string>
     <string name="home_fab_content_description">Ajouter un événement</string>
     <string name="card_days_since_label">JOURS DEPUIS</string>
@@ -29,7 +31,6 @@
     <string name="detail_hours_label">HEURES</string>
     <string name="detail_minutes_label">MINUTES</string>
     <string name="detail_since_date_at_time">depuis le %1$s à %2$s</string>
-    <string name="detail_edit_button">Modifier l\'événement</string>
     <string name="detail_widget_hint">Ajoutez un widget depuis votre écran d\'accueil pour le garder en vue.</string>
     <string name="detail_delete_dialog_title">Supprimer l\'événement ?</string>
     <string name="detail_delete_dialog_message">Cela supprime « %1$s » et tous les widgets qui l\'utilisent.</string>

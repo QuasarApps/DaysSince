@@ -96,7 +96,7 @@ class MilestonesViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Milestone", repo.getById("a")?.title)
+        assertEquals("Milestone", repo.snapshot().firstOrNull { it.id == "a" }?.title)
     }
 
     @Test

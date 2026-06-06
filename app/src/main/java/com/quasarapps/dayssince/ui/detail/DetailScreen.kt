@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -132,6 +130,16 @@ fun DetailScreen(
                 }
             }
 
+            // Milestone name, pinned to the top of the screen.
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = milestone.title,
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
             Spacer(Modifier.weight(1f))
 
             // Hero
@@ -159,22 +167,8 @@ fun DetailScreen(
                     GlassStat(value = dhm.hours, label = stringResource(R.string.detail_hours_label))
                     GlassStat(value = dhm.minutes, label = stringResource(R.string.detail_minutes_label))
                 }
-            }
-
-            Spacer(Modifier.weight(1f))
-
-            // Footer
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = milestone.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(Modifier.height(6.dp))
+                // "since <date> at <time>" sits just under the hours/minutes, as part of the hero.
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = stringResource(
                         R.string.detail_since_date_at_time,
@@ -185,13 +179,15 @@ fun DetailScreen(
                     color = Color.White.copy(alpha = 0.85f),
                     textAlign = TextAlign.Center,
                 )
-                Spacer(Modifier.height(22.dp))
-                FilledTonalButton(onClick = onEdit) {
-                    Icon(Icons.Filled.Edit, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.detail_edit_button))
-                }
-                Spacer(Modifier.height(10.dp))
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            // Footer
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Text(
                     text = stringResource(R.string.detail_widget_hint),
                     style = MaterialTheme.typography.bodySmall,
