@@ -53,9 +53,14 @@ fun CountUpNumber(
         val fittedSize = remember(targetText, maxWidth, baseSize) {
             val maxWidthPx = with(density) { maxWidth.toPx() }
             var size = baseSize
+            // Measure with the same tabular-figures feature used when rendering, so digit widths
+            // match and a tight fit doesn't end up clipping.
             while (
                 size.value > MIN_FONT_SP &&
-                measurer.measure(targetText, style.copy(fontSize = size)).size.width > maxWidthPx
+                measurer.measure(
+                    targetText,
+                    style.copy(fontSize = size, fontFeatureSettings = "tnum"),
+                ).size.width > maxWidthPx
             ) {
                 size = (size.value * STEP).sp
             }

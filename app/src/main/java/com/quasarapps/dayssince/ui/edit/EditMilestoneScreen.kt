@@ -95,14 +95,19 @@ fun EditMilestoneScreen(
 
     // rememberSaveable so a configuration change (e.g. rotation) doesn't wipe what the user has
     // entered. LocalDate/LocalTime aren't Parcelable, so they go through small Savers below.
-    var title by rememberSaveable { mutableStateOf(existing?.title ?: "") }
-    var date by rememberSaveable(stateSaver = LocalDateSaver) {
+    //
+    // Keyed on existing?.id: in the edit route `existing` is Flow-backed and can be null on the
+    // first composition, then resolve once milestones load. Keying re-initializes the fields from
+    // the milestone when it arrives (and when switching ids) while still surviving rotation for the
+    // same milestone (the id is stable across the config change).
+    var title by rememberSaveable(existing?.id) { mutableStateOf(existing?.title ?: "") }
+    var date by rememberSaveable(existing?.id, stateSaver = LocalDateSaver) {
         mutableStateOf(existing?.date ?: LocalDate.now())
     }
-    var time by rememberSaveable(stateSaver = LocalTimeSaver) {
+    var time by rememberSaveable(existing?.id, stateSaver = LocalTimeSaver) {
         mutableStateOf(existing?.time ?: LocalTime.now().withSecond(0).withNano(0))
     }
-    var accent by rememberSaveable { mutableIntStateOf(existing?.accent ?: 0) }
+    var accent by rememberSaveable(existing?.id) { mutableIntStateOf(existing?.accent ?: 0) }
 
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     var showTimePicker by rememberSaveable { mutableStateOf(false) }

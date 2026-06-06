@@ -1,7 +1,7 @@
 <resources>
-    <!-- Canonical app name, localized per-locale (see values-<lang>/strings.xml). The launcher label
-         routes through the `${appLabel}` manifest placeholder so the debug variant can override to
-         "Days Since (debug)"; the release variant resolves it back to this string. -->
+    <!-- Canonical app name, localized per-locale (see values-<lang>/strings.xml). Both build variants
+         resolve the `${appLabel}` manifest placeholder to this string, so the launcher label is
+         localized; the debug build is told apart by its `.debug` applicationId, not a label suffix. -->
     <string name="app_name">Days Since</string>
 
     <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
