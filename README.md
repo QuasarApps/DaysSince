@@ -123,8 +123,8 @@ boundary, so the in-app detail screen stays live to the minute.
 
 ### Android Studio
 
-1. Open the project root in Android Studio Ladybug (2024.2) or newer
-   (required by AGP 8.7 / the Kotlin 2.0 Compose compiler plugin).
+1. Open the project root in Android Studio Otter 3 Feature Drop (2025.2.3) or newer
+   (required by AGP 9.2 / the Kotlin 2.2 Compose compiler plugin).
 2. Allow Gradle sync.
 3. Run the `app` configuration on an emulator or device.
 

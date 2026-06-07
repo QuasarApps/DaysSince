@@ -1,6 +1,5 @@
 [versions]
-# AGP 8.7 officially validates compileSdk 35 (so the suppress flag is dropped) and works with the
-# bundled Gradle 8.11.1.
+# AGP 9.2.1, paired with the Gradle 9.x wrapper (pinned to 9.4.1 in gradle/wrapper/gradle-wrapper.properties).
 agp = "9.2.1"
 
 # Kotlin 2.x. The Compose compiler is now applied via the org.jetbrains.kotlin.plugin.compose
@@ -16,12 +15,12 @@ androidxTestCore = "1.6.1"
 androidxTestRules = "1.6.1"
 appcompat = "1.7.1"
 material = "1.13.0"
-# Compose BOM aligned with the Kotlin 2.0 compiler plugin.
+# Compose BOM: pins the Compose library versions. The Compose compiler itself tracks Kotlin (see [plugins]).
 composeBom = "2024.10.01"
 activityCompose = "1.9.3"
 # 4.14+ is required to support Android SDK 35 (project targetSdk); 4.12.x maxed out at SDK 34.
 robolectric = "4.14.1"
-# Versions aligned with Kotlin 2.0 / Compose BOM 2024.10.
+# Versions aligned with Compose BOM 2024.10.
 navigationCompose = "2.8.3"
 lifecycleViewmodelCompose = "2.8.7"
 datastore = "1.1.1"
