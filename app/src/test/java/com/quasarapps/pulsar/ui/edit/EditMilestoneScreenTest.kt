@@ -49,7 +49,7 @@ class EditMilestoneScreenTest {
         // waitForIdle settles instead of advancing time forever.
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 EditMilestoneScreen(existing = existing, onSave = onSave, onCancel = onCancel)
             }
         }

@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Пульсар</string>
 
-    <string name="accent_dynamic">Динамический</string>
+    <string name="accent_magenta">Маджента</string>
     <string name="accent_indigo">Индиго</string>
     <string name="accent_violet">Фиолетовый</string>
-    <string name="accent_rose">Розовый</string>
-    <string name="accent_sunset">Закат</string>
-    <string name="accent_emerald">Изумрудный</string>
-    <string name="accent_ocean">Океан</string>
-    <string name="accent_slate">Сланец</string>
+    <string name="accent_nebula">Туманность</string>
+    <string name="accent_aurora">Сияние</string>
+    <string name="accent_solar">Солнечный</string>
+    <string name="accent_ember">Уголёк</string>
+    <string name="accent_deep">Глубокий</string>
 
     <string name="action_save">Сохранить</string>
     <string name="action_cancel">Отмена</string>

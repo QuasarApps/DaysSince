@@ -51,7 +51,7 @@ class HomeScreenTest {
         // virtual clock would advance through it forever, so freeze it and waitForIdle settles.
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
             }
         }

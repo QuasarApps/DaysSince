@@ -43,7 +43,7 @@ class EditMilestoneScreenInstrumentedTest {
         // No clock freezing on a real device: the preview strip's rememberElapsedDhm loop is
         // delay-based (idle between ticks), so waitForIdle settles without it.
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 EditMilestoneScreen(existing = existing, onSave = onSave, onCancel = onCancel)
             }
         }

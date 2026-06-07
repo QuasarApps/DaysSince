@@ -5,14 +5,14 @@
     <string name="app_name">Pulsar</string>
 
     <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
-    <string name="accent_dynamic">Dynamic</string>
-    <string name="accent_indigo">Indigo</string>
+    <string name="accent_magenta">Magenta</string>
     <string name="accent_violet">Violet</string>
-    <string name="accent_rose">Rose</string>
-    <string name="accent_sunset">Sunset</string>
-    <string name="accent_emerald">Emerald</string>
-    <string name="accent_ocean">Ocean</string>
-    <string name="accent_slate">Slate</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_nebula">Nebula</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Ember</string>
+    <string name="accent_deep">Deep</string>
 
     <!-- Shared actions -->
     <string name="action_save">Save</string>

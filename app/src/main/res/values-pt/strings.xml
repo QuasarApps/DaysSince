@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">Pulsar</string>
 
-    <string name="accent_dynamic">Dinâmico</string>
+    <string name="accent_magenta">Magenta</string>
     <string name="accent_indigo">Índigo</string>
     <string name="accent_violet">Violeta</string>
-    <string name="accent_rose">Rosa</string>
-    <string name="accent_sunset">Pôr do sol</string>
-    <string name="accent_emerald">Esmeralda</string>
-    <string name="accent_ocean">Oceano</string>
-    <string name="accent_slate">Ardósia</string>
+    <string name="accent_nebula">Nebulosa</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Brasa</string>
+    <string name="accent_deep">Profundo</string>
 
     <string name="action_save">Salvar</string>
     <string name="action_cancel">Cancelar</string>

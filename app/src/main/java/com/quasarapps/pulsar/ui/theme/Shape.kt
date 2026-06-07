@@ -4,11 +4,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 
-/** Generous, expressive corner radii — large cards and pill-ish controls. */
+/**
+ * Pulsar shape scale (design system): M3 radii nudged rounder. Cards land on `large` (24dp);
+ * fully-rounded controls (FAB, counters, chips) use a pill shape at the call site.
+ */
 val PulsarShapes = Shapes(
     extraSmall = RoundedCornerShape(8.dp),
-    small = RoundedCornerShape(14.dp),
-    medium = RoundedCornerShape(22.dp),
-    large = RoundedCornerShape(30.dp),
-    extraLarge = RoundedCornerShape(38.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(24.dp),
+    extraLarge = RoundedCornerShape(32.dp),
 )

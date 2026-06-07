@@ -47,7 +47,7 @@ class DetailScreenInstrumentedTest {
         // rememberElapsedDhm's loop is delay-based, so waitForIdle settles. Assertions avoid the
         // animated day count and target static labels/titles instead.
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 DetailScreen(milestone = milestone, onBack = onBack, onEdit = onEdit, onDelete = onDelete)
             }
         }

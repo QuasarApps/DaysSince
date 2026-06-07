@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">פולסר</string>
 
-    <string name="accent_dynamic">דינמי</string>
+    <string name="accent_magenta">מגנטה</string>
     <string name="accent_indigo">אינדיגו</string>
     <string name="accent_violet">סגול</string>
-    <string name="accent_rose">ורוד</string>
-    <string name="accent_sunset">שקיעה</string>
-    <string name="accent_emerald">אזמרגד</string>
-    <string name="accent_ocean">אוקיינוס</string>
-    <string name="accent_slate">צפחה</string>
+    <string name="accent_nebula">ערפילית</string>
+    <string name="accent_aurora">זוהר</string>
+    <string name="accent_solar">סולארי</string>
+    <string name="accent_ember">גחלת</string>
+    <string name="accent_deep">עמוק</string>
 
     <string name="action_save">שמירה</string>
     <string name="action_cancel">ביטול</string>

@@ -53,7 +53,7 @@ class DetailScreenTest {
         // settleTransitions() where a popup needs to finish animating.
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 DetailScreen(milestone = milestone, onBack = onBack, onEdit = onEdit, onDelete = onDelete)
             }
         }

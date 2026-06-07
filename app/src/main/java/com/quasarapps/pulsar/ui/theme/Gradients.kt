@@ -1,29 +1,16 @@
 package com.quasarapps.pulsar.ui.theme
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-/**
- * The two stops of a milestone accent. For [DYNAMIC_ACCENT] these are pulled from the active
- * Material You scheme so the gradient adapts to the user's wallpaper; otherwise they come from
- * the fixed [MilestoneAccents] palette.
- */
-@Composable
+/** The two stops of a milestone accent, from the fixed [MilestoneAccents] palette. */
 fun accentStops(accentIndex: Int): Pair<Color, Color> {
-    val scheme = MaterialTheme.colorScheme
-    return if (accentIndex == DYNAMIC_ACCENT) {
-        scheme.primary to scheme.tertiary
-    } else {
-        val accent = accentOrDefault(accentIndex)
-        accent.start to accent.end
-    }
+    val accent = accentOrDefault(accentIndex)
+    return accent.start to accent.end
 }
 
 /** Diagonal hero/card gradient for a milestone accent. */
-@Composable
 fun accentBrush(accentIndex: Int): Brush {
     val (start, end) = accentStops(accentIndex)
     return Brush.linearGradient(
@@ -34,8 +21,36 @@ fun accentBrush(accentIndex: Int): Brush {
 }
 
 /**
- * A soft top-down legibility scrim. Layered over the accent gradient behind white text so
- * contrast holds up on lighter accents (e.g. amber) regardless of wallpaper.
+ * The signature Quasar gradient — magenta → violet → indigo. The brand "handshake", used for the
+ * extended FAB and other always-on-brand moments.
+ */
+val QuasarBrush: Brush = Brush.linearGradient(
+    listOf(
+        Color(0xFFFFE8FB),
+        Color(0xFFF482DC),
+        Color(0xFFD131BC),
+        Color(0xFF9925C3),
+        Color(0xFF480E93),
+    ),
+)
+
+/**
+ * The radial "new beginning" gradient earned by a 0-day milestone (the reward state) — a white-hot
+ * core blooming out to deep violet.
+ */
+val NewBeginningBrush: Brush = Brush.radialGradient(
+    colorStops = arrayOf(
+        0.0f to Color(0xFFFFF0FB),
+        0.14f to Color(0xFFF482DC),
+        0.34f to Color(0xFFD131BC),
+        0.58f to Color(0xFF9925C3),
+        1.0f to Color(0xFF3A0E6E),
+    ),
+)
+
+/**
+ * A soft top-down legibility scrim. Layered over the accent gradient behind white text so contrast
+ * holds up on lighter accents (e.g. Solar).
  */
 val LegibilityScrim: Brush = Brush.verticalGradient(
     colors = listOf(Color(0x00000000), Color(0x40000000)),
