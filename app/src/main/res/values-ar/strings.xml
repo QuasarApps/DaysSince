@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">نباض</string>
 
-    <string name="accent_dynamic">ديناميكي</string>
+    <string name="accent_magenta">أرجواني</string>
     <string name="accent_indigo">نيلي</string>
     <string name="accent_violet">بنفسجي</string>
-    <string name="accent_rose">وردي</string>
-    <string name="accent_sunset">غروب</string>
-    <string name="accent_emerald">زمردي</string>
-    <string name="accent_ocean">محيطي</string>
-    <string name="accent_slate">إردوازي</string>
+    <string name="accent_nebula">سديم</string>
+    <string name="accent_aurora">شفق</string>
+    <string name="accent_solar">شمسي</string>
+    <string name="accent_ember">جمرة</string>
+    <string name="accent_deep">عميق</string>
 
     <string name="action_save">حفظ</string>
     <string name="action_cancel">إلغاء</string>

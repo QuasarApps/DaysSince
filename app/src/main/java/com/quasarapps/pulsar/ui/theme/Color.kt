@@ -7,65 +7,101 @@ import androidx.compose.ui.graphics.Color
 import com.quasarapps.pulsar.R
 
 /*
- * Brand fallback palette. Used on API < 31 (no Material You) and in @Preview, where dynamic
- * color from the wallpaper is unavailable. On Android 12+ the dynamic scheme takes over and
- * these values are not used.
+ * The Pulsar brand palette — a fixed identity (no Material You / wallpaper adaptation). The app
+ * ships exactly these dark and light schemes on every device; light/dark follows the system unless
+ * the user overrides it in Settings.
+ *
+ * Dark is the canonical brand surface (cosmic purple-black, never neutral grey); light is the
+ * daytime counterpart. Values come from the Pulsar design system ("Quasar Spectrum").
  */
 
-private val BrandPrimary = Color(0xFF5B5FE0)
-private val BrandPrimaryDark = Color(0xFFBFC2FF)
-private val BrandSecondary = Color(0xFF7C5BE0)
-private val BrandTertiary = Color(0xFFE05B97)
-
-val FallbackLightColors = lightColorScheme(
-    primary = BrandPrimary,
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFE2E0FF),
-    onPrimaryContainer = Color(0xFF12104A),
-    secondary = BrandSecondary,
-    onSecondary = Color.White,
-    tertiary = BrandTertiary,
-    onTertiary = Color.White,
-    background = Color(0xFFFBF8FF),
-    onBackground = Color(0xFF1B1B21),
-    surface = Color(0xFFFBF8FF),
-    onSurface = Color(0xFF1B1B21),
-    surfaceVariant = Color(0xFFE4E1EC),
-    onSurfaceVariant = Color(0xFF47464F),
-    outline = Color(0xFF787680),
+val PulsarDarkColors = darkColorScheme(
+    primary = Color(0xFFE7A6FF),
+    onPrimary = Color(0xFF4B0072),
+    primaryContainer = Color(0xFF6A009A),
+    onPrimaryContainer = Color(0xFFF6D9FF),
+    inversePrimary = Color(0xFF7A19A6),
+    secondary = Color(0xFFCDB8FF),
+    onSecondary = Color(0xFF341C6B),
+    secondaryContainer = Color(0xFF4B358C),
+    onSecondaryContainer = Color(0xFFE7DEFF),
+    tertiary = Color(0xFFFFADE0),
+    onTertiary = Color(0xFF5C0E48),
+    tertiaryContainer = Color(0xFF7C2A63),
+    onTertiaryContainer = Color(0xFFFFD8EC),
+    error = Color(0xFFFFB3AE),
+    onError = Color(0xFF5E1116),
+    errorContainer = Color(0xFF8C2F2C),
+    onErrorContainer = Color(0xFFFFDAD6),
+    background = Color(0xFF0D0712),
+    onBackground = Color(0xFFEBE0EC),
+    surface = Color(0xFF0D0712),
+    onSurface = Color(0xFFEBE0EC),
+    surfaceDim = Color(0xFF0D0712),
+    surfaceBright = Color(0xFF352B3B),
+    surfaceContainerLowest = Color(0xFF070409),
+    surfaceContainerLow = Color(0xFF15101B),
+    surfaceContainer = Color(0xFF191320),
+    surfaceContainerHigh = Color(0xFF241C2C),
+    surfaceContainerHighest = Color(0xFF2F2637),
+    surfaceVariant = Color(0xFF241C2C),
+    onSurfaceVariant = Color(0xFFCFC1D1),
+    outline = Color(0xFF9A8C9E),
+    outlineVariant = Color(0xFF4D4351),
+    inverseSurface = Color(0xFFEBE0EC),
+    inverseOnSurface = Color(0xFF332D38),
+    scrim = Color(0xFF000000),
 )
 
-val FallbackDarkColors = darkColorScheme(
-    primary = BrandPrimaryDark,
-    onPrimary = Color(0xFF21195A),
-    primaryContainer = Color(0xFF3A3273),
-    onPrimaryContainer = Color(0xFFE2E0FF),
-    secondary = Color(0xFFCEBDFF),
-    onSecondary = Color(0xFF34215E),
-    tertiary = Color(0xFFFFB1CE),
-    onTertiary = Color(0xFF5A1138),
-    background = Color(0xFF121218),
-    onBackground = Color(0xFFE5E1E9),
-    surface = Color(0xFF121218),
-    onSurface = Color(0xFFE5E1E9),
-    surfaceVariant = Color(0xFF47464F),
-    onSurfaceVariant = Color(0xFFC9C5D0),
-    outline = Color(0xFF938F99),
+val PulsarLightColors = lightColorScheme(
+    primary = Color(0xFF7A19A6),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFF3CCFF),
+    onPrimaryContainer = Color(0xFF2E004A),
+    inversePrimary = Color(0xFFE7A6FF),
+    secondary = Color(0xFF635591),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFE7DEFF),
+    onSecondaryContainer = Color(0xFF23074F),
+    tertiary = Color(0xFF9C447F),
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFFFD8EC),
+    onTertiaryContainer = Color(0xFF3A0726),
+    error = Color(0xFFB3261E),
+    onError = Color(0xFFFFFFFF),
+    errorContainer = Color(0xFFF9DEDC),
+    onErrorContainer = Color(0xFF410E0B),
+    background = Color(0xFFFCF5FD),
+    onBackground = Color(0xFF1D1626),
+    surface = Color(0xFFFCF5FD),
+    onSurface = Color(0xFF1D1626),
+    surfaceDim = Color(0xFFDDD0DE),
+    surfaceBright = Color(0xFFFCF5FD),
+    surfaceContainerLowest = Color(0xFFFFFFFF),
+    surfaceContainerLow = Color(0xFFF6ECF7),
+    surfaceContainer = Color(0xFFF1E5F3),
+    surfaceContainerHigh = Color(0xFFEBDDEE),
+    surfaceContainerHighest = Color(0xFFE5D6E9),
+    surfaceVariant = Color(0xFFEBDDEE),
+    onSurfaceVariant = Color(0xFF5C5060),
+    outline = Color(0xFF7C7480),
+    outlineVariant = Color(0xFFDBCDDD),
+    inverseSurface = Color(0xFF322B36),
+    inverseOnSurface = Color(0xFFF5EDF6),
+    scrim = Color(0xFF000000),
 )
 
 /**
  * Per-milestone accent. Drives the card / hero gradient and the widget background.
  *
- * Index [DYNAMIC_ACCENT] (0) is special: it is rendered from the active Material You color
- * scheme at draw time (see Gradients.kt), so the placeholder stops here are only used if the
- * dynamic scheme is somehow unavailable.
- */
-/**
  * @param key a stable identifier persisted with a milestone. Unlike the list position (which
  *   silently remaps a milestone's color if the palette is ever reordered) and [labelRes] (whose
- *   resolved text is user-facing and localized), [key] never changes once shipped.
+ *   resolved text is user-facing and localized), [key] never changes once shipped. The order here
+ *   must stay in sync with `data.AccentKeys`; `AccentTest` enforces that.
  * @param labelRes a string resource for the human-readable, localized accent name. Used as the
  *   accessibility label in the accent picker; resolve with `stringResource`/`getString`.
+ * @param onAccent a legible foreground for text/icons drawn on the accent (white for most; dark
+ *   on the light Solar gradient).
  */
 data class Accent(
     val key: String,
@@ -75,18 +111,18 @@ data class Accent(
     val onAccent: Color = Color.White,
 )
 
-const val DYNAMIC_ACCENT = 0
-
+/** The eight milestone accents from the Pulsar design system, in persistence order. */
 val MilestoneAccents: List<Accent> = listOf(
-    Accent("dynamic", R.string.accent_dynamic, Color(0xFF5B5FE0), Color(0xFFE05B97)),
-    Accent("indigo", R.string.accent_indigo, Color(0xFF4F46E5), Color(0xFF7C3AED)),
-    Accent("violet", R.string.accent_violet, Color(0xFF7C3AED), Color(0xFFC026D3)),
-    Accent("rose", R.string.accent_rose, Color(0xFFE11D48), Color(0xFFFB7185)),
-    Accent("sunset", R.string.accent_sunset, Color(0xFFF97316), Color(0xFFE11D48)),
-    Accent("emerald", R.string.accent_emerald, Color(0xFF059669), Color(0xFF14B8A6)),
-    Accent("ocean", R.string.accent_ocean, Color(0xFF0EA5E9), Color(0xFF6366F1)),
-    Accent("slate", R.string.accent_slate, Color(0xFF334155), Color(0xFF0F172A)),
+    Accent("magenta", R.string.accent_magenta, Color(0xFFF482DC), Color(0xFFD131BC)),
+    Accent("violet", R.string.accent_violet, Color(0xFFB25FDF), Color(0xFF7B1AAE)),
+    Accent("indigo", R.string.accent_indigo, Color(0xFF5B6BF0), Color(0xFF2A1AA8)),
+    Accent("nebula", R.string.accent_nebula, Color(0xFF3FA9F5), Color(0xFF1C2C9A)),
+    Accent("aurora", R.string.accent_aurora, Color(0xFF2BD9B0), Color(0xFF0E8A77)),
+    Accent("solar", R.string.accent_solar, Color(0xFFFFC36B), Color(0xFFE08A2C), onAccent = Color(0xFF3A2400)),
+    Accent("ember", R.string.accent_ember, Color(0xFFFF7A59), Color(0xFFD8341C)),
+    Accent("deep", R.string.accent_deep, Color(0xFF2A2740), Color(0xFF0E1024)),
 )
 
+/** Lookup with a safe fallback to the default accent for a stored index that no longer exists. */
 fun accentOrDefault(index: Int): Accent =
-    MilestoneAccents.getOrElse(index) { MilestoneAccents[1] }
+    MilestoneAccents.getOrElse(index) { MilestoneAccents[0] }

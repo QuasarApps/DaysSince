@@ -15,9 +15,10 @@ import org.junit.Test
 class AccentTest {
 
     @Test
-    fun dynamicAccentIsIndexZero() {
-        assertEquals(0, DYNAMIC_ACCENT)
-        assertEquals(R.string.accent_dynamic, MilestoneAccents[DYNAMIC_ACCENT].labelRes)
+    fun defaultAccent_isMagentaAtIndexZero() {
+        assertEquals(0, AccentKeys.DEFAULT_INDEX)
+        assertEquals("magenta", MilestoneAccents[0].key)
+        assertEquals(R.string.accent_magenta, MilestoneAccents[0].labelRes)
     }
 
     @Test
@@ -30,8 +31,8 @@ class AccentTest {
     }
 
     @Test
-    fun accentOrDefault_outOfRange_fallsBackToIndexOne() {
-        val fallback = MilestoneAccents[1]
+    fun accentOrDefault_outOfRange_fallsBackToDefaultAccent() {
+        val fallback = MilestoneAccents[0]
         // Past the end, negative, and far out of range all fall back to the same default.
         assertSame(fallback, accentOrDefault(MilestoneAccents.size))
         assertSame(fallback, accentOrDefault(-1))

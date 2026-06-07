@@ -143,8 +143,12 @@ jobs:
           "$SDKMANAGER" "system-images;android-30;aosp_atd;x86_64" \
             || "$SDKMANAGER" "system-images;android-30;aosp_atd;x86"
 
+      # Force software GPU (swiftshader_indirect). Headless runners have no GPU, and newer emulator
+      # builds reject AGP's default `auto-no-window` mode ("Selected GPU option 'auto-no-window' is
+      # not valid, switching to 'auto'") then fail to boot the managed device during :app:<device>Setup.
+      # See https://developer.android.com/studio/test/managed-devices (headless build servers).
       - name: Instrumentation tests (Gradle Managed Device)
-        run: ./gradlew :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
+        run: ./gradlew -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
 
       - name: Upload instrumentation test report
         if: always()

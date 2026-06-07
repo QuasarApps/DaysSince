@@ -5,8 +5,8 @@ package com.quasarapps.pulsar.data
  * [Milestone.accent].
  *
  * The list position is the accent *index* used at runtime (and the bare integer that pre-key data
- * persisted); the string [ordered] entry at that position is the stable *key* that new data
- * persists, so the visual palette can be reordered/extended later without recoloring milestones.
+ * persisted); the string entry at that position is the stable *key* that new data persists, so the
+ * visual palette can be reordered/extended later without recoloring milestones.
  *
  * This lives in the data layer (not `ui.theme`) on purpose: key↔index resolution is a persistence
  * concern, and keeping it here means [MilestoneJson] doesn't have to depend on the UI. The order
@@ -15,24 +15,25 @@ package com.quasarapps.pulsar.data
 internal object AccentKeys {
 
     val ordered: List<String> = listOf(
-        "dynamic",
-        "indigo",
+        "magenta",
         "violet",
-        "rose",
-        "sunset",
-        "emerald",
-        "ocean",
-        "slate",
+        "indigo",
+        "nebula",
+        "aurora",
+        "solar",
+        "ember",
+        "deep",
     )
 
-    /** Index used for missing/unknown accents — "dynamic" (Material You), the safest default. */
+    /** Index used for missing/unknown accents — the default accent ("magenta"). */
     const val DEFAULT_INDEX = 0
 
     /**
-     * Stable key for the accent at [index]. Out-of-range indices fall back to index 1, mirroring
-     * `ui.theme.accentOrDefault`, so an encode of a corrupt index still yields a real key.
+     * Stable key for the accent at [index]. Out-of-range indices fall back to the default accent
+     * key, mirroring `ui.theme.accentOrDefault`, so an encode of a corrupt index still yields a
+     * real key.
      */
-    fun keyForIndex(index: Int): String = ordered.getOrElse(index) { ordered[1] }
+    fun keyForIndex(index: Int): String = ordered.getOrElse(index) { ordered[DEFAULT_INDEX] }
 
     /** Index for a stable [key]; a null/blank/unknown key falls back to [DEFAULT_INDEX]. */
     fun indexForKey(key: String?): Int {

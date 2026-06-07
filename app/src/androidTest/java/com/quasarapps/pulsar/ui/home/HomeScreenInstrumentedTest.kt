@@ -46,7 +46,7 @@ class HomeScreenInstrumentedTest {
         // idle), so on a real device waitForIdle settles fine. Freezing the clock instead stalls
         // layout/animation and makes nodes report as not-displayed.
         composeRule.setContent {
-            PulsarTheme(dynamicColor = false) {
+            PulsarTheme {
                 HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
             }
         }

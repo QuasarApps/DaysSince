@@ -14,7 +14,8 @@ home-screen widget.
 ## Features
 
 - **Multiple milestones.** Add as many as you like; each gets its own colour
-  accent (or "Dynamic" to inherit your Material You scheme).
+  accent from the Pulsar palette (Magenta, Violet, Indigo, Nebula, Aurora,
+  Solar, Ember, Deep).
 - **Detail screen** with a full-bleed gradient hero, count-up animation, and
   a days / hours / minutes breakdown.
 - **Two home-screen widgets:**
@@ -23,8 +24,8 @@ home-screen widget.
 - **Per-widget configuration** — when you place a widget, a picker lets you
   bind it to a specific milestone and optionally render it with a transparent
   background (just the number, floating on your wallpaper).
-- **Material You** dynamic colour on Android 12+, with a curated brand
-  fallback on older devices. Follows the system light/dark setting.
+- **Fixed Pulsar brand theme** — the same cosmic-purple identity on every
+  device (no wallpaper adaptation), following the system light/dark setting.
 - **Accessibility:** TalkBack descriptions on widget content, respects the
   system reduce-motion setting, tabular figures so digits don't jump.
 - **No network, no permissions.** Data is stored in app-private DataStore
@@ -59,7 +60,7 @@ ui/                         Compose screens + theme
   detail/DetailScreen       gradient hero + d/h/m breakdown
   edit/EditMilestoneScreen  Material 3 date + time pickers, accent picker
   components/               CountUpNumber, rememberElapsedDhm tick
-  theme/                    Material You + brand fallback + accent gradients
+  theme/                    Pulsar brand colours, type & accent gradients
 
 data/
   Milestone                 id, title, date, time, accent, createdAt

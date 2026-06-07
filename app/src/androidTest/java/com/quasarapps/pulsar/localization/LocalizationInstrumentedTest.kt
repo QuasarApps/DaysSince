@@ -42,7 +42,7 @@ class LocalizationInstrumentedTest {
                 LocalContext provides localizedContext,
                 LocalConfiguration provides config,
             ) {
-                PulsarTheme(dynamicColor = false) { content() }
+                PulsarTheme { content() }
             }
         }
     }

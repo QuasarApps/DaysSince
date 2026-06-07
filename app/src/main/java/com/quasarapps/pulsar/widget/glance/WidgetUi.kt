@@ -2,7 +2,6 @@ package com.quasarapps.pulsar.widget.glance
 
 import android.content.Intent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,23 +35,15 @@ import com.quasarapps.pulsar.ui.theme.accentOrDefault
 import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.Clock
 
-@Composable
 private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorProvider {
-    return if (transparent) {
-        // On a transparent background, use the milestone accent (or the theme primary for the
-        // dynamic accent) so the number stays legible over the user's wallpaper.
-        if (milestone == null || milestone.accent == 0) GlanceTheme.colors.primary
-        else ColorProvider(accentOrDefault(milestone.accent).end)
-    } else {
-        if (milestone == null || milestone.accent == 0) GlanceTheme.colors.onPrimaryContainer
-        else ColorProvider(Color.White)
-    }
+    // On a transparent background the accent's bright end stays legible over the wallpaper; on the
+    // solid accent background, use the accent's own on-color (white, or dark for the light Solar).
+    val accent = accentOrDefault(milestone?.accent ?: 0)
+    return ColorProvider(if (transparent) accent.end else accent.onAccent)
 }
 
-@Composable
 private fun backgroundColor(milestone: Milestone?): ColorProvider {
-    return if (milestone == null || milestone.accent == 0) GlanceTheme.colors.primaryContainer
-    else ColorProvider(accentOrDefault(milestone.accent).start)
+    return ColorProvider(accentOrDefault(milestone?.accent ?: 0).start)
 }
 
 @Composable
