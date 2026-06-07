@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ימים מאז</string>
+    <string name="app_name">פולסר</string>
 
     <string name="accent_dynamic">דינמי</string>
     <string name="accent_indigo">אינדיגו</string>
@@ -16,13 +16,13 @@
     <string name="action_edit">עריכה</string>
     <string name="action_delete">מחיקה</string>
 
-    <string name="home_title">ימים מאז</string>
+    <string name="home_title">פולסר</string>
     <string name="home_fab_new">חדש</string>
     <string name="home_fab_content_description">הוספת אירוע</string>
-    <string name="card_days_since_label">ימים מאז</string>
+    <string name="card_days_since_label">פולסר</string>
     <string name="card_on_date_at_time">ב-%1$s בשעה %2$s</string>
     <string name="empty_title">אין עדיין אירועים</string>
-    <string name="empty_subtitle">עקוב אחר הימים מאז משהו שחשוב לך.</string>
+    <string name="empty_subtitle">עקוב אחר הפולסר משהו שחשוב לך.</string>
     <string name="empty_cta">הוסף את האירוע הראשון שלך</string>
 
     <string name="detail_back_content_description">חזרה</string>
@@ -49,8 +49,8 @@
     <string name="widget_config_title">בחר אירוע</string>
     <string name="widget_config_transparent_title">רקע שקוף</string>
     <string name="widget_config_transparent_subtitle">הצג רק את המספר על הטפט שלך.</string>
-    <string name="widget_config_empty_subtitle">פתח את Pulsar כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
-    <string name="widget_config_open_app">פתח את Pulsar</string>
+    <string name="widget_config_empty_subtitle">פתח את פולסר כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
+    <string name="widget_config_open_app">פתח את פולסר</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d יום · מאז %2$s</item>
         <item quantity="two">%1$d ימים · מאז %2$s</item>

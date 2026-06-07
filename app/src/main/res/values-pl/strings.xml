@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dni Od</string>
+    <string name="app_name">Pulsar</string>
 
     <string name="accent_dynamic">Dynamiczny</string>
     <string name="accent_indigo">Indygo</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Edytuj</string>
     <string name="action_delete">Usuń</string>
 
-    <string name="home_title">Dni Od</string>
+    <string name="home_title">Pulsar</string>
     <string name="home_fab_new">Nowy</string>
     <string name="home_fab_content_description">Dodaj wydarzenie</string>
     <string name="card_days_since_label">DNI OD</string>

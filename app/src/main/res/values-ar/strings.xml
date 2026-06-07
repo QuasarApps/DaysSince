@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">الأيام منذ</string>
+    <string name="app_name">نباض</string>
 
     <string name="accent_dynamic">ديناميكي</string>
     <string name="accent_indigo">نيلي</string>
@@ -16,13 +16,13 @@
     <string name="action_edit">تعديل</string>
     <string name="action_delete">حذف</string>
 
-    <string name="home_title">الأيام منذ</string>
+    <string name="home_title">نباض</string>
     <string name="home_fab_new">جديد</string>
     <string name="home_fab_content_description">إضافة حدث</string>
-    <string name="card_days_since_label">الأيام منذ</string>
+    <string name="card_days_since_label">نباض</string>
     <string name="card_on_date_at_time">في %1$s الساعة %2$s</string>
     <string name="empty_title">لا توجد أحداث بعد</string>
-    <string name="empty_subtitle">تتبّع الأيام منذ شيء يهمّك.</string>
+    <string name="empty_subtitle">تتبّع نباض شيء يهمّك.</string>
     <string name="empty_cta">أضف أول حدث لك</string>
 
     <string name="detail_back_content_description">رجوع</string>
@@ -49,8 +49,8 @@
     <string name="widget_config_title">اختر حدثًا</string>
     <string name="widget_config_transparent_title">خلفية شفافة</string>
     <string name="widget_config_transparent_subtitle">اعرض الرقم فقط على خلفية شاشتك.</string>
-    <string name="widget_config_empty_subtitle">افتح Pulsar لإضافة حدث، ثم ضَع الأداة مرة أخرى.</string>
-    <string name="widget_config_open_app">فتح Pulsar</string>
+    <string name="widget_config_empty_subtitle">افتح نباض لإضافة حدث، ثم ضَع الأداة مرة أخرى.</string>
+    <string name="widget_config_open_app">فتح نباض</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="zero">%1$d يوم · منذ %2$s</item>
         <item quantity="one">%1$d يوم · منذ %2$s</item>

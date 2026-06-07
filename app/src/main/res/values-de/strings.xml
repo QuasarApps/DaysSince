@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tage Seit</string>
+    <string name="app_name">Pulsar</string>
 
     <string name="accent_dynamic">Dynamisch</string>
     <string name="accent_indigo">Indigo</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Bearbeiten</string>
     <string name="action_delete">Löschen</string>
 
-    <string name="home_title">Tage Seit</string>
+    <string name="home_title">Pulsar</string>
     <string name="home_fab_new">Neu</string>
     <string name="home_fab_content_description">Meilenstein hinzufügen</string>
     <string name="card_days_since_label">TAGE SEIT</string>
