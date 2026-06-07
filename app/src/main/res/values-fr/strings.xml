@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jours Depuis</string>
+    <string name="app_name">Pulsar</string>
 
     <string name="accent_dynamic">Dynamique</string>
     <string name="accent_indigo">Indigo</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Modifier</string>
     <string name="action_delete">Supprimer</string>
 
-    <string name="home_title">Jours Depuis</string>
+    <string name="home_title">Pulsar</string>
     <string name="home_fab_new">Nouveau</string>
     <string name="home_fab_content_description">Ajouter un événement</string>
     <string name="card_days_since_label">JOURS DEPUIS</string>
@@ -49,8 +49,8 @@
     <string name="widget_config_title">Choisir un événement</string>
     <string name="widget_config_transparent_title">Fond transparent</string>
     <string name="widget_config_transparent_subtitle">Afficher seulement le nombre sur votre fond d\'écran.</string>
-    <string name="widget_config_empty_subtitle">Ouvrez Days Since pour en ajouter un, puis replacez le widget.</string>
-    <string name="widget_config_open_app">Ouvrir Days Since</string>
+    <string name="widget_config_empty_subtitle">Ouvrez Pulsar pour en ajouter un, puis replacez le widget.</string>
+    <string name="widget_config_open_app">Ouvrir Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d jour · depuis %2$s</item>
         <item quantity="many">%1$d de jours · depuis %2$s</item>

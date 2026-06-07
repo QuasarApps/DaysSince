@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Full-backup rules for API 30 and below.
-    Explicitly include only the DaysSince prefs file so backups are intentional,
+    Explicitly include only the Pulsar prefs file so backups are intentional,
     not a side-effect of the default "include everything" behaviour.
     See https://developer.android.com/guide/topics/data/autobackup
 -->
 <full-backup-content>
     <!-- DataStore (Preferences): milestones list + widget bindings. -->
-    <include domain="file" path="datastore/dayssince_store.preferences_pb" />
+    <include domain="file" path="datastore/pulsar_store.preferences_pb" />
 </full-backup-content>

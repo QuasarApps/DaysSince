@@ -11,7 +11,7 @@
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DaysSince"
+        android:theme="@style/Theme.Pulsar"
         tools:targetApi="33">
 
         <activity
@@ -27,7 +27,7 @@
         <activity
             android:name=".widget.WidgetConfigActivity"
             android:exported="true"
-            android:theme="@style/Theme.DaysSince">
+            android:theme="@style/Theme.Pulsar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

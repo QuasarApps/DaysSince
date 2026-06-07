@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Días Desde</string>
+    <string name="app_name">Púlsar</string>
 
     <string name="accent_dynamic">Dinámico</string>
     <string name="accent_indigo">Índigo</string>
@@ -16,7 +16,7 @@
     <string name="action_edit">Editar</string>
     <string name="action_delete">Eliminar</string>
 
-    <string name="home_title">Días Desde</string>
+    <string name="home_title">Púlsar</string>
     <string name="home_fab_new">Nuevo</string>
     <string name="home_fab_content_description">Añadir hito</string>
     <string name="card_days_since_label">DÍAS DESDE</string>
@@ -49,8 +49,8 @@
     <string name="widget_config_title">Elige un hito</string>
     <string name="widget_config_transparent_title">Fondo transparente</string>
     <string name="widget_config_transparent_subtitle">Muestra solo el número sobre tu fondo de pantalla.</string>
-    <string name="widget_config_empty_subtitle">Abre Days Since para añadir uno y vuelve a colocar el widget.</string>
-    <string name="widget_config_open_app">Abrir Days Since</string>
+    <string name="widget_config_empty_subtitle">Abre Púlsar para añadir uno y vuelve a colocar el widget.</string>
+    <string name="widget_config_open_app">Abrir Púlsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d día · desde %2$s</item>
         <item quantity="many">%1$d de días · desde %2$s</item>

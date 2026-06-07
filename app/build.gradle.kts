@@ -21,21 +21,21 @@ val keystoreProperties = Properties().apply {
 fun signingValue(propKey: String, envKey: String): String? =
     keystoreProperties.getProperty(propKey) ?: System.getenv(envKey)
 
-val signingStoreFile = signingValue("storeFile", "DAYSSINCE_KEYSTORE_PATH")
-val signingStorePassword = signingValue("storePassword", "DAYSSINCE_KEYSTORE_PASSWORD")
-val signingKeyAlias = signingValue("keyAlias", "DAYSSINCE_KEY_ALIAS")
-val signingKeyPassword = signingValue("keyPassword", "DAYSSINCE_KEY_PASSWORD")
+val signingStoreFile = signingValue("storeFile", "PULSAR_KEYSTORE_PATH")
+val signingStorePassword = signingValue("storePassword", "PULSAR_KEYSTORE_PASSWORD")
+val signingKeyAlias = signingValue("keyAlias", "PULSAR_KEY_ALIAS")
+val signingKeyPassword = signingValue("keyPassword", "PULSAR_KEY_PASSWORD")
 
 // Version is overridable from the environment so CI/release automation can stamp a unique,
 // monotonically-increasing versionCode (e.g. from the CI run number or a release tag) instead of
 // relying on a human to bump a hardcoded literal. Unset -> baseline; but a value that is *set yet
 // invalid* fails the build loudly rather than silently shipping/colliding the baseline `1`.
-val appVersionCode = System.getenv("DAYSSINCE_VERSION_CODE")?.let { raw ->
+val appVersionCode = System.getenv("PULSAR_VERSION_CODE")?.let { raw ->
     raw.toIntOrNull()?.takeIf { it > 0 }
-        ?: error("DAYSSINCE_VERSION_CODE must be a positive integer, but was: '$raw'")
+        ?: error("PULSAR_VERSION_CODE must be a positive integer, but was: '$raw'")
 } ?: 1
-val appVersionName = System.getenv("DAYSSINCE_VERSION_NAME")?.let { raw ->
-    raw.ifBlank { error("DAYSSINCE_VERSION_NAME is set but blank") }
+val appVersionName = System.getenv("PULSAR_VERSION_NAME")?.let { raw ->
+    raw.ifBlank { error("PULSAR_VERSION_NAME is set but blank") }
 } ?: "1.0.0"
 
 val signingValues = listOf(
@@ -50,20 +50,20 @@ if (hasPartialReleaseSigning) {
     // (typo in a property name, missing env var on CI, etc.) and the silent
     // fallback to an unsigned APK only gets caught at upload time.
     logger.warn(
-        "DaysSince: partial release signing config detected. " +
+        "Pulsar: partial release signing config detected. " +
             "Some of [storeFile, storePassword, keyAlias, keyPassword] are set " +
             "but not all — :app:assembleRelease will produce an UNSIGNED APK. " +
-            "Check keystore.properties or the DAYSSINCE_KEYSTORE_* / DAYSSINCE_KEY_* " +
+            "Check keystore.properties or the PULSAR_KEYSTORE_* / PULSAR_KEY_* " +
             "environment variables.",
     )
 }
 
 android {
-    namespace = "com.quasarapps.dayssince"
+    namespace = "com.quasarapps.pulsar"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.quasarapps.dayssince"
+        applicationId = "com.quasarapps.pulsar"
         minSdk = 26
         targetSdk = 35
         versionCode = appVersionCode
@@ -75,7 +75,7 @@ android {
         // (`pixel2api30`, below) is en-US, so CI needs nothing extra. To run the connected suite on
         // a physical device whose system language is NOT English, pin the debug app to English
         // first (Android 13+):
-        //   adb shell cmd locale set-app-locales com.quasarapps.dayssince.debug --locales en-US
+        //   adb shell cmd locale set-app-locales com.quasarapps.pulsar.debug --locales en-US
         // Tests that exercise other locales set their own configuration and are unaffected.
     }
 
@@ -95,7 +95,7 @@ android {
             // The `.debug` applicationId suffix lets a debug build coexist with an installed release
             // build on the same device. The launcher label resolves `${appLabel}` to
             // `@string/app_name` (same as release) so the debug build's name is localized too — a
-            // hardcoded "Days Since (debug)" here would override every translation and show English
+            // hardcoded "Pulsar (debug)" here would override every translation and show English
             // on non-English devices.
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
