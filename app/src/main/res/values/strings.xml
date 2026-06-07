@@ -24,7 +24,8 @@
     <!-- Home screen -->
     <string name="home_title">Pulsar</string>
     <string name="home_fab_new">Mark</string>
-    <!-- Accessibility label for the add FAB (its visible "New" text is not exposed to TalkBack). -->
+    <!-- Accessibility label for the add FAB; its decorative star + "Mark" text are merged into one
+         node, so this is what TalkBack announces. -->
     <string name="home_fab_content_description">Add milestone</string>
     <!-- translator: standalone caption shown under a large standalone number; not adjacent to it,
          so no number agreement is needed. -->

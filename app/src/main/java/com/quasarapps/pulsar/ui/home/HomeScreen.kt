@@ -40,6 +40,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -205,7 +206,7 @@ private fun MarkFab(onAdd: () -> Unit) {
             .shadow(16.dp, RoundedCornerShape(50), spotColor = Color(0xFFD131BC))
             .clip(RoundedCornerShape(50))
             .background(QuasarBrush)
-            .clickable(onClick = onAdd)
+            .clickable(role = Role.Button, onClick = onAdd)
             // Merge into one node so TalkBack announces a single "Add milestone" button rather than
             // the decorative star + "Mark" text separately.
             .semantics(mergeDescendants = true) { contentDescription = fabCd }
