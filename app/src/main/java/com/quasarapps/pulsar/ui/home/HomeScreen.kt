@@ -1,5 +1,6 @@
 package com.quasarapps.pulsar.ui.home
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -22,39 +24,35 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
-import com.quasarapps.pulsar.ui.theme.LegibilityScrim
+import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
+import com.quasarapps.pulsar.ui.theme.QuasarBrush
 import com.quasarapps.pulsar.ui.theme.accentBrush
-import com.quasarapps.pulsar.util.LocalizedDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import com.quasarapps.pulsar.ui.theme.accentOrDefault
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,55 +66,37 @@ fun HomeScreen(
         // Pad away from status bar (top), nav bar (bottom), and the landscape side nav bar.
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
-            // Small top bar keeps the title close to the top — much better in landscape than
-            // the large variant which leaves a big empty band above the cards.
             TopAppBar(
-                title = { Text(stringResource(R.string.home_title), fontWeight = FontWeight.Bold) },
+                title = {
+                    // The Pulsar wordmark, in the Chakra Petch display face (via headlineSmall).
+                    Text(
+                        text = stringResource(R.string.home_title),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             )
         },
-        floatingActionButton = {
-            if (milestones.isNotEmpty()) {
-                // Scaffold's contentWindowInsets handles the BOTTOM inset on the FAB, but in
-                // M3 1.2.x it doesn't add the END inset. In landscape the system nav bar sits
-                // on the right edge, so we add the End inset explicitly to shift the FAB left
-                // and keep it out from under the software buttons.
-                //
-                // ExtendedFloatingActionButton does not surface its "New" text to the button's
-                // (merged) semantics node, so set an explicit contentDescription — otherwise
-                // TalkBack announces an unlabeled "Button".
-                val fabContentDescription = stringResource(R.string.home_fab_content_description)
-                ExtendedFloatingActionButton(
-                    onClick = onAdd,
-                    icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
-                    text = { Text(stringResource(R.string.home_fab_new)) },
-                    modifier = Modifier
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.End),
-                        )
-                        .semantics { contentDescription = fabContentDescription },
-                )
-            }
-        },
+        floatingActionButton = { MarkFab(onAdd) },
     ) { padding ->
         if (milestones.isEmpty()) {
             EmptyState(
-                onAdd = onAdd,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
             )
         } else {
-            // Two-column layout via a LazyColumn of paired Rows: both cells in a row share
-            // the row's max content height (via height(IntrinsicSize.Min) + fillMaxHeight),
-            // so the left and right columns of each row are visually balanced. Rows still
-            // size to their own content, so a row with more text grows independently of
-            // others.
+            // Two-column layout via a LazyColumn of paired Rows: both cells in a row share the row's
+            // max content height (height(IntrinsicSize.Min) + fillMaxHeight), so the columns stay
+            // visually balanced while each row sizes to its own content.
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 96.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 110.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 items(
@@ -138,8 +118,6 @@ fun HomeScreen(
                                     .fillMaxHeight(),
                             )
                         }
-                        // Last row may have a single item — fill the remaining column with
-                        // a spacer so the card stays half-width.
                         if (pair.size == 1) {
                             Spacer(modifier = Modifier.weight(1f))
                         }
@@ -157,87 +135,103 @@ private fun MilestoneCard(
     modifier: Modifier = Modifier,
 ) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
-    val brush = accentBrush(milestone.accent)
-    val locale = LocalConfiguration.current.locales[0]
-    val timeText = remember(milestone.time, locale) {
-        milestone.time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale))
-    }
-    val dateText = remember(milestone.date, locale) {
-        LocalizedDateFormat.formatLongDate(milestone.date, locale)
-    }
+    val isNew = dhm.days == 0L
+    val accent = accentOrDefault(milestone.accent)
+    val onColor = if (isNew) Color.White else accent.onAccent
+    val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)
 
     Box(
         modifier = modifier
+            .heightIn(min = 150.dp)
             .clip(MaterialTheme.shapes.large)
             .background(brush)
             .clickable(onClick = onClick),
     ) {
-        Box(Modifier.matchParentSize().background(LegibilityScrim))
+        // The 0-day "new beginning" tile earns a faint starburst in the corner — a small reward.
+        if (isNew) {
+            Starburst(
+                color = onColor.copy(alpha = 0.5f),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+                    .size(56.dp),
+            )
+        }
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = dhm.days.toString(),
-                style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                maxLines = 1,
-            )
-            Text(
-                text = stringResource(R.string.card_days_since_label),
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.White.copy(alpha = 0.85f),
-            )
-            Spacer(Modifier.height(10.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(
+                    text = dhm.days.toString(),
+                    style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),
+                    fontWeight = FontWeight.Bold,
+                    color = onColor,
+                    maxLines = 1,
+                )
+                Text(
+                    text = stringResource(
+                        if (isNew) R.string.card_new_beginning_label else R.string.card_days_since_label,
+                    ),
+                    style = MaterialTheme.typography.labelMedium,
+                    letterSpacing = 2.sp,
+                    color = onColor.copy(alpha = 0.88f),
+                )
+            }
             Text(
                 text = milestone.title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = onColor,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-            )
-            // Allow the date to wrap onto multiple lines instead of ellipsizing.
-            Text(
-                text = stringResource(
-                    R.string.card_on_date_at_time,
-                    dateText,
-                    timeText,
-                ),
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.85f),
             )
         }
     }
 }
 
 @Composable
-private fun EmptyState(
-    onAdd: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+private fun MarkFab(onAdd: () -> Unit) {
+    val label = stringResource(R.string.home_fab_new)
+    val fabCd = stringResource(R.string.home_fab_content_description)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(9.dp),
+        modifier = Modifier
+            // In landscape the system nav bar sits on the right edge; add the End inset so the FAB
+            // clears the software buttons (Scaffold only adds the BOTTOM inset here).
+            .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End))
+            .shadow(16.dp, RoundedCornerShape(50), spotColor = Color(0xFFD131BC))
+            .clip(RoundedCornerShape(50))
+            .background(QuasarBrush)
+            .clickable(onClick = onAdd)
+            // Merge into one node so TalkBack announces a single "Add milestone" button rather than
+            // the decorative star + "Mark" text separately.
+            .semantics(mergeDescendants = true) { contentDescription = fabCd }
+            .padding(horizontal = 22.dp, vertical = 16.dp),
+    ) {
+        Starburst(color = Color.White, modifier = Modifier.size(18.dp))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+        )
+    }
+}
+
+@Composable
+private fun EmptyState(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Box(
-            modifier = Modifier
-                .size(96.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                Icons.Rounded.Add,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.size(44.dp),
-            )
-        }
+        Starburst(
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(84.dp),
+        )
         Spacer(Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.empty_title),
@@ -250,9 +244,23 @@ private fun EmptyState(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Spacer(Modifier.height(28.dp))
-        Button(onClick = onAdd) {
-            Text(stringResource(R.string.empty_cta))
-        }
+    }
+}
+
+/** A four-point pulsar starburst: two crossing rays with a glowing core. Purely decorative. */
+@Composable
+private fun Starburst(color: Color, modifier: Modifier = Modifier) {
+    Canvas(modifier = modifier) {
+        val cx = size.width / 2f
+        val cy = size.height / 2f
+        val r = size.minDimension / 2f
+        val gap = r * 0.32f
+        val stroke = r * 0.10f
+        // Four rays (up/down/left/right) with a gap around the core.
+        drawLine(color, Offset(cx, cy - r), Offset(cx, cy - gap), strokeWidth = stroke, cap = StrokeCap.Round)
+        drawLine(color, Offset(cx, cy + gap), Offset(cx, cy + r), strokeWidth = stroke, cap = StrokeCap.Round)
+        drawLine(color, Offset(cx - r, cy), Offset(cx - gap, cy), strokeWidth = stroke, cap = StrokeCap.Round)
+        drawLine(color, Offset(cx + gap, cy), Offset(cx + r, cy), strokeWidth = stroke, cap = StrokeCap.Round)
+        drawCircle(color, radius = r * 0.16f, center = Offset(cx, cy))
     }
 }

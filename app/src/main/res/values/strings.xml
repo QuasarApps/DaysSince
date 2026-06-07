@@ -23,17 +23,18 @@
 
     <!-- Home screen -->
     <string name="home_title">Pulsar</string>
-    <string name="home_fab_new">New</string>
+    <string name="home_fab_new">Mark</string>
     <!-- Accessibility label for the add FAB (its visible "New" text is not exposed to TalkBack). -->
     <string name="home_fab_content_description">Add milestone</string>
     <!-- translator: standalone caption shown under a large standalone number; not adjacent to it,
          so no number agreement is needed. -->
     <string name="card_days_since_label">DAYS SINCE</string>
+    <!-- Kicker on a milestone card the day it is created (0 days) — the "new beginning" state. -->
+    <string name="card_new_beginning_label">A NEW BEGINNING</string>
     <!-- %1$s = localized long date, %2$s = localized time. e.g. "On January 1, 2026 at 9:00 AM" -->
     <string name="card_on_date_at_time">On %1$s at %2$s</string>
     <string name="empty_title">No milestones yet</string>
     <string name="empty_subtitle">Track the days since something that matters to you.</string>
-    <string name="empty_cta">Add your first milestone</string>
 
     <!-- Detail screen -->
     <string name="detail_back_content_description">Back</string>

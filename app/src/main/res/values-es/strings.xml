@@ -17,13 +17,13 @@
     <string name="action_delete">Eliminar</string>
 
     <string name="home_title">Púlsar</string>
-    <string name="home_fab_new">Nuevo</string>
+    <string name="home_fab_new">Marcar</string>
     <string name="home_fab_content_description">Añadir hito</string>
     <string name="card_days_since_label">DÍAS DESDE</string>
     <string name="card_on_date_at_time">El %1$s a las %2$s</string>
     <string name="empty_title">Aún no hay hitos</string>
     <string name="empty_subtitle">Lleva la cuenta de los días desde algo que te importa.</string>
-    <string name="empty_cta">Añade tu primer hito</string>
+    <string name="card_new_beginning_label">UN NUEVO COMIENZO</string>
 
     <string name="detail_back_content_description">Atrás</string>
     <string name="detail_more_options_content_description">Más opciones</string>

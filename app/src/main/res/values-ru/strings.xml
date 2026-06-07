@@ -17,13 +17,13 @@
     <string name="action_delete">Удалить</string>
 
     <string name="home_title">Пульсар</string>
-    <string name="home_fab_new">Новое</string>
+    <string name="home_fab_new">Отметить</string>
     <string name="home_fab_content_description">Добавить событие</string>
     <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>
     <string name="card_on_date_at_time">%1$s в %2$s</string>
     <string name="empty_title">Пока нет событий</string>
     <string name="empty_subtitle">Считайте дни с момента чего-то важного для вас.</string>
-    <string name="empty_cta">Добавьте первое событие</string>
+    <string name="card_new_beginning_label">НОВОЕ НАЧАЛО</string>
 
     <string name="detail_back_content_description">Назад</string>
     <string name="detail_more_options_content_description">Ещё</string>
