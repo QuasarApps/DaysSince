@@ -63,11 +63,11 @@ class EditMilestoneScreenInstrumentedTest {
 
         composeRule.onNodeWithText("Edit milestone").assertIsDisplayed()
         composeRule.onNode(hasSetTextAction()).assertTextContains("Sober")
-        // Accent index 2 is "Violet"; the selected swatch surfaces its label as a check icon
+        // Accent index 2 is "Indigo"; the selected swatch surfaces its label as a check icon
         // content description, so this confirms the accent prefilled correctly. The picker sits at
         // the bottom of a vertical-scroll column, so use assertExists() rather than
         // assertIsDisplayed() — on a short screen the swatch may be below the fold.
-        composeRule.onNodeWithContentDescription("Violet").assertExists()
+        composeRule.onNodeWithContentDescription("Indigo").assertExists()
         // The picked date is shown in the Date field (also use assertExists for the same reason).
         composeRule.onNodeWithText("June 15, 2025").assertExists()
     }
