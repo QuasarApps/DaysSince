@@ -106,13 +106,20 @@ class DetailScreenInstrumentedTest {
     }
 
     @Test
-    fun overflowMenu_resetInvokesOnReset() {
+    fun resetFlow_requiresConfirmation_thenInvokesOnReset() {
         var reset = false
         setContent(onReset = { reset = true })
 
         composeRule.onNodeWithContentDescription("More options").performClick()
         composeRule.onNodeWithText("Reset to now").performClick()
 
+        // The confirmation dialog appears; reset only fires after confirming.
+        composeRule.onNodeWithText("Reset to now?").assertIsDisplayed()
+        assertTrue(!reset)
+
+        // The confirm button ("Reset") is distinct from the menu item ("Reset to now"), so there's
+        // no coexistence ambiguity while the menu animates out.
+        composeRule.onNodeWithText("Reset").performClick()
         assertTrue(reset)
     }
 

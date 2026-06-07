@@ -120,15 +120,19 @@ class DetailScreenTest {
     }
 
     @Test
-    fun overflowMenu_resetInvokesOnReset() {
+    fun resetIsGatedBehindAConfirmationDialog() {
         var reset = false
         setContent(onReset = { reset = true })
 
         composeRule.onNodeWithContentDescription("More options").performClick()
         settleTransitions()
         composeRule.onNodeWithText("Reset to now").performClick()
+        settleTransitions()
 
-        assertTrue(reset)
+        // Choosing "Reset to now" opens a confirmation dialog and must NOT reset yet — the safety
+        // gate. (The full confirm -> onReset path is exercised in DetailScreenInstrumentedTest.)
+        composeRule.onNodeWithText("Reset to now?").assertIsDisplayed()
+        assertTrue("reset must not fire until the user confirms", !reset)
     }
 
     @Test

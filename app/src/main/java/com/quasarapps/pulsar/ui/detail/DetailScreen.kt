@@ -72,6 +72,7 @@ fun DetailScreen(
     val dhms = rememberElapsedDhms(milestone.date, milestone.time)
     val (accentStart, accentEnd) = accentStops(milestone.accent)
     var menuOpen by remember { mutableStateOf(false) }
+    var confirmReset by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
@@ -138,7 +139,7 @@ fun DetailScreen(
                         )
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.detail_action_reset)) },
-                            onClick = { menuOpen = false; onReset() },
+                            onClick = { menuOpen = false; confirmReset = true },
                             leadingIcon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
                         )
                         DropdownMenuItem(
@@ -212,6 +213,24 @@ fun DetailScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+    }
+
+    if (confirmReset) {
+        AlertDialog(
+            onDismissRequest = { confirmReset = false },
+            title = { Text(stringResource(R.string.detail_reset_dialog_title)) },
+            text = { Text(stringResource(R.string.detail_reset_dialog_message)) },
+            confirmButton = {
+                TextButton(onClick = { confirmReset = false; onReset() }) {
+                    Text(stringResource(R.string.action_reset))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmReset = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
     }
 
     if (confirmDelete) {

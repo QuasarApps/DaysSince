@@ -20,6 +20,7 @@
     <string name="action_ok">OK</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="action_reset">Reset</string>
 
     <!-- Home screen -->
     <string name="home_title">Pulsar</string>
@@ -42,6 +43,8 @@
     <string name="detail_more_options_content_description">More options</string>
     <!-- Overflow menu item: reset the milestone's start to the current moment (count back to 0). -->
     <string name="detail_action_reset">Reset to now</string>
+    <string name="detail_reset_dialog_title">Reset to now?</string>
+    <string name="detail_reset_dialog_message">This restarts the count from now.</string>
     <!-- translator: the next three are standalone unit captions under large standalone numbers
          (a dashboard-style readout); they are not placed next to the number, so no plural
          agreement is needed. -->

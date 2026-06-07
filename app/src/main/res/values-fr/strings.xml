@@ -15,6 +15,7 @@
     <string name="action_ok">OK</string>
     <string name="action_edit">Modifier</string>
     <string name="action_delete">Supprimer</string>
+    <string name="action_reset">Réinitialiser</string>
 
     <string name="home_title">Pulsar</string>
     <string name="home_fab_mark">Marquer</string>
@@ -28,6 +29,8 @@
     <string name="detail_back_content_description">Retour</string>
     <string name="detail_more_options_content_description">Plus d\'options</string>
     <string name="detail_action_reset">Réinitialiser à maintenant</string>
+    <string name="detail_reset_dialog_title">Réinitialiser à maintenant ?</string>
+    <string name="detail_reset_dialog_message">Le compte redémarrera à partir de maintenant.</string>
     <string name="detail_days_label">JOURS</string>
     <string name="detail_hours_label">HEURES</string>
     <string name="detail_minutes_label">MINUTES</string>

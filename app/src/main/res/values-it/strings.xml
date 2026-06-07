@@ -15,6 +15,7 @@
     <string name="action_ok">OK</string>
     <string name="action_edit">Modifica</string>
     <string name="action_delete">Elimina</string>
+    <string name="action_reset">Reimposta</string>
 
     <string name="home_title">Pulsar</string>
     <string name="home_fab_mark">Segna</string>
@@ -28,6 +29,8 @@
     <string name="detail_back_content_description">Indietro</string>
     <string name="detail_more_options_content_description">Altre opzioni</string>
     <string name="detail_action_reset">Reimposta a ora</string>
+    <string name="detail_reset_dialog_title">Reimposta a ora?</string>
+    <string name="detail_reset_dialog_message">Il conteggio ripartirà da adesso.</string>
     <string name="detail_days_label">GIORNI</string>
     <string name="detail_hours_label">ORE</string>
     <string name="detail_minutes_label">MINUTI</string>

@@ -41,8 +41,8 @@ fun rememberElapsedDhms(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDh
     var nowTick by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (true) {
-            val msToNextSecond = 1_000L - (System.currentTimeMillis() % 1_000L)
-            delay(msToNextSecond.coerceIn(1L, 1_000L))
+            val now = System.currentTimeMillis()
+            delay((1_000L - (now % 1_000L)).coerceIn(1L, 1_000L))
             nowTick = System.currentTimeMillis()
         }
     }
