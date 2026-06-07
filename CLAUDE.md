@@ -10,6 +10,7 @@ Keep commands flat so the permission checker can match them cleanly.
 
 - **No heredocs** (`$(cat <<EOF ...)` or `--body-file - <<'EOF' ...`). Write content to a file first, then pass the file path.
 - **No `cd` prefixes** — run from the current working directory.
+- **No `git -C "<path>"` for the current worktree** — run git directly from the working directory. The `-C` prefix defeats Claude Code's built-in read-only detection, so plain read-only commands (`git status`/`log`/`diff`/`branch`) start prompting every time. Only use `-C` to reach a *different* worktree.
 - **No chaining commands with `&&`** — issue each as a separate command.
 - **No command substitution** (`$(...)`, backticks) inside otherwise-allowed commands.
 - **Short commit messages** (single line) can use `git commit -m 'short summary'` directly. For multi-line commit bodies, write to `.claude-tmp/COMMIT_MSG.md` first, then `git commit -F .claude-tmp/COMMIT_MSG.md`.
