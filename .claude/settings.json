@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(Get-ChildItem *)"
+      "PowerShell(Get-ChildItem *)",
+      "Bash(./gradlew *)",
+      "PowerShell(.\\gradlew.bat *)"
     ]
   }
 }
