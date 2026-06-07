@@ -8,7 +8,9 @@
       "Bash(./gradlew :app:testDebugUnitTest *)",
       "Bash(./gradlew :app:assembleDebug *)",
       "Bash(./gradlew :app:compileDebugKotlin *)",
-      "PowerShell(.\\gradlew.bat *)"
+      "PowerShell(.\\gradlew.bat :app:testDebugUnitTest *)",
+      "PowerShell(.\\gradlew.bat :app:assembleDebug *)",
+      "PowerShell(.\\gradlew.bat :app:compileDebugKotlin *)"
     ]
   }
 }
