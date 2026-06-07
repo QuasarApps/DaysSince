@@ -49,8 +49,8 @@
     <string name="widget_config_title">Wybierz wydarzenie</string>
     <string name="widget_config_transparent_title">Przezroczyste tło</string>
     <string name="widget_config_transparent_subtitle">Pokaż tylko liczbę na tapecie.</string>
-    <string name="widget_config_empty_subtitle">Otwórz Days Since, aby dodać wydarzenie, a potem umieść widżet ponownie.</string>
-    <string name="widget_config_open_app">Otwórz Days Since</string>
+    <string name="widget_config_empty_subtitle">Otwórz Pulsar, aby dodać wydarzenie, a potem umieść widżet ponownie.</string>
+    <string name="widget_config_open_app">Otwórz Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d dzień · od %2$s</item>
         <item quantity="few">%1$d dni · od %2$s</item>

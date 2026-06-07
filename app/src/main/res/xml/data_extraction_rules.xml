@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Data extraction rules for API 31+.
-    Explicitly include only the DaysSince prefs file for both cloud backup
+    Explicitly include only the Pulsar prefs file for both cloud backup
     and device-to-device transfer.
     See https://developer.android.com/about/versions/12/backup-restore#xml-changes
 -->
 <data-extraction-rules>
     <cloud-backup>
         <!-- DataStore (Preferences): milestones list + widget bindings. -->
-        <include domain="file" path="datastore/dayssince_store.preferences_pb" />
+        <include domain="file" path="datastore/pulsar_store.preferences_pb" />
     </cloud-backup>
     <device-transfer>
-        <include domain="file" path="datastore/dayssince_store.preferences_pb" />
+        <include domain="file" path="datastore/pulsar_store.preferences_pb" />
     </device-transfer>
 </data-extraction-rules>

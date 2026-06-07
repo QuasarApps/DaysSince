@@ -49,8 +49,8 @@
     <string name="widget_config_title">Meilenstein auswählen</string>
     <string name="widget_config_transparent_title">Transparenter Hintergrund</string>
     <string name="widget_config_transparent_subtitle">Nur die Zahl auf deinem Hintergrundbild anzeigen.</string>
-    <string name="widget_config_empty_subtitle">Öffne Days Since, um einen hinzuzufügen, und platziere das Widget erneut.</string>
-    <string name="widget_config_open_app">Days Since öffnen</string>
+    <string name="widget_config_empty_subtitle">Öffne Pulsar, um einen hinzuzufügen, und platziere das Widget erneut.</string>
+    <string name="widget_config_open_app">Pulsar öffnen</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d Tag · seit %2$s</item>
         <item quantity="other">%1$d Tage · seit %2$s</item>

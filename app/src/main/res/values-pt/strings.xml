@@ -49,8 +49,8 @@
     <string name="widget_config_title">Escolha um marco</string>
     <string name="widget_config_transparent_title">Fundo transparente</string>
     <string name="widget_config_transparent_subtitle">Mostre apenas o número no seu papel de parede.</string>
-    <string name="widget_config_empty_subtitle">Abra o Days Since para adicionar um e posicione o widget novamente.</string>
-    <string name="widget_config_open_app">Abrir o Days Since</string>
+    <string name="widget_config_empty_subtitle">Abra o Pulsar para adicionar um e posicione o widget novamente.</string>
+    <string name="widget_config_open_app">Abrir o Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d dia · desde %2$s</item>
         <item quantity="many">%1$d de dias · desde %2$s</item>

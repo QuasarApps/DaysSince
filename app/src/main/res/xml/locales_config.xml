@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     Locales the app ships translations for, surfaced to the system per-app language picker
-    (Settings → Apps → Days Since → Language) on Android 13+. Referenced from the manifest as
+    (Settings → Apps → Pulsar → Language) on Android 13+. Referenced from the manifest as
     android:localeConfig.
 
     Declared manually rather than via AGP's androidResources.generateLocaleConfig: that flag breaks

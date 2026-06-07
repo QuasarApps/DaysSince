@@ -2,7 +2,7 @@
     <!-- Canonical app name, localized per-locale (see values-<lang>/strings.xml). Both build variants
          resolve the `${appLabel}` manifest placeholder to this string, so the launcher label is
          localized; the debug build is told apart by its `.debug` applicationId, not a label suffix. -->
-    <string name="app_name">Days Since</string>
+    <string name="app_name">Pulsar</string>
 
     <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
     <string name="accent_dynamic">Dynamic</string>
@@ -22,7 +22,7 @@
     <string name="action_delete">Delete</string>
 
     <!-- Home screen -->
-    <string name="home_title">Days Since</string>
+    <string name="home_title">Pulsar</string>
     <string name="home_fab_new">New</string>
     <!-- Accessibility label for the add FAB (its visible "New" text is not exposed to TalkBack). -->
     <string name="home_fab_content_description">Add milestone</string>
@@ -68,8 +68,8 @@
     <string name="widget_config_title">Choose a milestone</string>
     <string name="widget_config_transparent_title">Transparent background</string>
     <string name="widget_config_transparent_subtitle">Show just the number on your wallpaper.</string>
-    <string name="widget_config_empty_subtitle">Open Days Since to add one, then place the widget again.</string>
-    <string name="widget_config_open_app">Open Days Since</string>
+    <string name="widget_config_empty_subtitle">Open Pulsar to add one, then place the widget again.</string>
+    <string name="widget_config_open_app">Open Pulsar</string>
     <!-- %1$d = whole days, %2$s = localized long date. e.g. "12 days · since January 1, 2026".
          The count is passed both as the quantity selector and as %1$d. -->
     <plurals name="widget_config_row_subtitle">

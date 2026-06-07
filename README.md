@@ -1,4 +1,4 @@
-# Days Since
+# Pulsar
 
 A small Android app for tracking the days, hours, and minutes since the
 milestones that matter to you — sober time, last gym session, an anniversary,
@@ -35,7 +35,7 @@ home-screen widget.
 ## How the elapsed time is calculated
 
 The math lives in
-[`app/src/main/java/com/quasarapps/dayssince/DaysSince.kt`](app/src/main/java/com/quasarapps/dayssince/DaysSince.kt).
+[`app/src/main/java/com/quasarapps/pulsar/ElapsedTime.kt`](app/src/main/java/com/quasarapps/pulsar/ElapsedTime.kt).
 
 - Computes `ZonedDateTime.now() - picked` in the device time zone, so DST
   transitions (spring-forward / fall-back) are accounted for rather than
@@ -45,7 +45,7 @@ The math lives in
 - If the picked timestamp is in the future the value clamps to `0d 0h 0m`
   (and the date picker enforces `max = today` to make this hard to trigger).
 
-The behaviour is unit-tested in `DaysSinceTest`, including UTC, non-UTC
+The behaviour is unit-tested in `ElapsedTimeTest`, including UTC, non-UTC
 zones (Pacific/Kiritimati), and both DST transition directions in
 America/New_York.
 
@@ -79,8 +79,8 @@ widget/
 util/EnglishDateFormat      "1st of January 2026" formatting
 ```
 
-Persistence is a single [Preferences DataStore](app/src/main/java/com/quasarapps/dayssince/data/MilestonesRepository.kt)
-named `dayssince_store`, with two keys:
+Persistence is a single [Preferences DataStore](app/src/main/java/com/quasarapps/pulsar/data/MilestonesRepository.kt)
+named `pulsar_store`, with two keys:
 
 - `milestones_json` — JSON array of `Milestone` objects.
 - `widget_bindings_json` — JSON map of `appWidgetId → {milestoneId, transparent}`.
@@ -147,7 +147,7 @@ On macOS / Linux: `./gradlew :app:testDebugUnitTest`.
 
 Notable test files:
 
-- `DaysSinceTest` — date math, future-clamp, DST transitions.
+- `ElapsedTimeTest` — date math, future-clamp, DST transitions.
 - `EnglishDateFormatTest` — ordinal-suffix edge cases (11/12/13, 21st, 31st).
 - `MilestoneJsonTest` — round-trip and defensive decoding of stored JSON.
 - `MilestonesRepositoryBindingsTest` — widget binding serialisation,
@@ -171,7 +171,7 @@ On every push and pull request, CI runs three jobs — see
 ## Placing a widget
 
 1. Long-press an empty spot on your launcher.
-2. Choose **Widgets** and find **Days Since**.
+2. Choose **Widgets** and find **Pulsar**.
 3. Drag the widget onto the home screen.
 4. A picker opens — choose which milestone the widget should track, and
    optionally enable the transparent background.
@@ -184,7 +184,7 @@ different milestone.
 
 ## Privacy
 
-Days Since stores all data locally in the app's private storage. It does
+Pulsar stores all data locally in the app's private storage. It does
 not request any runtime permissions, makes no network requests, and
 includes no analytics or crash reporting. The stored milestones are
 included in Android Auto Backup so they survive an uninstall/reinstall

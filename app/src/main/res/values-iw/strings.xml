@@ -49,8 +49,8 @@
     <string name="widget_config_title">בחר אירוע</string>
     <string name="widget_config_transparent_title">רקע שקוף</string>
     <string name="widget_config_transparent_subtitle">הצג רק את המספר על הטפט שלך.</string>
-    <string name="widget_config_empty_subtitle">פתח את Days Since כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
-    <string name="widget_config_open_app">פתח את Days Since</string>
+    <string name="widget_config_empty_subtitle">פתח את Pulsar כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
+    <string name="widget_config_open_app">פתח את Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d יום · מאז %2$s</item>
         <item quantity="two">%1$d ימים · מאז %2$s</item>

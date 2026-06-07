@@ -49,8 +49,8 @@
     <string name="widget_config_title">اختر حدثًا</string>
     <string name="widget_config_transparent_title">خلفية شفافة</string>
     <string name="widget_config_transparent_subtitle">اعرض الرقم فقط على خلفية شاشتك.</string>
-    <string name="widget_config_empty_subtitle">افتح Days Since لإضافة حدث، ثم ضَع الأداة مرة أخرى.</string>
-    <string name="widget_config_open_app">فتح Days Since</string>
+    <string name="widget_config_empty_subtitle">افتح Pulsar لإضافة حدث، ثم ضَع الأداة مرة أخرى.</string>
+    <string name="widget_config_open_app">فتح Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="zero">%1$d يوم · منذ %2$s</item>
         <item quantity="one">%1$d يوم · منذ %2$s</item>

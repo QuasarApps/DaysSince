@@ -49,8 +49,8 @@
     <string name="widget_config_title">Elige un hito</string>
     <string name="widget_config_transparent_title">Fondo transparente</string>
     <string name="widget_config_transparent_subtitle">Muestra solo el número sobre tu fondo de pantalla.</string>
-    <string name="widget_config_empty_subtitle">Abre Days Since para añadir uno y vuelve a colocar el widget.</string>
-    <string name="widget_config_open_app">Abrir Days Since</string>
+    <string name="widget_config_empty_subtitle">Abre Pulsar para añadir uno y vuelve a colocar el widget.</string>
+    <string name="widget_config_open_app">Abrir Pulsar</string>
     <plurals name="widget_config_row_subtitle">
         <item quantity="one">%1$d día · desde %2$s</item>
         <item quantity="many">%1$d de días · desde %2$s</item>

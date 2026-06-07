@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DaysSince"
+rootProject.name = "Pulsar"
 include(":app")
  
