@@ -17,13 +17,13 @@
     <string name="action_delete">Elimina</string>
 
     <string name="home_title">Pulsar</string>
-    <string name="home_fab_new">Nuovo</string>
+    <string name="home_fab_mark">Segna</string>
     <string name="home_fab_content_description">Aggiungi evento</string>
     <string name="card_days_since_label">GIORNI DA</string>
     <string name="card_on_date_at_time">Il %1$s alle %2$s</string>
     <string name="empty_title">Ancora nessun evento</string>
     <string name="empty_subtitle">Conta i giorni da qualcosa che conta per te.</string>
-    <string name="empty_cta">Aggiungi il tuo primo evento</string>
+    <string name="card_new_beginning_label">UN NUOVO INIZIO</string>
 
     <string name="detail_back_content_description">Indietro</string>
     <string name="detail_more_options_content_description">Altre opzioni</string>

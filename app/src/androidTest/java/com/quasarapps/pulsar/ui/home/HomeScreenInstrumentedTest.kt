@@ -19,7 +19,8 @@ import java.time.LocalTime
 /**
  * Compose UI test for [HomeScreen] on a device/emulator.
  *
- * Covers the empty-state vs. populated-list branches and the click contracts (add / open).
+ * Covers the empty-state vs. populated-list branches and the click contracts (add / open). The
+ * "Mark" FAB is always present (the empty state has no separate CTA button).
  */
 @RunWith(AndroidJUnit4::class)
 class HomeScreenInstrumentedTest {
@@ -43,8 +44,7 @@ class HomeScreenInstrumentedTest {
     ) {
         // Note: we deliberately do NOT freeze the test clock here. The milestone cards'
         // rememberElapsedDhm loop is delay-based (it suspends between minute ticks, which counts as
-        // idle), so on a real device waitForIdle settles fine. Freezing the clock instead stalls
-        // layout/animation and makes nodes report as not-displayed.
+        // idle), so on a real device waitForIdle settles fine.
         composeRule.setContent {
             PulsarTheme {
                 HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
@@ -53,28 +53,19 @@ class HomeScreenInstrumentedTest {
     }
 
     @Test
-    fun emptyState_showsPromptAndCta() {
+    fun emptyState_showsPromptAndFab() {
         setContent(milestones = emptyList())
 
         composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
-        composeRule.onNodeWithText("Add your first milestone").assertIsDisplayed()
+        composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
     }
 
     @Test
-    fun emptyState_hidesFab() {
-        setContent(milestones = emptyList())
-
-        // The "New" FAB is gated behind milestones.isNotEmpty(); it must be absent on the empty
-        // state (the CTA button is the only way to add the first milestone).
-        composeRule.onNodeWithText("New", useUnmergedTree = true).assertDoesNotExist()
-    }
-
-    @Test
-    fun emptyState_ctaInvokesOnAdd() {
+    fun emptyState_fabInvokesOnAdd() {
         var added = false
         setContent(milestones = emptyList(), onAdd = { added = true })
 
-        composeRule.onNodeWithText("Add your first milestone").performClick()
+        composeRule.onNodeWithContentDescription("Add milestone").performClick()
 
         assertTrue(added)
     }
@@ -85,17 +76,12 @@ class HomeScreenInstrumentedTest {
 
         composeRule.onNodeWithText("Sober").assertIsDisplayed()
         composeRule.onNodeWithText("Gym streak").assertIsDisplayed()
-        // The "New" FAB only appears once there is at least one milestone. Its label lives in the
-        // unmerged tree: ExtendedFloatingActionButton does not merge its text into the button's
-        // semantics node on this Compose version, so the default (merged) lookup can't see it.
-        composeRule.onNodeWithText("New", useUnmergedTree = true).assertIsDisplayed()
+        // The FAB merges its children for TalkBack, so its "Mark" label is only in the unmerged tree.
+        composeRule.onNodeWithText("Mark", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
     fun fab_hasAccessibilityLabel_forTalkBack() {
-        // Regression guard for the a11y fix: because the FAB's "New" text doesn't merge into the
-        // button's semantics node, an explicit contentDescription is set so TalkBack doesn't
-        // announce an unlabeled "Button".
         setContent(milestones = listOf(milestone("a", "Sober")))
 
         composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
@@ -119,8 +105,7 @@ class HomeScreenInstrumentedTest {
         var added = false
         setContent(milestones = listOf(milestone("a", "Sober")), onAdd = { added = true })
 
-        // See populatedList_rendersTitlesAndFab: the FAB label is only in the unmerged tree.
-        composeRule.onNodeWithText("New", useUnmergedTree = true).performClick()
+        composeRule.onNodeWithContentDescription("Add milestone").performClick()
 
         assertTrue(added)
     }

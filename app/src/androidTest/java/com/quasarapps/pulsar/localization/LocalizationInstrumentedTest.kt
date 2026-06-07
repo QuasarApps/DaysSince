@@ -56,7 +56,6 @@ class LocalizationInstrumentedTest {
         emptyHome(Locale("es"))
 
         composeRule.onNodeWithText("Aún no hay hitos").assertIsDisplayed()
-        composeRule.onNodeWithText("Añade tu primer hito").assertIsDisplayed()
         // Guards against a silent fallback to the English baseline.
         composeRule.onNodeWithText("No milestones yet").assertDoesNotExist()
     }
@@ -66,7 +65,6 @@ class LocalizationInstrumentedTest {
         emptyHome(Locale("ru"))
 
         composeRule.onNodeWithText("Пока нет событий").assertIsDisplayed()
-        composeRule.onNodeWithText("Добавьте первое событие").assertIsDisplayed()
     }
 
     @Test
@@ -77,7 +75,7 @@ class LocalizationInstrumentedTest {
     }
 
     @Test
-    fun milestoneCard_spanish_rendersLocaleFormattedDate() {
+    fun milestoneCard_spanish_rendersTranslatedCaption() {
         val milestone = Milestone(
             id = "a",
             title = "Sobriedad",
@@ -90,9 +88,10 @@ class LocalizationInstrumentedTest {
             HomeScreen(milestones = listOf(milestone), onAdd = {}, onOpen = {})
         }
 
-        // Spanish long-date style ("15 de junio de 2025"), wired through card_on_date_at_time.
-        composeRule.onNodeWithText("15 de junio de 2025", substring = true).assertIsDisplayed()
-        // The all-caps caption is translated too.
+        // The card shows the title and the translated all-caps kicker. (The card no longer renders
+        // the date — that moved to the detail screen — so locale date formatting is covered by
+        // LocalizedDateFormat(Instrumented)Test instead.)
+        composeRule.onNodeWithText("Sobriedad").assertIsDisplayed()
         composeRule.onNodeWithText("DÍAS DESDE").assertIsDisplayed()
     }
 }

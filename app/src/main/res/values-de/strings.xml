@@ -17,13 +17,13 @@
     <string name="action_delete">Löschen</string>
 
     <string name="home_title">Pulsar</string>
-    <string name="home_fab_new">Neu</string>
+    <string name="home_fab_mark">Markieren</string>
     <string name="home_fab_content_description">Meilenstein hinzufügen</string>
     <string name="card_days_since_label">TAGE SEIT</string>
     <string name="card_on_date_at_time">Am %1$s um %2$s</string>
     <string name="empty_title">Noch keine Meilensteine</string>
     <string name="empty_subtitle">Zähle die Tage seit etwas, das dir wichtig ist.</string>
-    <string name="empty_cta">Ersten Meilenstein hinzufügen</string>
+    <string name="card_new_beginning_label">EIN NEUANFANG</string>
 
     <string name="detail_back_content_description">Zurück</string>
     <string name="detail_more_options_content_description">Weitere Optionen</string>

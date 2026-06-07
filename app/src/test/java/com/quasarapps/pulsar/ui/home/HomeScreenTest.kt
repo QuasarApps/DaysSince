@@ -20,11 +20,11 @@ import java.time.LocalTime
 /**
  * Compose UI test for [HomeScreen], run on the JVM under Robolectric (no emulator).
  *
- * Mirrors the on-device coverage for fast CI feedback: empty-state vs. populated-list branches,
- * the FAB gating, and the add / open click contracts.
+ * Mirrors the on-device coverage for fast CI feedback: empty-state vs. populated-list branches and
+ * the add / open click contracts. The "Mark" FAB is always present now (it's the only add path;
+ * the empty state no longer has a separate CTA button).
  *
- * Pinned to en-US so the English-copy assertions don't depend on the host's default locale (the app
- * now ships translations, so a non-English default would otherwise load localized strings).
+ * Pinned to en-US so the English-copy assertions don't depend on the host's default locale.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(qualifiers = "en-rUS")
@@ -58,21 +58,20 @@ class HomeScreenTest {
     }
 
     @Test
-    fun emptyState_showsPromptAndHidesFab() {
+    fun emptyState_showsPromptAndFab() {
         setContent(milestones = emptyList())
 
         composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
-        composeRule.onNodeWithText("Add your first milestone").assertIsDisplayed()
-        // The FAB is gated behind a non-empty list.
-        composeRule.onNodeWithText("New", useUnmergedTree = true).assertDoesNotExist()
+        // The FAB is always available — it's the way to add the first milestone.
+        composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
     }
 
     @Test
-    fun emptyState_ctaInvokesOnAdd() {
+    fun emptyState_fabInvokesOnAdd() {
         var added = false
         setContent(milestones = emptyList(), onAdd = { added = true })
 
-        composeRule.onNodeWithText("Add your first milestone").performClick()
+        composeRule.onNodeWithContentDescription("Add milestone").performClick()
 
         assertTrue(added)
     }
@@ -83,16 +82,14 @@ class HomeScreenTest {
 
         composeRule.onNodeWithText("Sober").assertIsDisplayed()
         composeRule.onNodeWithText("Gym streak").assertIsDisplayed()
-        // ExtendedFloatingActionButton doesn't merge its text into the button node, so the label
-        // is only reachable via the unmerged tree.
-        composeRule.onNodeWithText("New", useUnmergedTree = true).assertIsDisplayed()
+        // The FAB merges its children for TalkBack, so its "Mark" label is only in the unmerged tree.
+        composeRule.onNodeWithText("Mark", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
     fun fab_hasAccessibilityLabel_forTalkBack() {
-        // Regression guard for the a11y fix: the FAB's "New" text doesn't merge into the button's
-        // semantics node, so an explicit contentDescription keeps it from being an unlabeled
-        // "Button" for TalkBack.
+        // The FAB merges the decorative star + "Mark" text into one node with an explicit
+        // contentDescription, so TalkBack announces a single labeled button.
         setContent(milestones = listOf(milestone("a", "Sober")))
 
         composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
@@ -116,7 +113,7 @@ class HomeScreenTest {
         var added = false
         setContent(milestones = listOf(milestone("a", "Sober")), onAdd = { added = true })
 
-        composeRule.onNodeWithText("New", useUnmergedTree = true).performClick()
+        composeRule.onNodeWithContentDescription("Add milestone").performClick()
 
         assertTrue(added)
     }
