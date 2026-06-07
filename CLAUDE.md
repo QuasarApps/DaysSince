@@ -18,3 +18,7 @@ Keep commands flat so the permission checker can match them cleanly.
 - **PR comments:** write to `.claude-tmp/PR_COMMENT.md`, then `gh pr comment <n> --body-file .claude-tmp/PR_COMMENT.md`.
 - **`gh` doesn't accept `-C`** — when the current working directory isn't inside the target repo, pass `--repo OWNER/NAME` and use an absolute path for `--body-file`.
 - **Never write scratch files inside `.git/`** — it's treated as a sensitive path and triggers permission prompts. Use `.claude-tmp/` (gitignored at the repo root).
+
+## Permission allowlist
+
+- The `.claude/settings.json` allowlist intentionally trusts the project's own Gradle wrapper (`./gradlew` / `.\gradlew.bat`) for **any** task. Any Gradle invocation runs `build.gradle.kts`/test code, so per-task scoping isn't a real security boundary — this is a de-noising convenience scoped to the project's own build, not a grant for arbitrary external tools.

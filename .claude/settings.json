@@ -2,15 +2,8 @@
   "permissions": {
     "allow": [
       "PowerShell(Get-ChildItem *)",
-      "PowerShell(Get-Content *)",
-      "PowerShell(Test-Path *)",
-      "PowerShell(Select-String *)",
-      "Bash(./gradlew :app:testDebugUnitTest *)",
-      "Bash(./gradlew :app:assembleDebug *)",
-      "Bash(./gradlew :app:compileDebugKotlin *)",
-      "PowerShell(.\\gradlew.bat :app:testDebugUnitTest *)",
-      "PowerShell(.\\gradlew.bat :app:assembleDebug *)",
-      "PowerShell(.\\gradlew.bat :app:compileDebugKotlin *)"
+      "Bash(./gradlew *)",
+      "PowerShell(.\\gradlew.bat *)"
     ]
   }
 }
