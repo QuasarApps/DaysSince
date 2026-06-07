@@ -19,10 +19,10 @@
     <string name="home_title">פולסר</string>
     <string name="home_fab_new">חדש</string>
     <string name="home_fab_content_description">הוספת אירוע</string>
-    <string name="card_days_since_label">פולסר</string>
+    <string name="card_days_since_label">ימים מאז</string>
     <string name="card_on_date_at_time">ב-%1$s בשעה %2$s</string>
     <string name="empty_title">אין עדיין אירועים</string>
-    <string name="empty_subtitle">עקוב אחר הפולסר משהו שחשוב לך.</string>
+    <string name="empty_subtitle">עקוב אחר הימים מאז משהו שחשוב לך.</string>
     <string name="empty_cta">הוסף את האירוע הראשון שלך</string>
 
     <string name="detail_back_content_description">חזרה</string>
