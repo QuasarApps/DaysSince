@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">Retour</string>
     <string name="detail_more_options_content_description">Plus d\'options</string>
+    <string name="detail_action_reset">Réinitialiser à maintenant</string>
     <string name="detail_days_label">JOURS</string>
     <string name="detail_hours_label">HEURES</string>
     <string name="detail_minutes_label">MINUTES</string>
+    <string name="detail_seconds_label">SECONDES</string>
     <string name="detail_since_date_at_time">depuis le %1$s à %2$s</string>
     <string name="detail_widget_hint">Ajoutez un widget depuis votre écran d\'accueil pour le garder en vue.</string>
     <string name="detail_delete_dialog_title">Supprimer l\'événement ?</string>

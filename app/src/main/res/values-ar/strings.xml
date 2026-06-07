@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">رجوع</string>
     <string name="detail_more_options_content_description">خيارات أخرى</string>
+    <string name="detail_action_reset">إعادة التعيين إلى الآن</string>
     <string name="detail_days_label">أيام</string>
     <string name="detail_hours_label">ساعات</string>
     <string name="detail_minutes_label">دقائق</string>
+    <string name="detail_seconds_label">ثواني</string>
     <string name="detail_since_date_at_time">منذ %1$s الساعة %2$s</string>
     <string name="detail_widget_hint">أضف أداة إلى شاشتك الرئيسية لإبقاء هذا في مرأى العين.</string>
     <string name="detail_delete_dialog_title">حذف الحدث؟</string>

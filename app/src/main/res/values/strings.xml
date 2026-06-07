@@ -40,12 +40,15 @@
     <!-- Detail screen -->
     <string name="detail_back_content_description">Back</string>
     <string name="detail_more_options_content_description">More options</string>
+    <!-- Overflow menu item: reset the milestone's start to the current moment (count back to 0). -->
+    <string name="detail_action_reset">Reset to now</string>
     <!-- translator: the next three are standalone unit captions under large standalone numbers
          (a dashboard-style readout); they are not placed next to the number, so no plural
          agreement is needed. -->
     <string name="detail_days_label">DAYS</string>
     <string name="detail_hours_label">HOURS</string>
     <string name="detail_minutes_label">MINUTES</string>
+    <string name="detail_seconds_label">SECONDS</string>
     <!-- %1$s = localized long date, %2$s = localized time. e.g. "since June 15, 2025 at 9:30 AM" -->
     <string name="detail_since_date_at_time">since %1$s at %2$s</string>
     <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>

@@ -9,10 +9,15 @@ import java.time.temporal.ChronoUnit
 
 object ElapsedTime {
 
+    /**
+     * Elapsed time, broken down. [seconds] is only populated by [sincePickedDhms] — the minute-
+     * resolution [sincePickedDhm] (used by widgets) leaves it 0.
+     */
     data class ElapsedDhm(
         val days: Long,
         val hours: Long,
-        val minutes: Long
+        val minutes: Long,
+        val seconds: Long = 0,
     )
 
     /**
@@ -54,5 +59,30 @@ object ElapsedTime {
         val minutes = totalMinutes % 60L
 
         return ElapsedDhm(days = days, hours = hours, minutes = minutes)
+    }
+
+    /**
+     * Elapsed time broken down to the second, for the live detail screen. Same DST-correct,
+     * future-clamped behaviour as [sincePickedDhm] but at second resolution (so the detail's seconds
+     * tile ticks). Days/hours/minutes match [sincePickedDhm] for the same instant.
+     */
+    fun sincePickedDhms(
+        pickedDate: LocalDate,
+        pickedTime: LocalTime,
+        clock: Clock = Clock.systemDefaultZone(),
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ElapsedDhm {
+        val start = ZonedDateTime.of(pickedDate, pickedTime, zoneId)
+        val now = ZonedDateTime.now(clock.withZone(zoneId))
+
+        val totalSeconds = ChronoUnit.SECONDS.between(start, now)
+        if (totalSeconds <= 0) return ElapsedDhm(days = 0, hours = 0, minutes = 0, seconds = 0)
+
+        val days = totalSeconds / (60L * 60L * 24L)
+        val hours = (totalSeconds % (60L * 60L * 24L)) / (60L * 60L)
+        val minutes = (totalSeconds % (60L * 60L)) / 60L
+        val seconds = totalSeconds % 60L
+
+        return ElapsedDhm(days = days, hours = hours, minutes = minutes, seconds = seconds)
     }
 }

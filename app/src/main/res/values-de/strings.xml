@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">Zurück</string>
     <string name="detail_more_options_content_description">Weitere Optionen</string>
+    <string name="detail_action_reset">Auf jetzt zurücksetzen</string>
     <string name="detail_days_label">TAGE</string>
     <string name="detail_hours_label">STUNDEN</string>
     <string name="detail_minutes_label">MINUTEN</string>
+    <string name="detail_seconds_label">SEKUNDEN</string>
     <string name="detail_since_date_at_time">seit %1$s um %2$s</string>
     <string name="detail_widget_hint">Füge ein Widget zu deinem Startbildschirm hinzu, um dies im Blick zu behalten.</string>
     <string name="detail_delete_dialog_title">Meilenstein löschen?</string>

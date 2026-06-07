@@ -17,6 +17,8 @@ import com.quasarapps.pulsar.ui.detail.DetailScreen
 import com.quasarapps.pulsar.ui.edit.EditMilestoneScreen
 import com.quasarapps.pulsar.ui.home.HomeScreen
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
+import java.time.LocalDate
+import java.time.LocalTime
 
 private object Routes {
     const val HOME = "home"
@@ -103,6 +105,13 @@ fun PulsarApp(initialMilestoneId: String? = null) {
                     milestone = milestone,
                     onBack = { navController.popBackStack() },
                     onEdit = { if (id != null) navController.navigate(Routes.edit(id)) },
+                    onReset = {
+                        if (milestone != null) {
+                            vm.updateMilestone(
+                                milestone.copy(date = LocalDate.now(), time = LocalTime.now().withNano(0)),
+                            )
+                        }
+                    },
                     onDelete = {
                         if (id != null) vm.deleteMilestone(id)
                         navController.popBackStack()

@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">Voltar</string>
     <string name="detail_more_options_content_description">Mais opções</string>
+    <string name="detail_action_reset">Redefinir para agora</string>
     <string name="detail_days_label">DIAS</string>
     <string name="detail_hours_label">HORAS</string>
     <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_seconds_label">SEGUNDOS</string>
     <string name="detail_since_date_at_time">desde %1$s às %2$s</string>
     <string name="detail_widget_hint">Adicione um widget à tela inicial para manter isso à vista.</string>
     <string name="detail_delete_dialog_title">Excluir marco?</string>

@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">חזרה</string>
     <string name="detail_more_options_content_description">אפשרויות נוספות</string>
+    <string name="detail_action_reset">אפס לעכשיו</string>
     <string name="detail_days_label">ימים</string>
     <string name="detail_hours_label">שעות</string>
     <string name="detail_minutes_label">דקות</string>
+    <string name="detail_seconds_label">שניות</string>
     <string name="detail_since_date_at_time">מאז %1$s בשעה %2$s</string>
     <string name="detail_widget_hint">הוסף ווידג\'ט ממסך הבית כדי לשמור על זה לנגד עיניך.</string>
     <string name="detail_delete_dialog_title">למחוק את האירוע?</string>

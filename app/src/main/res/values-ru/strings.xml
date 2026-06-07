@@ -27,9 +27,11 @@
 
     <string name="detail_back_content_description">Назад</string>
     <string name="detail_more_options_content_description">Ещё</string>
+    <string name="detail_action_reset">Сбросить на сейчас</string>
     <string name="detail_days_label">ДНИ</string>
     <string name="detail_hours_label">ЧАСЫ</string>
     <string name="detail_minutes_label">МИНУТЫ</string>
+    <string name="detail_seconds_label">СЕКУНДЫ</string>
     <string name="detail_since_date_at_time">с %1$s в %2$s</string>
     <string name="detail_widget_hint">Добавьте виджет на главный экран, чтобы это было всегда на виду.</string>
     <string name="detail_delete_dialog_title">Удалить событие?</string>
