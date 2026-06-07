@@ -80,6 +80,7 @@ class PulsarAppNavigationInstrumentedTest {
             composeRule.onAllNodesWithText(title).fetchSemanticsNodes().isNotEmpty()
         }
         composeRule.onAllNodesWithText(title).onFirst().assertExists()
-        composeRule.onNodeWithText("DAYS SINCE").assertExists()
+        // The milestone was created just now (0 days), so the card shows the "new beginning" kicker.
+        composeRule.onNodeWithText("A NEW BEGINNING").assertExists()
     }
 }

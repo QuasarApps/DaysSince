@@ -194,7 +194,7 @@ private fun MilestoneCard(
 
 @Composable
 private fun MarkFab(onAdd: () -> Unit) {
-    val label = stringResource(R.string.home_fab_new)
+    val label = stringResource(R.string.home_fab_mark)
     val fabCd = stringResource(R.string.home_fab_content_description)
     Row(
         verticalAlignment = Alignment.CenterVertically,

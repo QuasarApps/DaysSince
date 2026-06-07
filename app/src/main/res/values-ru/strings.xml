@@ -17,7 +17,7 @@
     <string name="action_delete">Удалить</string>
 
     <string name="home_title">Пульсар</string>
-    <string name="home_fab_new">Отметить</string>
+    <string name="home_fab_mark">Отметить</string>
     <string name="home_fab_content_description">Добавить событие</string>
     <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>
     <string name="card_on_date_at_time">%1$s в %2$s</string>

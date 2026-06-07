@@ -17,7 +17,7 @@
     <string name="action_delete">Supprimer</string>
 
     <string name="home_title">Pulsar</string>
-    <string name="home_fab_new">Marquer</string>
+    <string name="home_fab_mark">Marquer</string>
     <string name="home_fab_content_description">Ajouter un événement</string>
     <string name="card_days_since_label">JOURS DEPUIS</string>
     <string name="card_on_date_at_time">Le %1$s à %2$s</string>

@@ -17,7 +17,7 @@
     <string name="action_delete">Excluir</string>
 
     <string name="home_title">Pulsar</string>
-    <string name="home_fab_new">Marcar</string>
+    <string name="home_fab_mark">Marcar</string>
     <string name="home_fab_content_description">Adicionar marco</string>
     <string name="card_days_since_label">DIAS DESDE</string>
     <string name="card_on_date_at_time">Em %1$s às %2$s</string>
