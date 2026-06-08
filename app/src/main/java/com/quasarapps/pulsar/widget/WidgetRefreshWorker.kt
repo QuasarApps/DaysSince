@@ -13,7 +13,7 @@ import com.quasarapps.pulsar.data.MilestonesRepository
  * worker just performs the refresh.
  *
  * It also doubles as the cleanup path for removed widgets: when started with [KEY_UNBIND_IDS] in its
- * input data (see [WidgetRefreshScheduler.unbindWidgets]), it first drops those widgets' bindings.
+ * input data (see [WidgetRefreshScheduler.unbindWidgets]), it instead drops those widgets' bindings.
  * Doing the (suspend) DataStore write here — rather than in the receiver's `onDeleted` — keeps it off
  * the short-lived broadcast thread and clear of the single `goAsync()` slot that
  * [com.quasarapps.pulsar.widget.glance.MilestoneGlanceWidgetReceiver]'s superclass already uses.
@@ -26,9 +26,14 @@ class WidgetRefreshWorker(
     override suspend fun doWork(): Result {
         val unbindIds = inputData.getIntArray(KEY_UNBIND_IDS)
         if (unbindIds != null && unbindIds.isNotEmpty()) {
+            // Cleanup path (a widget was removed): just drop the binding(s). Removing a deleted
+            // widget's binding can't change what any *remaining* widget shows, so there's nothing to
+            // re-render — skip refreshAll() and the extra wakeups it would cost.
             val repo = MilestonesRepository(applicationContext)
             unbindIds.forEach { repo.unbindWidget(it) }
+            return Result.success()
         }
+        // Refresh path (data changed / periodic tick): re-render every placed widget.
         MilestoneWidgets.refreshAll(applicationContext)
         return Result.success()
     }
