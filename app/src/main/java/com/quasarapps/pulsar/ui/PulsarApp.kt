@@ -68,6 +68,12 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             val vm: MilestonesViewModel = viewModel()
             val milestones by vm.milestones.collectAsState()
 
+            // Splash overlay state, declared before the content so it can gate the content's a11y.
+            // Shown on a normal cold launch and skipped when opened via a widget deep-link (so the
+            // tapped milestone appears immediately). rememberSaveable keeps a rotation mid-splash from
+            // replaying it (and from re-showing after an onNewIntent, when it's already dismissed).
+            var splashDone by rememberSaveable { mutableStateOf(deepLink != null) }
+
             // Deep-link from a widget tap: jump straight to that milestone's detail.
             //
             // Keyed on [deepLink] (a new value per delivery), so it fires for a cold-start tap and
@@ -78,17 +84,15 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             // avoids stacking a duplicate detail when the same milestone is tapped twice in a row.
             LaunchedEffect(deepLink) {
                 if (deepLink != null) {
+                    // Dismiss the splash so it can't linger over the deep-linked detail — covers a
+                    // tap arriving via onNewIntent while a launcher cold-start's splash is still up.
+                    // (On a cold-start deep link splashDone is already true, so this is a no-op.)
+                    splashDone = true
                     navController.navigate(Routes.detail(deepLink.milestoneId)) {
                         launchSingleTop = true
                     }
                 }
             }
-
-            // Splash overlay state, declared before the content so it can gate the content's a11y.
-            // Shown on a normal cold launch and skipped when opened via a widget deep-link (so the
-            // tapped milestone appears immediately). rememberSaveable keeps a rotation mid-splash from
-            // replaying it (and from re-showing after an onNewIntent, when it's already dismissed).
-            var splashDone by rememberSaveable { mutableStateOf(deepLink != null) }
 
             // App content (the NavHost composes/warms underneath the splash). While the splash is up,
             // clear the semantics of everything behind it so a screen reader stays within the modal

@@ -1,6 +1,7 @@
 package com.quasarapps.pulsar.ui
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -139,6 +140,36 @@ class PulsarAppNavigationInstrumentedTest {
         }
         composeRule.onAllNodesWithText(deepLinkTitle).onFirst().assertIsDisplayed()
         // "DAYS" is the detail hero's unit label (Home uses "DAYS SINCE"), so it pins us to detail.
+        composeRule.onNodeWithText("DAYS").assertIsDisplayed()
+    }
+
+    @Test
+    fun deepLinkDeliveredWhileRunning_navigatesToThatMilestone() {
+        // The singleTop / onNewIntent path: a deep link arriving *after* the app is already running
+        // (modelled by flipping the deepLink the host passes) must navigate to that milestone.
+        runBlocking {
+            MilestonesRepository(appContext).upsert(
+                Milestone(
+                    id = "retap-id",
+                    title = "Re-tap Target",
+                    date = LocalDate.now().minusDays(1),
+                    time = LocalTime.NOON,
+                    createdAt = 1L,
+                ),
+            )
+        }
+
+        val deepLink = mutableStateOf<DeepLinkTarget?>(null)
+        composeRule.setContent { PulsarApp(deepLink = deepLink.value) }
+        awaitSplashGone()
+        // We're on Home (the seeded milestone shows as a card with the "DAYS SINCE" kicker, not "DAYS").
+
+        // Simulate the onNewIntent delivery of a widget tap.
+        composeRule.runOnIdle { deepLink.value = DeepLinkTarget("retap-id", token = 1L) }
+
+        composeRule.waitUntil(timeoutMillis = 10_000) {
+            composeRule.onAllNodesWithText("DAYS").fetchSemanticsNodes().isNotEmpty()
+        }
         composeRule.onNodeWithText("DAYS").assertIsDisplayed()
     }
 }
