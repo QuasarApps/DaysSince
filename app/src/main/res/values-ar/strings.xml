@@ -21,7 +21,6 @@
     <string name="home_fab_mark">تحديد</string>
     <string name="home_fab_content_description">إضافة حدث</string>
     <string name="card_days_since_label">الأيام منذ</string>
-    <string name="card_on_date_at_time">في %1$s الساعة %2$s</string>
     <string name="empty_title">لا توجد أحداث بعد</string>
     <string name="empty_subtitle">تتبّع الأيام منذ شيء يهمّك.</string>
     <string name="card_new_beginning_label">بداية جديدة</string>

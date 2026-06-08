@@ -21,7 +21,6 @@
     <string name="home_fab_mark">Markieren</string>
     <string name="home_fab_content_description">Meilenstein hinzufügen</string>
     <string name="card_days_since_label">TAGE SEIT</string>
-    <string name="card_on_date_at_time">Am %1$s um %2$s</string>
     <string name="empty_title">Noch keine Meilensteine</string>
     <string name="empty_subtitle">Zähle die Tage seit etwas, das dir wichtig ist.</string>
     <string name="card_new_beginning_label">EIN NEUANFANG</string>
