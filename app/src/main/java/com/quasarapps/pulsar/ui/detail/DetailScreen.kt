@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.CountUpNumber
+import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhms
 import com.quasarapps.pulsar.ui.theme.accentStops
 import com.quasarapps.pulsar.util.LocalizedDateFormat
@@ -70,7 +71,14 @@ fun DetailScreen(
         return
     }
 
-    val dhms = rememberElapsedDhms(milestone.date, milestone.time)
+    // Only the H/M/S row needs per-second updates. When units are hidden, the day count is all that
+    // shows and it only needs per-minute resolution — so use the cheaper minute ticker and leave the
+    // per-second effect uncreated. Toggling showUnits just cancels one effect and starts the other.
+    val dhms = if (showUnits) {
+        rememberElapsedDhms(milestone.date, milestone.time)
+    } else {
+        rememberElapsedDhm(milestone.date, milestone.time)
+    }
     val (accentStart, accentEnd) = accentStops(milestone.accent)
     var menuOpen by remember { mutableStateOf(false) }
     var confirmReset by remember { mutableStateOf(false) }
