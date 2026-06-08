@@ -211,16 +211,16 @@ private fun Stat(value: String, label: String, fg: ColorProvider, fontSize: Text
 private fun cappedDays(days: Long, context: Context): String =
     if (days > 9999) context.getString(R.string.widget_days_capped) else days.toString()
 
-/** Font size for the 1x1 Days widget number, shrinking as the string gets longer. */
-private fun daysWidgetFontSize(daysText: String): TextUnit = when (daysText.length) {
+/** Font size for the 1x1 Days widget number, shrinking as the string gets longer. internal for test. */
+internal fun daysWidgetFontSize(daysText: String): TextUnit = when (daysText.length) {
     in 0..2 -> 30.sp
     3 -> 26.sp
     4 -> 20.sp
     else -> 16.sp // "9999+"
 }
 
-/** Font size for the 2x1 DHM stats, shrinking as the days string gets longer. */
-private fun dhmStatFontSize(daysText: String): TextUnit = when (daysText.length) {
+/** Font size for the 2x1 DHM stats, shrinking as the days string gets longer. internal for test. */
+internal fun dhmStatFontSize(daysText: String): TextUnit = when (daysText.length) {
     in 0..2 -> 22.sp
     3 -> 20.sp
     4 -> 17.sp

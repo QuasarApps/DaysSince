@@ -2,6 +2,7 @@ package com.quasarapps.pulsar
 
 import java.time.Clock
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -85,4 +86,17 @@ object ElapsedTime {
 
         return ElapsedDhm(days = days, hours = hours, minutes = minutes, seconds = seconds)
     }
+
+    /**
+     * Whether a milestone reads as a "new beginning": exactly 0 elapsed [days] **and** its start is
+     * not in the future. The future guard matters because a later-today time clamps the day count to
+     * 0 (see [sincePickedDhm]) yet isn't a genuine new beginning. [days] is passed in (rather than
+     * recomputed) so callers reuse their live, ticking day count; [now] is injectable for tests.
+     */
+    fun isNewBeginning(
+        days: Long,
+        date: LocalDate,
+        time: LocalTime,
+        now: LocalDateTime = LocalDateTime.now(),
+    ): Boolean = days == 0L && !LocalDateTime.of(date, time).isAfter(now)
 }

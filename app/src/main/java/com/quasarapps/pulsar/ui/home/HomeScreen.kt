@@ -49,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.quasarapps.pulsar.ElapsedTime
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.Starburst
@@ -57,7 +58,6 @@ import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
 import com.quasarapps.pulsar.ui.theme.QuasarBrush
 import com.quasarapps.pulsar.ui.theme.accentBrush
 import com.quasarapps.pulsar.ui.theme.accentOrDefault
-import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,8 +150,7 @@ private fun MilestoneCard(
     modifier: Modifier = Modifier,
 ) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
-    // 0 days AND not in the future (a later time today clamps to 0 but isn't a "new beginning").
-    val isNew = dhm.days == 0L && !LocalDateTime.of(milestone.date, milestone.time).isAfter(LocalDateTime.now())
+    val isNew = ElapsedTime.isNewBeginning(dhm.days, milestone.date, milestone.time)
     val accent = accentOrDefault(milestone.accent)
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)

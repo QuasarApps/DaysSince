@@ -201,7 +201,9 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
 
 @Composable
 private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
-    val days = ElapsedTime.sincePickedDhm(milestone.date, milestone.time).days
+    val days = remember(milestone.date, milestone.time) {
+        ElapsedTime.sincePickedDhm(milestone.date, milestone.time).days
+    }
     val locale = LocalConfiguration.current.locales[0]
     val dateText = remember(milestone.date, locale) {
         LocalizedDateFormat.formatLongDate(milestone.date, locale)

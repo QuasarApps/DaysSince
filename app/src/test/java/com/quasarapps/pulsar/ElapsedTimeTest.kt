@@ -1,10 +1,13 @@
 package com.quasarapps.pulsar
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -228,5 +231,47 @@ class ElapsedTimeTest {
 
         val dhm = ElapsedTime.sincePickedDhm(picked, pickedTime, clock = clock, zoneId = ny)
         assertEquals(ElapsedTime.ElapsedDhm(days = 1, hours = 1, minutes = 0), dhm)
+    }
+
+    // isNewBeginning — 0 elapsed days AND a non-future start.
+
+    @Test
+    fun isNewBeginning_zeroDaysAndPastStart_isTrue() {
+        val now = LocalDateTime.of(2026, 1, 7, 10, 0)
+        assertTrue(
+            ElapsedTime.isNewBeginning(
+                days = 0,
+                date = LocalDate.of(2026, 1, 7),
+                time = LocalTime.of(9, 0),
+                now = now,
+            ),
+        )
+    }
+
+    @Test
+    fun isNewBeginning_zeroDaysButFutureTimeToday_isFalse() {
+        // A later-today pick clamps to 0 days but isn't a new beginning.
+        val now = LocalDateTime.of(2026, 1, 7, 10, 0)
+        assertFalse(
+            ElapsedTime.isNewBeginning(
+                days = 0,
+                date = LocalDate.of(2026, 1, 7),
+                time = LocalTime.of(11, 0),
+                now = now,
+            ),
+        )
+    }
+
+    @Test
+    fun isNewBeginning_nonZeroDays_isFalse() {
+        val now = LocalDateTime.of(2026, 1, 7, 10, 0)
+        assertFalse(
+            ElapsedTime.isNewBeginning(
+                days = 5,
+                date = LocalDate.of(2026, 1, 2),
+                time = LocalTime.of(9, 0),
+                now = now,
+            ),
+        )
     }
 }
