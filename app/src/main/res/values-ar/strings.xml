@@ -64,4 +64,17 @@
         <item quantity="many">%1$d يومًا · منذ %2$s</item>
         <item quantity="other">%1$d يوم · منذ %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_theme_header">المظهر</string>
+    <string name="settings_theme_system">إعداد النظام الافتراضي</string>
+    <string name="settings_theme_light">فاتح</string>
+    <string name="settings_theme_dark">داكن</string>
+    <string name="settings_display_header">العرض</string>
+    <string name="settings_show_units_title">إظهار الساعات والدقائق</string>
+    <string name="settings_show_units_subtitle">عرض الساعات والدقائق والثواني مباشرةً في شاشة تفاصيل الحدث.</string>
+    <string name="settings_about_header">حول التطبيق</string>
+    <string name="settings_version_label">الإصدار</string>
+    <string name="settings_made_by">تطوير Quasar Apps</string>
 </resources>

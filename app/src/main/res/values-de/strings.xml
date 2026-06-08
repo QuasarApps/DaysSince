@@ -60,4 +60,17 @@
         <item quantity="one">%1$d Tag · seit %2$s</item>
         <item quantity="other">%1$d Tage · seit %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_theme_header">Design</string>
+    <string name="settings_theme_system">Systemstandard</string>
+    <string name="settings_theme_light">Hell</string>
+    <string name="settings_theme_dark">Dunkel</string>
+    <string name="settings_display_header">Anzeige</string>
+    <string name="settings_show_units_title">Stunden und Minuten anzeigen</string>
+    <string name="settings_show_units_subtitle">Zeigt Stunden, Minuten und Sekunden live auf der Detailseite eines Meilensteins an.</string>
+    <string name="settings_about_header">Über</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_made_by">Entwickelt von Quasar Apps</string>
 </resources>

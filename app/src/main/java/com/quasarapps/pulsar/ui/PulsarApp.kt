@@ -1,5 +1,6 @@
 package com.quasarapps.pulsar.ui
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -13,9 +14,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.quasarapps.pulsar.data.ThemeMode
 import com.quasarapps.pulsar.ui.detail.DetailScreen
 import com.quasarapps.pulsar.ui.edit.EditMilestoneScreen
 import com.quasarapps.pulsar.ui.home.HomeScreen
+import com.quasarapps.pulsar.ui.settings.SettingsScreen
+import com.quasarapps.pulsar.ui.settings.SettingsViewModel
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
 import java.time.LocalDateTime
 
@@ -24,6 +28,7 @@ private object Routes {
     const val ADD = "add"
     const val EDIT = "edit/{id}"
     const val DETAIL = "detail/{id}"
+    const val SETTINGS = "settings"
 
     fun edit(id: String) = "edit/$id"
     fun detail(id: String) = "detail/$id"
@@ -31,7 +36,17 @@ private object Routes {
 
 @Composable
 fun PulsarApp(initialMilestoneId: String? = null) {
-    PulsarTheme {
+    // Settings drive the theme, so they're read above PulsarTheme. Until the first DataStore value
+    // arrives the default (follow-system) applies, then it reconciles to the stored choice.
+    val settingsVm: SettingsViewModel = viewModel()
+    val settings by settingsVm.settings.collectAsState()
+    val darkTheme = when (settings.themeMode) {
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+
+    PulsarTheme(darkTheme = darkTheme) {
         val navController = rememberNavController()
         val vm: MilestonesViewModel = viewModel()
         val milestones by vm.milestones.collectAsState()
@@ -58,6 +73,7 @@ fun PulsarApp(initialMilestoneId: String? = null) {
                     milestones = milestones,
                     onAdd = { navController.navigate(Routes.ADD) },
                     onOpen = { id -> navController.navigate(Routes.detail(id)) },
+                    onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                 )
             }
 
@@ -102,6 +118,7 @@ fun PulsarApp(initialMilestoneId: String? = null) {
                 val milestone = milestones.firstOrNull { it.id == id }
                 DetailScreen(
                     milestone = milestone,
+                    showUnits = settings.showUnits,
                     onBack = { navController.popBackStack() },
                     onEdit = { if (id != null) navController.navigate(Routes.edit(id)) },
                     onReset = {
@@ -117,6 +134,15 @@ fun PulsarApp(initialMilestoneId: String? = null) {
                         if (id != null) vm.deleteMilestone(id)
                         navController.popBackStack()
                     },
+                )
+            }
+
+            composable(Routes.SETTINGS) {
+                SettingsScreen(
+                    settings = settings,
+                    onSetThemeMode = settingsVm::setThemeMode,
+                    onToggleUnits = settingsVm::setShowUnits,
+                    onBack = { navController.popBackStack() },
                 )
             }
         }

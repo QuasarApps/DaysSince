@@ -84,4 +84,17 @@
         <item quantity="one">%1$d day · since %2$s</item>
         <item quantity="other">%1$d days · since %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme_header">Theme</string>
+    <string name="settings_theme_system">System default</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_display_header">Display</string>
+    <string name="settings_show_units_title">Show hours &amp; minutes</string>
+    <string name="settings_show_units_subtitle">Show the live hours, minutes and seconds on a milestone\'s detail screen.</string>
+    <string name="settings_about_header">About</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_made_by">Made by Quasar Apps</string>
 </resources>

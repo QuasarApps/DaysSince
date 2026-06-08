@@ -83,4 +83,19 @@ class PulsarAppNavigationInstrumentedTest {
         // The milestone was created just now (0 days), so the card shows the "new beginning" kicker.
         composeRule.onNodeWithText("A NEW BEGINNING").assertExists()
     }
+
+    @Test
+    fun settingsGear_opensSettingsThenBackReturnsHome() {
+        composeRule.setContent { PulsarApp() }
+
+        // The gear lives in the home top bar (present in the empty state too).
+        composeRule.onNodeWithContentDescription("Settings").performClick()
+
+        // "Theme" is a Settings-only section header, so it's an unambiguous "we're on Settings" signal.
+        composeRule.onNodeWithText("Theme").assertIsDisplayed()
+
+        // Back returns to the home empty state.
+        composeRule.onNodeWithContentDescription("Back").performClick()
+        composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
+    }
 }

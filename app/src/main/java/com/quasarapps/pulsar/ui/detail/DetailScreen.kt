@@ -63,6 +63,7 @@ fun DetailScreen(
     onEdit: () -> Unit,
     onReset: () -> Unit,
     onDelete: () -> Unit,
+    showUnits: Boolean = true,
 ) {
     if (milestone == null) {
         MilestoneMissing(onBack)
@@ -185,15 +186,19 @@ fun DetailScreen(
                     color = Color.White.copy(alpha = 0.9f),
                 )
                 Spacer(Modifier.height(28.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    GlassStat(value = dhms.hours, label = stringResource(R.string.detail_hours_label))
-                    GlassStat(value = dhms.minutes, label = stringResource(R.string.detail_minutes_label))
-                    GlassStat(value = dhms.seconds, label = stringResource(R.string.detail_seconds_label))
+                // The live hours/minutes/seconds breakdown is opt-out via Settings (Show hours &
+                // minutes). The day count and the since-line below always stay.
+                if (showUnits) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        GlassStat(value = dhms.hours, label = stringResource(R.string.detail_hours_label))
+                        GlassStat(value = dhms.minutes, label = stringResource(R.string.detail_minutes_label))
+                        GlassStat(value = dhms.seconds, label = stringResource(R.string.detail_seconds_label))
+                    }
+                    Spacer(Modifier.height(16.dp))
                 }
-                Spacer(Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.detail_since_date_at_time, dateText, timeText),
                     style = MaterialTheme.typography.bodyLarge,

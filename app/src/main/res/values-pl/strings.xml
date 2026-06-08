@@ -62,4 +62,17 @@
         <item quantity="many">%1$d dni · od %2$s</item>
         <item quantity="other">%1$d dnia · od %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Ustawienia</string>
+    <string name="settings_theme_header">Motyw</string>
+    <string name="settings_theme_system">Domyślny systemowy</string>
+    <string name="settings_theme_light">Jasny</string>
+    <string name="settings_theme_dark">Ciemny</string>
+    <string name="settings_display_header">Wyświetlanie</string>
+    <string name="settings_show_units_title">Pokaż godziny i minuty</string>
+    <string name="settings_show_units_subtitle">Pokazuje na żywo godziny, minuty i sekundy na ekranie szczegółów wydarzenia.</string>
+    <string name="settings_about_header">Informacje</string>
+    <string name="settings_version_label">Wersja</string>
+    <string name="settings_made_by">Stworzone przez Quasar Apps</string>
 </resources>
