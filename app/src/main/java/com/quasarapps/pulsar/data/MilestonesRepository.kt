@@ -34,6 +34,16 @@ data class WidgetRenderData(
 )
 
 /**
+ * Everything [MilestonesRepository.delete] removed for one milestone — the milestone itself and the
+ * widget bindings that pointed at it — so [MilestonesRepository.restore] can reverse the delete
+ * verbatim (same id, createdAt, accent, and re-bound widgets) for an undo.
+ */
+data class RemovedMilestone(
+    val milestone: Milestone,
+    val bindings: Map<Int, WidgetBinding>,
+)
+
+/**
  * Single source of truth for milestones and widget bindings, backed by Preferences DataStore.
  *
  * Milestones are stored as a JSON array string (see [MilestoneJson]); widget bindings as a
@@ -61,11 +71,36 @@ class MilestonesRepository internal constructor(
         }
     }
 
-    suspend fun delete(id: String) {
+    /**
+     * Removes the milestone [id] and any widget bindings pointing at it, returning a
+     * [RemovedMilestone] snapshot of what was removed (or null if [id] wasn't present) so the caller
+     * can offer an undo via [restore].
+     */
+    suspend fun delete(id: String): RemovedMilestone? {
+        var removed: RemovedMilestone? = null
         dataStore.edit { prefs ->
-            val remaining = MilestoneJson.decode(prefs[KEY_MILESTONES]).filterNot { it.id == id }
-            prefs[KEY_MILESTONES] = MilestoneJson.encode(remaining)
-            val bindings = decodeBindings(prefs[KEY_BINDINGS]).filterValues { it.milestoneId != id }
+            val current = MilestoneJson.decode(prefs[KEY_MILESTONES])
+            val milestone = current.firstOrNull { it.id == id } ?: return@edit
+            val allBindings = decodeBindings(prefs[KEY_BINDINGS])
+            removed = RemovedMilestone(milestone, allBindings.filterValues { it.milestoneId == id })
+            prefs[KEY_MILESTONES] = MilestoneJson.encode(current.filterNot { it.id == id })
+            prefs[KEY_BINDINGS] = encodeBindings(allBindings.filterValues { it.milestoneId != id })
+        }
+        return removed
+    }
+
+    /**
+     * Reverses a [delete] for undo: re-inserts the [removed] milestone (no-op if it somehow exists
+     * again) and re-applies its widget bindings. The milestone keeps its original createdAt, so it
+     * returns to its original position in the createdAt-sorted list.
+     */
+    suspend fun restore(removed: RemovedMilestone) {
+        dataStore.edit { prefs ->
+            val current = MilestoneJson.decode(prefs[KEY_MILESTONES]).toMutableList()
+            if (current.none { it.id == removed.milestone.id }) current.add(removed.milestone)
+            prefs[KEY_MILESTONES] = MilestoneJson.encode(current)
+            val bindings = decodeBindings(prefs[KEY_BINDINGS]).toMutableMap()
+            bindings.putAll(removed.bindings)
             prefs[KEY_BINDINGS] = encodeBindings(bindings)
         }
     }

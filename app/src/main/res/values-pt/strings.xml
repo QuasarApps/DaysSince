@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">SEGUNDOS</string>
     <string name="detail_since_date_at_time">desde %1$s às %2$s</string>
     <string name="detail_widget_hint">Adicione um widget à tela inicial para manter isso à vista.</string>
-    <string name="detail_delete_dialog_title">Excluir marco?</string>
-    <string name="detail_delete_dialog_message">Isso remove “%1$s” e todos os widgets que o utilizam.</string>
+    <string name="detail_delete_snackbar">“%1$s” excluído</string>
+    <string name="action_undo">Desfazer</string>
     <string name="detail_missing">Este marco não está mais disponível.</string>
     <string name="detail_go_back">Voltar</string>
 

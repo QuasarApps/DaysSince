@@ -82,7 +82,6 @@ fun DetailScreen(
     val (accentStart, accentEnd) = accentStops(milestone.accent)
     var menuOpen by remember { mutableStateOf(false) }
     var confirmReset by remember { mutableStateOf(false) }
-    var confirmDelete by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
     val timeText = remember(milestone.time, locale) {
@@ -157,8 +156,9 @@ fun DetailScreen(
                             leadingIcon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
                         )
                         DropdownMenuItem(
+                            // Delete immediately; the caller shows an Undo snackbar (no confirm dialog).
                             text = { Text(stringResource(R.string.action_delete)) },
-                            onClick = { menuOpen = false; confirmDelete = true },
+                            onClick = { menuOpen = false; onDelete() },
                             leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null) },
                         )
                     }
@@ -245,26 +245,6 @@ fun DetailScreen(
             },
             dismissButton = {
                 TextButton(onClick = { confirmReset = false }) {
-                    Text(stringResource(R.string.action_cancel))
-                }
-            },
-        )
-    }
-
-    if (confirmDelete) {
-        AlertDialog(
-            onDismissRequest = { confirmDelete = false },
-            title = { Text(stringResource(R.string.detail_delete_dialog_title)) },
-            text = {
-                Text(stringResource(R.string.detail_delete_dialog_message, milestone.title))
-            },
-            confirmButton = {
-                TextButton(onClick = { confirmDelete = false; onDelete() }) {
-                    Text(stringResource(R.string.action_delete))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { confirmDelete = false }) {
                     Text(stringResource(R.string.action_cancel))
                 }
             },

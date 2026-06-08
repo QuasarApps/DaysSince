@@ -19,6 +19,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -119,12 +120,29 @@ class MilestonesViewModelTest {
     }
 
     @Test
-    fun deleteMilestone_removesIt() = runTest(dispatcher) {
+    fun deleteMilestone_removesItAndExposesPendingUndo() = runTest(dispatcher) {
         repo.upsert(Milestone(id = "a", title = "Gym", date = date, time = time, createdAt = 1L))
 
         viewModel.deleteMilestone("a")
         advanceUntilIdle()
 
         assertEquals(emptyList<Milestone>(), repo.snapshot())
+        assertEquals("a", viewModel.pendingUndo.value?.milestone?.id)
+    }
+
+    @Test
+    fun undoDelete_restoresTheMilestoneAndClearsPendingUndo() = runTest(dispatcher) {
+        repo.upsert(Milestone(id = "a", title = "Gym", date = date, time = time, accent = 2, createdAt = 1L))
+        viewModel.deleteMilestone("a")
+        advanceUntilIdle()
+
+        viewModel.undoDelete()
+        advanceUntilIdle()
+
+        val restored = repo.snapshot().single()
+        assertEquals("a", restored.id)
+        assertEquals("Gym", restored.title)
+        assertEquals(2, restored.accent)
+        assertNull(viewModel.pendingUndo.value)
     }
 }
