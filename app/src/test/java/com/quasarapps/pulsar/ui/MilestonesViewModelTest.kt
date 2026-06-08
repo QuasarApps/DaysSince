@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.data.MilestonesRepository
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalTime
@@ -66,11 +68,25 @@ class MilestonesViewModelTest {
     }
 
     @Test
-    fun addMilestone_blankTitle_fallsBackToMilestone() = runTest(dispatcher) {
+    fun addMilestone_blankTitle_fallsBackToLocalizedDefault() = runTest(dispatcher) {
         viewModel.addMilestone(title = "   ", date = date, time = time, accent = 0)
         advanceUntilIdle()
 
-        assertEquals("Milestone", repo.snapshot().single().title)
+        // The fallback comes from the string resource, not a hardcoded literal (en -> "Milestone").
+        assertEquals(app.getString(R.string.milestone_default_title), repo.snapshot().single().title)
+    }
+
+    @Test
+    @Config(qualifiers = "de")
+    fun addMilestone_blankTitle_usesLocalizedDefaultUnderNonEnglishLocale() = runTest(dispatcher) {
+        viewModel.addMilestone(title = "", date = date, time = time, accent = 0)
+        advanceUntilIdle()
+
+        // Guards against re-hardcoding the English word: on a German device a blank title must
+        // persist the German default ("Meilenstein"), not "Milestone".
+        val stored = repo.snapshot().single().title
+        assertEquals(app.getString(R.string.milestone_default_title), stored)
+        assertEquals("Meilenstein", stored)
     }
 
     @Test
@@ -86,7 +102,7 @@ class MilestonesViewModelTest {
     }
 
     @Test
-    fun updateMilestone_blankTitle_fallsBackToMilestone() = runTest(dispatcher) {
+    fun updateMilestone_blankTitle_fallsBackToLocalizedDefault() = runTest(dispatcher) {
         repo.upsert(
             Milestone(id = "a", title = "Original", date = date, time = time, createdAt = 1L),
         )
@@ -96,7 +112,10 @@ class MilestonesViewModelTest {
         )
         advanceUntilIdle()
 
-        assertEquals("Milestone", repo.snapshot().firstOrNull { it.id == "a" }?.title)
+        assertEquals(
+            app.getString(R.string.milestone_default_title),
+            repo.snapshot().firstOrNull { it.id == "a" }?.title,
+        )
     }
 
     @Test

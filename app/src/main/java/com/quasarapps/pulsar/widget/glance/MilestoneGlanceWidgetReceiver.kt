@@ -20,6 +20,14 @@ abstract class MilestoneGlanceWidgetReceiver : GlanceAppWidgetReceiver() {
         WidgetRefreshScheduler.ensureScheduled(context)
     }
 
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        // Drop the saved binding(s) for the removed widget(s) so the bindings map stays bounded.
+        // Routed through WorkManager because the write is suspend and the broadcast thread / single
+        // goAsync() slot are unavailable here (the superclass uses them for its own Glance cleanup).
+        WidgetRefreshScheduler.unbindWidgets(context, appWidgetIds)
+    }
+
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
         WidgetRefreshScheduler.cancelIfNoWidgets(context)

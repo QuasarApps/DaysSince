@@ -236,7 +236,16 @@ fun EditMilestoneScreen(
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
                 TextButton(onClick = {
-                    time = LocalTime.of(state.hour, state.minute)
+                    val picked = LocalTime.of(state.hour, state.minute)
+                    // If the date is today, a later-than-now time would clamp the count to 0 with no
+                    // explanation (sincePickedDhm treats a future instant as 0). Mirror the date
+                    // picker's future guard and snap back to the current minute instead.
+                    val now = LocalTime.now()
+                    time = if (date == LocalDate.now() && picked.isAfter(now)) {
+                        now.withSecond(0).withNano(0)
+                    } else {
+                        picked
+                    }
                     showTimePicker = false
                 }) { Text(stringResource(R.string.action_ok)) }
             },
