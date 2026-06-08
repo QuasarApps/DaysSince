@@ -61,4 +61,17 @@
         <item quantity="many">%1$d de jours · depuis %2$s</item>
         <item quantity="other">%1$d jours · depuis %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_theme_header">Thème</string>
+    <string name="settings_theme_system">Système par défaut</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_display_header">Affichage</string>
+    <string name="settings_show_units_title">Afficher les heures et les minutes</string>
+    <string name="settings_show_units_subtitle">Affiche les heures, minutes et secondes en direct sur l\'écran de détail d\'un événement.</string>
+    <string name="settings_about_header">À propos</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_made_by">Créé par Quasar Apps</string>
 </resources>

@@ -62,4 +62,17 @@
         <item quantity="many">%1$d дней · с %2$s</item>
         <item quantity="other">%1$d дня · с %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_theme_header">Тема</string>
+    <string name="settings_theme_system">Системная</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_display_header">Отображение</string>
+    <string name="settings_show_units_title">Показывать часы и минуты</string>
+    <string name="settings_show_units_subtitle">Показывает часы, минуты и секунды в реальном времени на экране сведений о событии.</string>
+    <string name="settings_about_header">О приложении</string>
+    <string name="settings_version_label">Версия</string>
+    <string name="settings_made_by">Создано Quasar Apps</string>
 </resources>

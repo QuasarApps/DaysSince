@@ -8,4 +8,6 @@
 <full-backup-content>
     <!-- DataStore (Preferences): milestones list + widget bindings. -->
     <include domain="file" path="datastore/pulsar_store.preferences_pb" />
+    <!-- DataStore (Preferences): app settings (theme mode + units toggle). -->
+    <include domain="file" path="datastore/pulsar_settings.preferences_pb" />
 </full-backup-content>

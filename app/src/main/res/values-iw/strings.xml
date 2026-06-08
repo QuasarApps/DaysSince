@@ -61,4 +61,17 @@
         <item quantity="two">%1$d ימים · מאז %2$s</item>
         <item quantity="other">%1$d ימים · מאז %2$s</item>
     </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_theme_header">ערכת נושא</string>
+    <string name="settings_theme_system">ברירת המחדל של המערכת</string>
+    <string name="settings_theme_light">בהיר</string>
+    <string name="settings_theme_dark">כהה</string>
+    <string name="settings_display_header">תצוגה</string>
+    <string name="settings_show_units_title">הצגת שעות ודקות</string>
+    <string name="settings_show_units_subtitle">הצגת שעות, דקות ושניות בזמן אמת במסך הפרטים של אירוע.</string>
+    <string name="settings_about_header">מידע</string>
+    <string name="settings_version_label">גרסה</string>
+    <string name="settings_made_by">פותח על ידי Quasar Apps</string>
 </resources>

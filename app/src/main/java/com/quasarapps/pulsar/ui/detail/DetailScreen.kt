@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.CountUpNumber
+import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhms
 import com.quasarapps.pulsar.ui.theme.accentStops
 import com.quasarapps.pulsar.util.LocalizedDateFormat
@@ -63,13 +64,21 @@ fun DetailScreen(
     onEdit: () -> Unit,
     onReset: () -> Unit,
     onDelete: () -> Unit,
+    showUnits: Boolean = true,
 ) {
     if (milestone == null) {
         MilestoneMissing(onBack)
         return
     }
 
-    val dhms = rememberElapsedDhms(milestone.date, milestone.time)
+    // Only the H/M/S row needs per-second updates. When units are hidden, the day count is all that
+    // shows and it only needs per-minute resolution — so use the cheaper minute ticker and leave the
+    // per-second effect uncreated. Toggling showUnits just cancels one effect and starts the other.
+    val dhms = if (showUnits) {
+        rememberElapsedDhms(milestone.date, milestone.time)
+    } else {
+        rememberElapsedDhm(milestone.date, milestone.time)
+    }
     val (accentStart, accentEnd) = accentStops(milestone.accent)
     var menuOpen by remember { mutableStateOf(false) }
     var confirmReset by remember { mutableStateOf(false) }
@@ -185,15 +194,19 @@ fun DetailScreen(
                     color = Color.White.copy(alpha = 0.9f),
                 )
                 Spacer(Modifier.height(28.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    GlassStat(value = dhms.hours, label = stringResource(R.string.detail_hours_label))
-                    GlassStat(value = dhms.minutes, label = stringResource(R.string.detail_minutes_label))
-                    GlassStat(value = dhms.seconds, label = stringResource(R.string.detail_seconds_label))
+                // The live hours/minutes/seconds breakdown is opt-out via Settings (Show hours &
+                // minutes). The day count and the since-line below always stay.
+                if (showUnits) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        GlassStat(value = dhms.hours, label = stringResource(R.string.detail_hours_label))
+                        GlassStat(value = dhms.minutes, label = stringResource(R.string.detail_minutes_label))
+                        GlassStat(value = dhms.seconds, label = stringResource(R.string.detail_seconds_label))
+                    }
+                    Spacer(Modifier.height(16.dp))
                 }
-                Spacer(Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.detail_since_date_at_time, dateText, timeText),
                     style = MaterialTheme.typography.bodyLarge,

@@ -39,6 +39,7 @@ class DetailScreenInstrumentedTest {
 
     private fun setContent(
         milestone: Milestone? = sample,
+        showUnits: Boolean = true,
         onBack: () -> Unit = {},
         onEdit: () -> Unit = {},
         onReset: () -> Unit = {},
@@ -51,6 +52,7 @@ class DetailScreenInstrumentedTest {
             PulsarTheme {
                 DetailScreen(
                     milestone = milestone,
+                    showUnits = showUnits,
                     onBack = onBack,
                     onEdit = onEdit,
                     onReset = onReset,
@@ -82,6 +84,15 @@ class DetailScreenInstrumentedTest {
         // viewport position, so assert existence rather than display.
         composeRule.onNodeWithText("Sober").assertExists()
         composeRule.onNodeWithText("since June 15, 2025", substring = true).assertExists()
+    }
+
+    @Test
+    fun showUnitsFalse_hidesUnitsBreakdown_butKeepsDayCount() {
+        setContent(showUnits = false)
+
+        // The day count stays; the Settings opt-out removes only the H/M/S breakdown.
+        composeRule.onNodeWithText("DAYS").assertIsDisplayed()
+        composeRule.onNodeWithText("HOURS").assertDoesNotExist()
     }
 
     @Test
