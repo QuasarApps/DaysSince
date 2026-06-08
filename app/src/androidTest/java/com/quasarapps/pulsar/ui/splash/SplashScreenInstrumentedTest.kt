@@ -1,8 +1,11 @@
 package com.quasarapps.pulsar.ui.splash
 
+import android.content.Context
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -21,6 +24,8 @@ class SplashScreenInstrumentedTest {
     @get:Rule
     val composeRule = createComposeRule()
 
+    private val context = ApplicationProvider.getApplicationContext<Context>()
+
     @Test
     fun rendersBrandLockupThenFinishes() {
         var finished = false
@@ -30,8 +35,9 @@ class SplashScreenInstrumentedTest {
             }
         }
 
-        composeRule.onNodeWithText("Pulsar").assertExists()
-        composeRule.onNodeWithText("Count the time").assertExists()
+        // Resolve copy from resources so the test isn't pinned to one locale / literal copy.
+        composeRule.onNodeWithText(context.getString(R.string.app_name)).assertExists()
+        composeRule.onNodeWithText(context.getString(R.string.splash_tagline)).assertExists()
 
         // After the entrance + hold, the splash signals completion so the host can dismiss it.
         composeRule.waitUntil(timeoutMillis = 5_000) { finished }

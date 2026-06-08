@@ -2,11 +2,13 @@ package com.quasarapps.pulsar.ui.splash
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 /**
@@ -35,7 +37,9 @@ class SplashScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Pulsar").assertExists()
-        composeRule.onNodeWithText("Count the time").assertExists()
+        // Resolve copy from resources so the test stays correct if the wordmark/tagline text changes.
+        val res = RuntimeEnvironment.getApplication()
+        composeRule.onNodeWithText(res.getString(R.string.app_name)).assertExists()
+        composeRule.onNodeWithText(res.getString(R.string.splash_tagline)).assertExists()
     }
 }
