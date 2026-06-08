@@ -46,7 +46,8 @@ import com.quasarapps.pulsar.data.Settings
 import com.quasarapps.pulsar.data.ThemeMode
 
 /**
- * App settings: theme mode, the detail-screen units toggle, and an About section.
+ * App settings: theme mode, the detail-screen units toggle, a Backup &amp; privacy section (backup
+ * toggle + privacy note), and an About section.
  *
  * Stateless — the current [settings] and the edit callbacks are hoisted to the caller (which holds
  * the [SettingsViewModel]), keeping this screen easy to preview and test.

@@ -34,11 +34,13 @@ class MilestoneBackupAgent : BackupAgent() {
         // else: contribute nothing this pass, so the milestone/settings stores aren't uploaded.
     }
 
-    // Read the setting synchronously here (the agent has no coroutine scope). On any read failure,
-    // fall back to the default (backup on) rather than silently dropping a user's backup.
+    // Read the setting synchronously here (the agent has no coroutine scope). On a read failure
+    // (I/O / corruption) fail *closed* — skip the backup — so an error can never upload milestone
+    // data after the user explicitly opted out. A skipped pass is recoverable (the next cycle
+    // retries once the read succeeds); an erroneous upload of opted-out data isn't.
     private fun backupEnabled(): Boolean = runCatching {
         runBlocking { SettingsRepository(applicationContext).snapshot().backupEnabled }
-    }.getOrDefault(true)
+    }.getOrDefault(false)
 
     override fun onBackup(
         oldState: ParcelFileDescriptor?,

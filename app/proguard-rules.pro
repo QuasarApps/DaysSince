@@ -7,9 +7,11 @@
 # Keep MainActivity — it is the launcher activity declared in the manifest.
 -keep class com.quasarapps.pulsar.MainActivity { *; }
 
-# The backup agent is declared via android:backupAgent and instantiated reflectively by the platform
-# backup framework, so the class and its no-arg constructor must survive R8.
--keep class com.quasarapps.pulsar.backup.MilestoneBackupAgent { <init>(...); }
+# The backup agent is declared via android:backupAgent and driven entirely by the platform backup
+# framework — it's instantiated reflectively AND its onFullBackup/onRestore overrides are invoked by
+# the OS, never from app code. Keep the whole class (members included) so R8 can't strip those
+# overrides and silently fall back to the default (ungated) backup in release builds.
+-keep class com.quasarapps.pulsar.backup.MilestoneBackupAgent { *; }
 
 # WorkManager's default WorkerFactory instantiates workers reflectively by class name, so the
 # worker class and its (Context, WorkerParameters) constructor must survive R8. It also falls under
