@@ -5,4 +5,12 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
+
+    <!-- Cold-start splash (core-splashscreen). Always the dark cosmic brand surface with the launcher
+         mark, regardless of light/dark, then hands off to the app theme. The richer wordmark +
+         tagline moment is the in-app Compose SplashScreen. -->
+    <style name="Theme.Pulsar.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.Pulsar</item>
+    </style>
 </resources>

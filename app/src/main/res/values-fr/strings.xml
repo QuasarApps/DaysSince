@@ -74,4 +74,7 @@
     <string name="settings_about_header">À propos</string>
     <string name="settings_version_label">Version</string>
     <string name="settings_made_by">Créé par Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Comptez le temps</string>
 </resources>

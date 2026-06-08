@@ -75,4 +75,7 @@
     <string name="settings_about_header">О приложении</string>
     <string name="settings_version_label">Версия</string>
     <string name="settings_made_by">Создано Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Считайте время</string>
 </resources>

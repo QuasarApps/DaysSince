@@ -97,4 +97,7 @@
     <string name="settings_about_header">About</string>
     <string name="settings_version_label">Version</string>
     <string name="settings_made_by">Made by Quasar Apps</string>
+
+    <!-- Splash screen tagline, shown under the Pulsar wordmark. -->
+    <string name="splash_tagline">Count the time</string>
 </resources>

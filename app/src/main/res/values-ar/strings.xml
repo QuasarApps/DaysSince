@@ -77,4 +77,7 @@
     <string name="settings_about_header">حول التطبيق</string>
     <string name="settings_version_label">الإصدار</string>
     <string name="settings_made_by">تطوير Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">احسب الوقت</string>
 </resources>
