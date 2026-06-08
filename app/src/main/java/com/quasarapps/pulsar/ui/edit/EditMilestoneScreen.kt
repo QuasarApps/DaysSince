@@ -59,13 +59,17 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
+import com.quasarapps.pulsar.ui.components.Starburst
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
-import com.quasarapps.pulsar.ui.theme.LegibilityScrim
 import com.quasarapps.pulsar.ui.theme.MilestoneAccents
+import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
 import com.quasarapps.pulsar.ui.theme.accentBrush
+import com.quasarapps.pulsar.ui.theme.accentOrDefault
 import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -243,31 +247,53 @@ fun EditMilestoneScreen(
 @Composable
 private fun PreviewStrip(title: String, date: LocalDate, time: LocalTime, accent: Int) {
     val dhm = rememberElapsedDhm(date, time)
+    val isNew = dhm.days == 0L
+    val onColor = if (isNew) Color.White else accentOrDefault(accent).onAccent
+    val brush = if (isNew) NewBeginningBrush else accentBrush(accent)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(118.dp)
+            .height(124.dp)
             .clip(MaterialTheme.shapes.large)
-            .background(accentBrush(accent)),
+            .background(brush),
     ) {
-        Box(Modifier.matchParentSize().background(LegibilityScrim))
+        if (isNew) {
+            Starburst(
+                color = onColor.copy(alpha = 0.5f),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+                    .size(48.dp),
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(18.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = dhm.days.toString(),
-                style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = dhm.days.toString(),
+                    style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),
+                    fontWeight = FontWeight.Bold,
+                    color = onColor,
+                )
+                Text(
+                    text = stringResource(
+                        if (isNew) R.string.card_new_beginning_label else R.string.card_days_since_label,
+                    ),
+                    style = MaterialTheme.typography.labelMedium,
+                    letterSpacing = 2.sp,
+                    color = onColor.copy(alpha = 0.88f),
+                )
+            }
             Text(
                 text = title.ifBlank { stringResource(R.string.milestone_default_title) },
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = onColor,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -333,7 +359,7 @@ private fun AccentPicker(selected: Int, onSelect: (Int) -> Unit) {
                     Icon(
                         Icons.Filled.Check,
                         contentDescription = stringResource(accent.labelRes),
-                        tint = Color.White,
+                        tint = accent.onAccent,
                     )
                 }
             }
