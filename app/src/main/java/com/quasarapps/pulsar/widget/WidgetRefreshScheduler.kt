@@ -23,6 +23,13 @@ import java.util.concurrent.TimeUnit
  * is skipped while the battery is low, rather than WorkManager's 15-minute floor or the battery cost
  * of per-minute exact alarms. That still brings the DHM widget from ~6 h stale down to ~1 h, at a
  * fraction of the wake-ups, and comfortably catches the once-a-day rollover that actually matters.
+ *
+ * This battery-aware WorkManager job is the *primary* periodic refresh: it's armed from each
+ * provider's `onUpdate`, re-armed on app start via [ensureScheduledIfWidgetsPlaced], and persisted
+ * across reboots by WorkManager. The widgets also keep a coarse (6 h) `updatePeriodMillis` platform
+ * alarm as a backstop — far sparser than this hourly job (so it no longer competes the way the old
+ * 30-min cadence did), but, unlike WorkManager, it still fires while the app is dormant, which keeps
+ * the *day count* from sitting on the wrong day across a midnight when the app goes unopened.
  */
 object WidgetRefreshScheduler {
 
@@ -58,18 +65,33 @@ object WidgetRefreshScheduler {
         )
     }
 
+    /**
+     * Re-arms the periodic refresh on app start, but only if a widget is actually placed — so a user
+     * with no widgets never schedules background work. (Unlike [ensureScheduled], which is called
+     * from `onUpdate` where a widget is known to exist.) This restores the hourly job promptly if it
+     * was ever lost — e.g. the OS dropped it, or an app-data clear wiped WorkManager's db — rather
+     * than waiting for the next coarse `updatePeriodMillis` tick (~6 h), which would otherwise be the
+     * only thing left to re-arm it (an `onUpdate` also calls [ensureScheduled]).
+     */
+    fun ensureScheduledIfWidgetsPlaced(context: Context) {
+        if (hasPlacedWidgets(context)) ensureScheduled(context)
+    }
+
     /** Unique name for the one-off, data-changed refresh (kept separate from the periodic work). */
     const val IMMEDIATE_WORK_NAME = "milestone_widget_refresh_now"
 
     /**
-     * Enqueues a one-off refresh after a milestone change so placed widgets re-render promptly.
+     * Enqueues a one-off refresh after a milestone change so placed widgets re-render promptly —
+     * the single redraw path for an edit (no redundant in-process `updateAll` alongside it).
      *
-     * Routed through WorkManager (rather than only an in-process `updateAll`) so the refresh still
-     * runs if the app is backgrounded or its process is torn down right after the edit.
+     * Routed through WorkManager (rather than an in-process `updateAll`) so the refresh still runs if
+     * the app is backgrounded or its process is torn down right after the edit; the one-off is
+     * unconstrained, so it runs within ~a second — imperceptible while the user is still in-app.
      * [ExistingWorkPolicy.REPLACE] collapses rapid successive edits into a single refresh of the
-     * latest data.
+     * latest data. Returns null (enqueuing nothing) when no widget is placed.
      */
-    fun refreshNow(context: Context): Operation {
+    fun refreshNow(context: Context): Operation? {
+        if (!hasPlacedWidgets(context)) return null
         val request = OneTimeWorkRequestBuilder<WidgetRefreshWorker>().build()
         return WorkManager.getInstance(context).enqueueUniqueWork(
             IMMEDIATE_WORK_NAME,

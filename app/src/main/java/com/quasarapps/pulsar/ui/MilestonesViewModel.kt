@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.data.MilestonesRepository
-import com.quasarapps.pulsar.widget.MilestoneWidgets
 import com.quasarapps.pulsar.widget.WidgetRefreshScheduler
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -63,14 +62,13 @@ class MilestonesViewModel internal constructor(
     }
 
     /**
-     * Pushes the latest data to placed widgets after a change. Updates in-process for an instant
-     * redraw, then enqueues a WorkManager backstop so the refresh still happens if the app is
-     * backgrounded / its process is torn down right after the edit. The backstop is guarded because
-     * WorkManager isn't initialized in plain (non-instrumented) unit tests.
+     * Pushes the latest data to placed widgets after a change via a single WorkManager one-off.
+     * Routing through WorkManager (rather than an in-process `updateAll` too) keeps it to one redraw
+     * and makes it durable if the app is backgrounded / torn down right after the edit; the one-off
+     * is unconstrained so it lands within ~a second. Enqueues nothing when no widget is placed, and
+     * is guarded because WorkManager isn't initialized in plain (non-instrumented) unit tests.
      */
-    private suspend fun refreshWidgets() {
-        val app = getApplication<Application>()
-        MilestoneWidgets.refreshAll(app)
-        runCatching { WidgetRefreshScheduler.refreshNow(app) }
+    private fun refreshWidgets() {
+        runCatching { WidgetRefreshScheduler.refreshNow(getApplication()) }
     }
 }

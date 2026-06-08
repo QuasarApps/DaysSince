@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- updatePeriodMillis=21600000 (6 h): a coarse platform AlarmManager refresh that acts as a
+     day-count correctness floor. The battery-aware WidgetRefreshWorker (hourly, scheduled by
+     WidgetRefreshScheduler) is the primary refresh; this sparse alarm — unlike WorkManager — still
+     fires while the app is dormant (Doze / aggressive OEMs), so a "days since" count can't sit on
+     the wrong day across a midnight while the app goes unopened. At 6 h it's far sparser than the
+     hourly job, so it no longer competes the way the old 30-min cadence did. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.quasarapps.pulsar.widget.WidgetConfigActivity"
     android:description="@string/widget_days_description"

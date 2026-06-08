@@ -43,8 +43,15 @@ private object Routes {
     fun detail(id: String) = "detail/$id"
 }
 
+/**
+ * A milestone-detail deep link delivered by a widget tap. [token] is a per-delivery nonce from the
+ * host activity: it makes two taps of the same milestone distinct values so each re-navigates,
+ * while leaving recomposition (same value) a no-op.
+ */
+data class DeepLinkTarget(val milestoneId: String, val token: Long)
+
 @Composable
-fun PulsarApp(initialMilestoneId: String? = null) {
+fun PulsarApp(deepLink: DeepLinkTarget? = null) {
     // Settings drive the theme, so they're read above PulsarTheme. Until the first DataStore value
     // arrives the default (follow-system) applies, then it reconciles to the stored choice.
     val settingsVm: SettingsViewModel = viewModel()
@@ -61,27 +68,31 @@ fun PulsarApp(initialMilestoneId: String? = null) {
             val vm: MilestonesViewModel = viewModel()
             val milestones by vm.milestones.collectAsState()
 
-            // Deep-link from a widget tap: jump straight to that milestone's detail.
-            //
-            // Guard with a saveable flag so this fires exactly once for a given launch.
-            // The flag is restored across Activity recreation (e.g. a device rotation),
-            // so the effect won't re-run and re-navigate to the detail screen after the
-            // user has already navigated elsewhere — otherwise rotating anywhere in the
-            // app would snap back to this milestone's detail. The NavController restores
-            // its own back stack across rotation, so honoring it is all we need to do.
-            var deepLinkHandled by rememberSaveable { mutableStateOf(false) }
-            LaunchedEffect(initialMilestoneId) {
-                if (initialMilestoneId != null && !deepLinkHandled) {
-                    deepLinkHandled = true
-                    navController.navigate(Routes.detail(initialMilestoneId))
-                }
-            }
-
             // Splash overlay state, declared before the content so it can gate the content's a11y.
             // Shown on a normal cold launch and skipped when opened via a widget deep-link (so the
             // tapped milestone appears immediately). rememberSaveable keeps a rotation mid-splash from
-            // replaying it.
-            var splashDone by rememberSaveable { mutableStateOf(initialMilestoneId != null) }
+            // replaying it (and from re-showing after an onNewIntent, when it's already dismissed).
+            var splashDone by rememberSaveable { mutableStateOf(deepLink != null) }
+
+            // Deep-link from a widget tap: jump straight to that milestone's detail.
+            //
+            // Keyed on [deepLink] (a new value per delivery), so it fires for a cold-start tap and
+            // again for each later onNewIntent tap — even of the same milestone. It does NOT re-fire
+            // on recomposition or Activity recreation: the host only delivers a deep link on a fresh
+            // start or onNewIntent (never on a rotation recreate), so after a rotation [deepLink] is
+            // null here and the NavController restores its own back stack untouched. launchSingleTop
+            // avoids stacking a duplicate detail when the same milestone is tapped twice in a row.
+            LaunchedEffect(deepLink) {
+                if (deepLink != null) {
+                    // Dismiss the splash so it can't linger over the deep-linked detail — covers a
+                    // tap arriving via onNewIntent while a launcher cold-start's splash is still up.
+                    // (On a cold-start deep link splashDone is already true, so this is a no-op.)
+                    splashDone = true
+                    navController.navigate(Routes.detail(deepLink.milestoneId)) {
+                        launchSingleTop = true
+                    }
+                }
+            }
 
             // App content (the NavHost composes/warms underneath the splash). While the splash is up,
             // clear the semantics of everything behind it so a screen reader stays within the modal
