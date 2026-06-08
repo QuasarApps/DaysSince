@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -155,12 +156,24 @@ private fun MilestoneCard(
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)
 
+    // One merged TalkBack node per card — "<title>, <status>" + "Button" — instead of the decorative
+    // number / kicker / title being traversed as three separate, unlabeled nodes. For a 0-day card
+    // the status mirrors the visible "new beginning" kicker rather than reading "0 days", so a screen
+    // reader hears the same celebratory state a sighted user sees.
+    val statusFragment = if (isNew) {
+        stringResource(R.string.card_new_beginning_label)
+    } else {
+        pluralStringResource(R.plurals.widget_a11y_days, dhm.days.toInt(), dhm.days)
+    }
+    val cardDescription = stringResource(R.string.card_a11y_content_description, milestone.title, statusFragment)
+
     Box(
         modifier = modifier
             .heightIn(min = 150.dp)
             .clip(MaterialTheme.shapes.large)
             .background(brush)
-            .clickable(onClick = onClick),
+            .clickable(role = Role.Button, onClick = onClick)
+            .semantics(mergeDescendants = true) { contentDescription = cardDescription },
     ) {
         // The 0-day "new beginning" tile earns a faint starburst in the corner — a small reward.
         if (isNew) {

@@ -1,5 +1,6 @@
 package com.quasarapps.pulsar.widget.glance
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -140,7 +141,7 @@ internal fun DaysWidgetContent(
         milestone.title,
         LocalizedDateFormat.formatLongDate(milestone.date, locale),
     )
-    val daysText = cappedDays(dhm.days)
+    val daysText = cappedDays(dhm.days, context)
     WidgetScaffold(milestone, transparent, description) { fg ->
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -178,7 +179,7 @@ internal fun DaysHoursMinutesWidgetContent(
         res.getQuantityString(R.plurals.widget_a11y_hours, dhm.hours.toInt(), dhm.hours),
         res.getQuantityString(R.plurals.widget_a11y_minutes, dhm.minutes.toInt(), dhm.minutes),
     )
-    val daysText = cappedDays(dhm.days)
+    val daysText = cappedDays(dhm.days, context)
     // Size all three stats off the (widest) days value so they shrink together and the row keeps
     // fitting the 2x1 footprint as the day count grows — Glance has no text auto-size.
     val statFontSize = dhmStatFontSize(daysText)
@@ -206,8 +207,9 @@ private fun Stat(value: String, label: String, fg: ColorProvider, fontSize: Text
     }
 }
 
-/** Whole days, capped at 4 digits; anything larger renders as "9999+". */
-private fun cappedDays(days: Long): String = if (days > 9999) "9999+" else days.toString()
+/** Whole days, capped at 4 digits; anything larger renders as the capped string ("9999+"). */
+private fun cappedDays(days: Long, context: Context): String =
+    if (days > 9999) context.getString(R.string.widget_days_capped) else days.toString()
 
 /** Font size for the 1x1 Days widget number, shrinking as the string gets longer. */
 private fun daysWidgetFontSize(daysText: String): TextUnit = when (daysText.length) {

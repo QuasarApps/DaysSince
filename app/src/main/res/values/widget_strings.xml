@@ -15,6 +15,11 @@
     <string name="widget_unit_hours">HRS</string>
     <string name="widget_unit_minutes">MIN</string>
 
+    <!-- Shown instead of the day count once it exceeds 9999 (the widget can't fit more digits).
+         translatable=false: it mirrors the widget's Western-digit number rendering, so it isn't
+         localized per-locale; it lives here only to keep the literal out of code. -->
+    <string name="widget_days_capped" translatable="false">9999+</string>
+
     <!-- Accessibility descriptions. These are spoken by TalkBack, so the count and noun ARE
          adjacent and must agree. The count fragments below are composed into the templates. -->
     <plurals name="widget_a11y_days">

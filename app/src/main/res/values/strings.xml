@@ -33,6 +33,11 @@
     <string name="card_days_since_label">DAYS SINCE</string>
     <!-- Kicker on a milestone card the day it is created (0 days) — the "new beginning" state. -->
     <string name="card_new_beginning_label">A NEW BEGINNING</string>
+    <!-- Accessibility label for a milestone card, announced as one node by TalkBack.
+         %1$s = milestone title, %2$s = status fragment (the elapsed-days plural e.g. "365 days", or
+         the new-beginning label for a 0-day card). Translatable so locales can adapt the joiner
+         (e.g. the Arabic comma) or the word order for natural screen-reader phrasing. -->
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
     <string name="empty_title">No milestones yet</string>
     <string name="empty_subtitle">Track the days since something that matters to you.</string>
 

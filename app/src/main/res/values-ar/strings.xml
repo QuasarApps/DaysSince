@@ -79,4 +79,7 @@
 
     <!-- Splash screen -->
     <string name="splash_tagline">احسب الوقت</string>
+
+    <!-- a11y card label "<title>، <status>" — uses the Arabic comma. -->
+    <string name="card_a11y_content_description">%1$s، %2$s</string>
 </resources>
