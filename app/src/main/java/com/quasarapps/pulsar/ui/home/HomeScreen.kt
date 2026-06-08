@@ -1,6 +1,5 @@
 package com.quasarapps.pulsar.ui.home
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,9 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -49,11 +46,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
+import com.quasarapps.pulsar.ui.components.Starburst
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
 import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
 import com.quasarapps.pulsar.ui.theme.QuasarBrush
 import com.quasarapps.pulsar.ui.theme.accentBrush
 import com.quasarapps.pulsar.ui.theme.accentOrDefault
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,7 +135,8 @@ private fun MilestoneCard(
     modifier: Modifier = Modifier,
 ) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
-    val isNew = dhm.days == 0L
+    // 0 days AND not in the future (a later time today clamps to 0 but isn't a "new beginning").
+    val isNew = dhm.days == 0L && !LocalDateTime.of(milestone.date, milestone.time).isAfter(LocalDateTime.now())
     val accent = accentOrDefault(milestone.accent)
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)
@@ -245,23 +245,5 @@ private fun EmptyState(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-    }
-}
-
-/** A four-point pulsar starburst: two crossing rays with a glowing core. Purely decorative. */
-@Composable
-private fun Starburst(color: Color, modifier: Modifier = Modifier) {
-    Canvas(modifier = modifier) {
-        val cx = size.width / 2f
-        val cy = size.height / 2f
-        val r = size.minDimension / 2f
-        val gap = r * 0.32f
-        val stroke = r * 0.10f
-        // Four rays (up/down/left/right) with a gap around the core.
-        drawLine(color, Offset(cx, cy - r), Offset(cx, cy - gap), strokeWidth = stroke, cap = StrokeCap.Round)
-        drawLine(color, Offset(cx, cy + gap), Offset(cx, cy + r), strokeWidth = stroke, cap = StrokeCap.Round)
-        drawLine(color, Offset(cx - r, cy), Offset(cx - gap, cy), strokeWidth = stroke, cap = StrokeCap.Round)
-        drawLine(color, Offset(cx + gap, cy), Offset(cx + r, cy), strokeWidth = stroke, cap = StrokeCap.Round)
-        drawCircle(color, radius = r * 0.16f, center = Offset(cx, cy))
     }
 }

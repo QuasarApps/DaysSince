@@ -1,6 +1,7 @@
 package com.quasarapps.pulsar.ui.edit
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -63,11 +64,9 @@ class EditMilestoneScreenInstrumentedTest {
 
         composeRule.onNodeWithText("Edit milestone").assertIsDisplayed()
         composeRule.onNode(hasSetTextAction()).assertTextContains("Sober")
-        // Accent index 2 is "Indigo"; the selected swatch surfaces its label as a check icon
-        // content description, so this confirms the accent prefilled correctly. The picker sits at
-        // the bottom of a vertical-scroll column, so use assertExists() rather than
-        // assertIsDisplayed() — on a short screen the swatch may be below the fold.
-        composeRule.onNodeWithContentDescription("Indigo").assertExists()
+        // Accent index 2 is "Indigo". Every swatch is a labeled radio option; the prefilled one is
+        // selected, so assertIsSelected confirms the accent prefilled correctly.
+        composeRule.onNodeWithContentDescription("Indigo").assertIsSelected()
         // The picked date is shown in the Date field (also use assertExists for the same reason).
         composeRule.onNodeWithText("June 15, 2025").assertExists()
     }

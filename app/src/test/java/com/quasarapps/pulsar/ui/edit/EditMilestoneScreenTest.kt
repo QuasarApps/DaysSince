@@ -72,6 +72,21 @@ class EditMilestoneScreenTest {
     }
 
     @Test
+    fun newMilestone_previewShowsNewBeginning() {
+        setContent(existing = null)
+        // A new milestone defaults to "now" (0 days), so the preview shows the new-beginning kicker.
+        composeRule.onNodeWithText("A NEW BEGINNING").assertIsDisplayed()
+    }
+
+    @Test
+    fun existingPastMilestone_previewShowsDaysSinceKicker() {
+        setContent(
+            existing = Milestone("a", "Sober", sampleDate, sampleTime, accent = 2, createdAt = 1L),
+        )
+        composeRule.onNodeWithText("DAYS SINCE").assertIsDisplayed()
+    }
+
+    @Test
     fun editingTitleThenSaving_passesEditedTitleAndUntouchedFields() {
         var savedTitle: String? = null
         var savedDate: LocalDate? = null
