@@ -65,6 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.quasarapps.pulsar.ElapsedTime
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.Starburst
@@ -76,7 +77,6 @@ import com.quasarapps.pulsar.ui.theme.accentOrDefault
 import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -260,9 +260,7 @@ fun EditMilestoneScreen(
 @Composable
 private fun PreviewStrip(title: String, date: LocalDate, time: LocalTime, accent: Int) {
     val dhm = rememberElapsedDhm(date, time)
-    // 0 days AND not in the future: sincePickedDhm clamps a future pick (e.g. a later time today)
-    // to 0 days, but that isn't a "new beginning" — only a genuinely current/past one is.
-    val isNew = dhm.days == 0L && !LocalDateTime.of(date, time).isAfter(LocalDateTime.now())
+    val isNew = ElapsedTime.isNewBeginning(dhm.days, date, time)
     val onColor = if (isNew) Color.White else accentOrDefault(accent).onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(accent)
     Box(

@@ -1,6 +1,8 @@
 package com.quasarapps.pulsar
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Clock
 import java.time.Instant
@@ -228,5 +230,68 @@ class ElapsedTimeTest {
 
         val dhm = ElapsedTime.sincePickedDhm(picked, pickedTime, clock = clock, zoneId = ny)
         assertEquals(ElapsedTime.ElapsedDhm(days = 1, hours = 1, minutes = 0), dhm)
+    }
+
+    // isNewBeginning — 0 elapsed days AND a non-future start, resolved with the same zoned-instant
+    // model as sincePickedDhm.
+
+    private val utcClock10 = Clock.fixed(Instant.parse("2026-01-07T10:00:00Z"), utc)
+
+    @Test
+    fun isNewBeginning_zeroDaysAndPastStart_isTrue() {
+        assertTrue(
+            ElapsedTime.isNewBeginning(
+                days = 0,
+                date = LocalDate.of(2026, 1, 7),
+                time = LocalTime.of(9, 0),
+                clock = utcClock10,
+                zoneId = utc,
+            ),
+        )
+    }
+
+    @Test
+    fun isNewBeginning_zeroDaysButFutureTimeToday_isFalse() {
+        // A later-today pick clamps to 0 days but isn't a new beginning.
+        assertFalse(
+            ElapsedTime.isNewBeginning(
+                days = 0,
+                date = LocalDate.of(2026, 1, 7),
+                time = LocalTime.of(11, 0),
+                clock = utcClock10,
+                zoneId = utc,
+            ),
+        )
+    }
+
+    @Test
+    fun isNewBeginning_nonZeroDays_isFalse() {
+        assertFalse(
+            ElapsedTime.isNewBeginning(
+                days = 5,
+                date = LocalDate.of(2026, 1, 2),
+                time = LocalTime.of(9, 0),
+                clock = utcClock10,
+                zoneId = utc,
+            ),
+        )
+    }
+
+    @Test
+    fun isNewBeginning_dstGapStart_staysConsistentWithSincePickedDhm() {
+        // 2025-03-09 02:30 in New York doesn't exist (spring-forward 02:00 -> 03:00); ZonedDateTime
+        // resolves it forward to 03:30 EDT (07:30Z). With "now" just before that, sincePickedDhm
+        // clamps to 0 days because the pick is still in the future — isNewBeginning must agree it's
+        // NOT a new beginning, rather than reading the bare local 02:30 as already past.
+        val ny = ZoneId.of("America/New_York")
+        val gapDate = LocalDate.of(2025, 3, 9)
+        val gapTime = LocalTime.of(2, 30)
+        val clock = Clock.fixed(Instant.parse("2025-03-09T07:00:00Z"), ny)
+
+        val dhm = ElapsedTime.sincePickedDhm(gapDate, gapTime, clock = clock, zoneId = ny)
+        val isNew = ElapsedTime.isNewBeginning(dhm.days, gapDate, gapTime, clock = clock, zoneId = ny)
+
+        assertEquals(0L, dhm.days)
+        assertFalse(isNew)
     }
 }

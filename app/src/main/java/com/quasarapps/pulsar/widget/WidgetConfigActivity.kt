@@ -201,6 +201,9 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
 
 @Composable
 private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
+    // Computed inline rather than remember()-ed: it's wall-clock-dependent, so caching it would let
+    // the "X days since" go stale (e.g. across midnight) while this picker is open. sincePickedDhm is
+    // cheap, so recomputing per recomposition is the cheaper-than-a-bug trade.
     val days = ElapsedTime.sincePickedDhm(milestone.date, milestone.time).days
     val locale = LocalConfiguration.current.locales[0]
     val dateText = remember(milestone.date, locale) {

@@ -12,6 +12,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.json.JSONObject
 
+// Milestone data + widget bindings. Deliberately separate from SettingsRepository's "pulsar_settings"
+// store so the two evolve independently; a given DataStore name may only be instantiated once per
+// process, so these names must stay distinct. The `by preferencesDataStore` delegate makes this a
+// per-process singleton, which is why constructing MilestonesRepository(context) ad hoc (from the
+// view model, widgets, the config activity, and the refresh worker) is cheap and safe — each is a
+// thin wrapper over the same underlying store.
 private val Context.milestonesDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "pulsar_store")
 
