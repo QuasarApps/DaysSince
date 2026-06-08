@@ -102,22 +102,26 @@ They share:
 - A tap target that opens `MainActivity` deep-linked to the bound
   milestone's detail screen.
 
-Update cadence has two layers, both **WorkManager** (`WidgetRefreshWorker`):
+Update cadence has three layers:
 
-- A one-off, immediately after every milestone or binding change, so placed
-  widgets re-render promptly. It's unconstrained (lands within ~a second) and
-  durable across the app being backgrounded or killed right after the edit;
-  it enqueues nothing when no widget is placed.
-- A periodic job that re-renders every placed widget about **once an hour**,
-  skipped while the battery is low. It's scheduled while any widget is placed,
-  re-armed on app start, and cancelled once the last widget is removed. An hour
-  is the deliberate battery-vs-freshness trade: *days* is the headline unit and
-  only changes once a day, so the wide widget's hours/minutes are a nice-to-have
-  rather than worth more frequent wake-ups.
-
-The widgets set `updatePeriodMillis="0"`, so there's no platform AlarmManager
-refresh competing with — and ignoring the battery constraint of — the
-WorkManager job, which is the single source of periodic refresh.
+- A **WorkManager** one-off, immediately after every milestone or binding change,
+  so placed widgets re-render promptly. It's unconstrained (lands within ~a
+  second) and durable across the app being backgrounded or killed right after the
+  edit; it enqueues nothing when no widget is placed.
+- A **WorkManager** periodic job (`WidgetRefreshWorker`) that re-renders every
+  placed widget about **once an hour**, skipped while the battery is low. It's
+  scheduled while any widget is placed, re-armed on app start, and cancelled once
+  the last widget is removed. An hour is the deliberate battery-vs-freshness
+  trade: *days* is the headline unit and only changes once a day, so the wide
+  widget's hours/minutes are a nice-to-have rather than worth more frequent
+  wake-ups. This is the **primary** periodic refresh.
+- The platform's `updatePeriodMillis` (**6 h** on both widgets) as a coarse
+  **backstop**. Unlike WorkManager, it still fires while the app is dormant
+  (Doze / aggressive OEM battery managers), so the *day count* can't sit on the
+  wrong day across a midnight while the app goes unopened. At 6 h it's far sparser
+  than the hourly job — it no longer competes the way the old 30-min cadence did.
+  (Caveat: a hard **force-stop** suspends every refresh path until the app is
+  next opened, so a force-stopped-and-never-reopened widget can still go stale.)
 
 In the foreground the app itself ticks once per minute, aligned to the minute
 boundary, so the in-app detail screen stays live to the minute.

@@ -24,10 +24,12 @@ import java.util.concurrent.TimeUnit
  * of per-minute exact alarms. That still brings the DHM widget from ~6 h stale down to ~1 h, at a
  * fraction of the wake-ups, and comfortably catches the once-a-day rollover that actually matters.
  *
- * This battery-aware WorkManager job is the *single* periodic refresh mechanism: the widgets set
- * `updatePeriodMillis="0"`, so there's no platform AlarmManager refresh competing with (and
- * ignoring the battery constraint of) this one. It's armed from each provider's `onUpdate` and
- * re-armed on app start via [ensureScheduledIfWidgetsPlaced]; WorkManager persists it across reboots.
+ * This battery-aware WorkManager job is the *primary* periodic refresh: it's armed from each
+ * provider's `onUpdate`, re-armed on app start via [ensureScheduledIfWidgetsPlaced], and persisted
+ * across reboots by WorkManager. The widgets also keep a coarse (6 h) `updatePeriodMillis` platform
+ * alarm as a backstop — far sparser than this hourly job (so it no longer competes the way the old
+ * 30-min cadence did), but, unlike WorkManager, it still fires while the app is dormant, which keeps
+ * the *day count* from sitting on the wrong day across a midnight when the app goes unopened.
  */
 object WidgetRefreshScheduler {
 
