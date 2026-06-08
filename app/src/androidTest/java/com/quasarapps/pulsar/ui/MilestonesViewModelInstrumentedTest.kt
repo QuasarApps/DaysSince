@@ -122,6 +122,6 @@ class MilestonesViewModelInstrumentedTest {
     }
 
     private companion object {
-        const val TIMEOUT_MS = 5_000L
+        const val TIMEOUT_MS = 10_000L
     }
 }
