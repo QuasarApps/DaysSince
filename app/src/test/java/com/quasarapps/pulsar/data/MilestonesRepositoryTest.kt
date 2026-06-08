@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
@@ -125,6 +126,35 @@ class MilestonesRepositoryTest {
         // The binding for the deleted milestone is gone; the unrelated one survives.
         assertNull(repo.bindingForWidget(11))
         assertEquals("b", repo.bindingForWidget(22)?.milestoneId)
+    }
+
+    // ---- delete returns a snapshot that restore re-applies (undo) ----
+
+    @Test
+    fun deleteThenRestore_roundTripsMilestoneAndItsBindings() = runTest(dispatcher) {
+        repo.upsert(milestone("a", title = "Gym", accent = 2, createdAt = 100L))
+        repo.bindWidget(appWidgetId = 7, milestoneId = "a", transparent = true)
+
+        val removed = repo.delete("a")
+
+        assertNotNull(removed)
+        assertEquals("a", removed!!.milestone.id)
+        assertEquals(emptyList<Milestone>(), repo.snapshot())
+        assertNull(repo.bindingForWidget(7))
+
+        repo.restore(removed)
+
+        val restored = repo.snapshot().single()
+        assertEquals("a", restored.id)
+        assertEquals(2, restored.accent)
+        val binding = repo.bindingForWidget(7)
+        assertEquals("a", binding?.milestoneId)
+        assertEquals(true, binding?.transparent)
+    }
+
+    @Test
+    fun delete_unknownId_returnsNull() = runTest(dispatcher) {
+        assertNull(repo.delete("nope"))
     }
 
     // ---- widget bindings ----

@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">SECONDES</string>
     <string name="detail_since_date_at_time">depuis le %1$s à %2$s</string>
     <string name="detail_widget_hint">Ajoutez un widget depuis votre écran d\'accueil pour le garder en vue.</string>
-    <string name="detail_delete_dialog_title">Supprimer l\'événement ?</string>
-    <string name="detail_delete_dialog_message">Cela supprime « %1$s » et tous les widgets qui l\'utilisent.</string>
+    <string name="detail_delete_snackbar">« %1$s » supprimé</string>
+    <string name="action_undo">Annuler</string>
     <string name="detail_missing">Cet événement n\'est plus disponible.</string>
     <string name="detail_go_back">Retour</string>
 

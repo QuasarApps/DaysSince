@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">ثواني</string>
     <string name="detail_since_date_at_time">منذ %1$s الساعة %2$s</string>
     <string name="detail_widget_hint">أضف أداة إلى شاشتك الرئيسية لإبقاء هذا في مرأى العين.</string>
-    <string name="detail_delete_dialog_title">حذف الحدث؟</string>
-    <string name="detail_delete_dialog_message">سيؤدي ذلك إلى إزالة ”%1$s“ وأي أدوات تستخدمه.</string>
+    <string name="detail_delete_snackbar">تم حذف ”%1$s“</string>
+    <string name="action_undo">تراجع</string>
     <string name="detail_missing">لم يعد هذا الحدث متاحًا.</string>
     <string name="detail_go_back">العودة</string>
 

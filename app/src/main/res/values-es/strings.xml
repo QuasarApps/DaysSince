@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">SEGUNDOS</string>
     <string name="detail_since_date_at_time">desde el %1$s a las %2$s</string>
     <string name="detail_widget_hint">Añade un widget desde tu pantalla de inicio para tenerlo siempre a la vista.</string>
-    <string name="detail_delete_dialog_title">¿Eliminar hito?</string>
-    <string name="detail_delete_dialog_message">Esto elimina «%1$s» y los widgets que lo usen.</string>
+    <string name="detail_delete_snackbar">Se eliminó «%1$s»</string>
+    <string name="action_undo">Deshacer</string>
     <string name="detail_missing">Este hito ya no está disponible.</string>
     <string name="detail_go_back">Volver</string>
 

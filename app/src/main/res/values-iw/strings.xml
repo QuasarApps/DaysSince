@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">שניות</string>
     <string name="detail_since_date_at_time">מאז %1$s בשעה %2$s</string>
     <string name="detail_widget_hint">הוסף ווידג\'ט ממסך הבית כדי לשמור על זה לנגד עיניך.</string>
-    <string name="detail_delete_dialog_title">למחוק את האירוע?</string>
-    <string name="detail_delete_dialog_message">פעולה זו תסיר את ”%1$s“ וכל ווידג\'ט שמשתמש בו.</string>
+    <string name="detail_delete_snackbar">”%1$s“ נמחק</string>
+    <string name="action_undo">ביטול</string>
     <string name="detail_missing">האירוע הזה אינו זמין יותר.</string>
     <string name="detail_go_back">חזרה</string>
 

@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">SEKUNDY</string>
     <string name="detail_since_date_at_time">od %1$s o %2$s</string>
     <string name="detail_widget_hint">Dodaj widżet do ekranu głównego, aby mieć to na widoku.</string>
-    <string name="detail_delete_dialog_title">Usunąć wydarzenie?</string>
-    <string name="detail_delete_dialog_message">Spowoduje to usunięcie „%1$s” oraz wszystkich widżetów, które go używają.</string>
+    <string name="detail_delete_snackbar">Usunięto „%1$s”</string>
+    <string name="action_undo">Cofnij</string>
     <string name="detail_missing">To wydarzenie nie jest już dostępne.</string>
     <string name="detail_go_back">Wróć</string>
 

@@ -6,17 +6,28 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.quasarapps.pulsar.R
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -91,6 +102,27 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
                     navController.navigate(Routes.detail(deepLink.milestoneId)) {
                         launchSingleTop = true
                     }
+                }
+            }
+
+            // Undo-delete: the view model exposes the most recent deletion; surface it as an app-level
+            // snackbar (delete happens on Detail then pops back to Home, so the host can't live on a
+            // single screen). Tapping Undo restores the milestone + its widget bindings; a dismiss or
+            // timeout drops it.
+            val context = LocalContext.current
+            val snackbarHostState = remember { SnackbarHostState() }
+            val pendingUndo by vm.pendingUndo.collectAsState()
+            LaunchedEffect(pendingUndo) {
+                val pending = pendingUndo ?: return@LaunchedEffect
+                val result = snackbarHostState.showSnackbar(
+                    message = context.getString(R.string.detail_delete_snackbar, pending.milestone.title),
+                    actionLabel = context.getString(R.string.action_undo),
+                    withDismissAction = true,
+                    duration = SnackbarDuration.Short,
+                )
+                when (result) {
+                    SnackbarResult.ActionPerformed -> vm.undoDelete()
+                    SnackbarResult.Dismissed -> vm.clearPendingUndo()
                 }
             }
 
@@ -194,6 +226,14 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             ) {
                 SplashScreen(onFinished = { splashDone = true })
             }
+
+            // App-level so it survives the Detail→Home pop-back after a delete.
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .windowInsetsPadding(WindowInsets.safeDrawing),
+            )
         }
     }
 }

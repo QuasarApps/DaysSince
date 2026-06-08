@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">СЕКУНДЫ</string>
     <string name="detail_since_date_at_time">с %1$s в %2$s</string>
     <string name="detail_widget_hint">Добавьте виджет на главный экран, чтобы это было всегда на виду.</string>
-    <string name="detail_delete_dialog_title">Удалить событие?</string>
-    <string name="detail_delete_dialog_message">Будет удалено «%1$s» и все использующие его виджеты.</string>
+    <string name="detail_delete_snackbar">«%1$s» удалено</string>
+    <string name="action_undo">Отменить</string>
     <string name="detail_missing">Это событие больше недоступно.</string>
     <string name="detail_go_back">Назад</string>
 

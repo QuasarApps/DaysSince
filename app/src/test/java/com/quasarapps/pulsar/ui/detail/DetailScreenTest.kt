@@ -20,7 +20,8 @@ import java.time.LocalTime
  * Compose UI test for [DetailScreen], run on the JVM under Robolectric (no emulator).
  *
  * Mirrors the on-device coverage for fast CI feedback: the missing-milestone fallback, the
- * hero/footer content, and the overflow-menu actions including the delete confirmation gate.
+ * hero/footer content, and the overflow-menu actions (reset is gated by a confirm dialog; delete
+ * fires immediately, with undo offered by the caller via a snackbar).
  *
  * Pinned to en-US: the assertions check English copy and en-US long dates (e.g. "June 15, 2025"),
  * which the screen formats from the active configuration locale. Without this the test would depend
@@ -156,7 +157,7 @@ class DetailScreenTest {
     }
 
     @Test
-    fun deleteIsGatedBehindAConfirmationDialog() {
+    fun deleteMenuItem_invokesOnDeleteImmediately() {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
@@ -165,26 +166,9 @@ class DetailScreenTest {
         composeRule.onNodeWithText("Delete").performClick()
         settleTransitions()
 
-        // Choosing "Delete" from the menu opens a confirmation dialog and must NOT delete yet — the
-        // safety gate. (The full confirm -> onDelete path is exercised on a real device in
-        // DetailScreenInstrumentedTest, where stacked-popup button clicks are reliable.)
-        composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
-        assertTrue("delete must not fire until the user confirms", !deleted)
-    }
-
-    @Test
-    fun deleteFlow_cancelDismissesWithoutDeleting() {
-        var deleted = false
-        setContent(onDelete = { deleted = true })
-
-        composeRule.onNodeWithContentDescription("More options").performClick()
-        settleTransitions()
-        composeRule.onNodeWithText("Delete").performClick()
-        settleTransitions()
-        composeRule.onNodeWithText("Cancel").performClick()
-        settleTransitions()
-
+        // Delete fires immediately — undo is offered via a snackbar by the caller, so there's no
+        // confirmation dialog (unlike reset).
         composeRule.onNodeWithText("Delete milestone?").assertDoesNotExist()
-        assertTrue(!deleted)
+        assertTrue(deleted)
     }
 }

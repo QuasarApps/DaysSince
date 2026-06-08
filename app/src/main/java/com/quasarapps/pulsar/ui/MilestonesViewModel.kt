@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.data.MilestonesRepository
+import com.quasarapps.pulsar.data.RemovedMilestone
 import com.quasarapps.pulsar.widget.WidgetRefreshScheduler
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -54,11 +57,36 @@ class MilestonesViewModel internal constructor(
         }
     }
 
+    /**
+     * The most recent delete, available to undo, or null if there's nothing pending. The UI observes
+     * this to show an "Undo" snackbar; [undoDelete] or [clearPendingUndo] clear it.
+     */
+    private val _pendingUndo = MutableStateFlow<RemovedMilestone?>(null)
+    val pendingUndo: StateFlow<RemovedMilestone?> = _pendingUndo.asStateFlow()
+
     fun deleteMilestone(id: String) {
         viewModelScope.launch {
-            repo.delete(id)
+            // Only arm undo / refresh when something was actually removed. A no-op delete (absent id)
+            // must not null out a previously-pending undo and dismiss its snackbar.
+            val removed = repo.delete(id) ?: return@launch
+            _pendingUndo.value = removed
             refreshWidgets()
         }
+    }
+
+    /** Restores the pending deleted milestone (and its widget bindings); no-op if nothing's pending. */
+    fun undoDelete() {
+        val removed = _pendingUndo.value ?: return
+        _pendingUndo.value = null
+        viewModelScope.launch {
+            repo.restore(removed)
+            refreshWidgets()
+        }
+    }
+
+    /** Drops the pending undo (e.g. the snackbar timed out or was dismissed). */
+    fun clearPendingUndo() {
+        _pendingUndo.value = null
     }
 
     /**

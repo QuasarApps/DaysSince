@@ -36,8 +36,8 @@
     <string name="detail_seconds_label">SEKUNDEN</string>
     <string name="detail_since_date_at_time">seit %1$s um %2$s</string>
     <string name="detail_widget_hint">Füge ein Widget zu deinem Startbildschirm hinzu, um dies im Blick zu behalten.</string>
-    <string name="detail_delete_dialog_title">Meilenstein löschen?</string>
-    <string name="detail_delete_dialog_message">Dadurch werden „%1$s“ und alle Widgets entfernt, die ihn verwenden.</string>
+    <string name="detail_delete_snackbar">„%1$s“ gelöscht</string>
+    <string name="action_undo">Rückgängig</string>
     <string name="detail_missing">Dieser Meilenstein ist nicht mehr verfügbar.</string>
     <string name="detail_go_back">Zurück</string>
 

@@ -2,7 +2,6 @@ package com.quasarapps.pulsar.ui.detail
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -20,7 +19,7 @@ import java.time.LocalTime
  * Compose UI test for [DetailScreen] on a device/emulator.
  *
  * Covers the missing-milestone fallback, the hero/footer content, and the overflow-menu actions
- * (edit, and delete behind a confirmation dialog).
+ * (edit, reset behind a confirmation dialog, and immediate delete — undo is offered by the caller).
  */
 @RunWith(AndroidJUnit4::class)
 class DetailScreenInstrumentedTest {
@@ -135,41 +134,16 @@ class DetailScreenInstrumentedTest {
     }
 
     @Test
-    fun deleteFlow_requiresConfirmation_thenInvokesOnDelete() {
+    fun deleteMenuItem_invokesOnDeleteImmediately() {
         var deleted = false
         setContent(onDelete = { deleted = true })
 
         composeRule.onNodeWithContentDescription("More options").performClick()
-        // Click the menu's "Delete" (unique: the dialog isn't open yet).
         composeRule.onNodeWithText("Delete").performClick()
 
-        // The confirmation dialog appears; deletion only fires after confirming.
-        composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
-        assertTrue(!deleted)
-
-        // The dropdown's "Delete" item and the dialog's "Delete" confirm button briefly coexist
-        // while the menu animates out. Wait until exactly one "Delete" remains so the click is
-        // unambiguous on a slow emulator (see issue #24) before pressing the confirm button.
-        composeRule.waitUntil(timeoutMillis = 5_000) {
-            composeRule.onAllNodesWithText("Delete").fetchSemanticsNodes().size == 1
-        }
-        composeRule.onNodeWithText("Delete").performClick()
+        // Delete fires immediately — undo is offered via a snackbar by the caller, so there's no
+        // confirmation dialog (unlike reset).
         assertTrue(deleted)
-    }
-
-    @Test
-    fun deleteFlow_cancelDismissesWithoutDeleting() {
-        var deleted = false
-        setContent(onDelete = { deleted = true })
-
-        composeRule.onNodeWithContentDescription("More options").performClick()
-        composeRule.onNodeWithText("Delete").performClick()
-        composeRule.onNodeWithText("Delete milestone?").assertIsDisplayed()
-
-        composeRule.onNodeWithText("Cancel").performClick()
-
-        // Cancel dismisses the dialog and deletes nothing.
         composeRule.onNodeWithText("Delete milestone?").assertDoesNotExist()
-        assertTrue(!deleted)
     }
 }

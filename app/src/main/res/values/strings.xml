@@ -21,6 +21,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_reset">Reset</string>
+    <string name="action_undo">Undo</string>
 
     <!-- Home screen -->
     <string name="home_title">Pulsar</string>
@@ -58,9 +59,8 @@
     <!-- %1$s = localized long date, %2$s = localized time. e.g. "since June 15, 2025 at 9:30 AM" -->
     <string name="detail_since_date_at_time">since %1$s at %2$s</string>
     <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>
-    <string name="detail_delete_dialog_title">Delete milestone?</string>
-    <!-- %1$s = milestone title -->
-    <string name="detail_delete_dialog_message">This removes “%1$s” and any widgets using it.</string>
+    <!-- Shown in the Undo snackbar after a delete. %1$s = milestone title. -->
+    <string name="detail_delete_snackbar">Deleted “%1$s”</string>
     <string name="detail_missing">This milestone is no longer available.</string>
     <string name="detail_go_back">Go back</string>
 
