@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
@@ -118,9 +119,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
 
     buildFeatures {
         compose = true
@@ -153,6 +151,15 @@ android {
                 }
             }
         }
+    }
+}
+
+kotlin {
+    // Kotlin compilation target, set via the Kotlin Gradle plugin's compilerOptions DSL — replaces
+    // the deprecated android.kotlinOptions block. Pairs with the Java source/target in
+    // android.compileOptions above.
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 
