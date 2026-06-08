@@ -122,6 +122,9 @@ class MilestonesViewModelInstrumentedTest {
     }
 
     private companion object {
-        const val TIMEOUT_MS = 10_000L
+        // Generous because this awaits a real DataStore flow round-trip on the emulator; the previous
+        // 10s ceiling occasionally tripped a spurious TimeoutCancellationException under CI load. A
+        // genuinely broken delete still fails (just later) — the higher bound only absorbs slowness.
+        const val TIMEOUT_MS = 30_000L
     }
 }

@@ -79,4 +79,9 @@
     <string name="splash_tagline">Считайте время</string>
 
     <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Резервное копирование и конфиденциальность</string>
+    <string name="settings_backup_title">Резервное копирование событий</string>
+    <string name="settings_backup_subtitle">Включите свои события в резервную копию Google этого устройства, чтобы восстановить их на новом телефоне.</string>
+    <string name="settings_privacy_note">Pulsar хранит всё на вашем устройстве — без аккаунтов, без серверов и без отслеживания. Когда резервное копирование включено, ваши события входят в резервную копию Google вашего устройства.</string>
 </resources>

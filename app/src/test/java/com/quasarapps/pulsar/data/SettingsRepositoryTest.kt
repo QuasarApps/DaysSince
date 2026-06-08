@@ -51,10 +51,12 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun defaults_areSystemThemeWithUnitsShown() = runTest(dispatcher) {
+    fun defaults_areSystemThemeWithUnitsShownAndBackupOn() = runTest(dispatcher) {
         val settings = repo.snapshot()
         assertEquals(ThemeMode.SYSTEM, settings.themeMode)
         assertTrue(settings.showUnits)
+        // Backup defaults ON so restore-on-new-device keeps working unless the user opts out.
+        assertTrue(settings.backupEnabled)
     }
 
     @Test
@@ -76,13 +78,24 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun themeModeAndShowUnits_areStoredIndependently() = runTest(dispatcher) {
+    fun setBackupEnabled_persistsAndRoundTrips() = runTest(dispatcher) {
+        repo.setBackupEnabled(false)
+        assertFalse(repo.snapshot().backupEnabled)
+
+        repo.setBackupEnabled(true)
+        assertTrue(repo.snapshot().backupEnabled)
+    }
+
+    @Test
+    fun themeModeShowUnitsAndBackup_areStoredIndependently() = runTest(dispatcher) {
         repo.setThemeMode(ThemeMode.DARK)
         repo.setShowUnits(false)
+        repo.setBackupEnabled(false)
 
         val settings = repo.snapshot()
         assertEquals(ThemeMode.DARK, settings.themeMode)
         assertFalse(settings.showUnits)
+        assertFalse(settings.backupEnabled)
     }
 
     @Test

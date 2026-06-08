@@ -78,4 +78,9 @@
     <string name="splash_tagline">Comptez le temps</string>
 
     <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Sauvegarde et confidentialité</string>
+    <string name="settings_backup_title">Sauvegarder les événements</string>
+    <string name="settings_backup_subtitle">Inclure vos événements dans la sauvegarde Google de cet appareil pour les restaurer sur un nouveau téléphone.</string>
+    <string name="settings_privacy_note">Pulsar stocke tout sur votre appareil – aucun compte, aucun serveur, aucun suivi. Lorsque la sauvegarde est activée, vos événements sont inclus dans la sauvegarde Google de votre appareil.</string>
 </resources>

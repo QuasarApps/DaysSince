@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.quasarapps.pulsar.data.Settings
 import com.quasarapps.pulsar.data.ThemeMode
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
@@ -36,6 +37,7 @@ class SettingsScreenTest {
         settings: Settings = Settings(),
         onSetThemeMode: (ThemeMode) -> Unit = {},
         onToggleUnits: (Boolean) -> Unit = {},
+        onSetBackup: (Boolean) -> Unit = {},
         onBack: () -> Unit = {},
     ) {
         composeRule.setContent {
@@ -44,6 +46,7 @@ class SettingsScreenTest {
                     settings = settings,
                     onSetThemeMode = onSetThemeMode,
                     onToggleUnits = onToggleUnits,
+                    onSetBackup = onSetBackup,
                     onBack = onBack,
                 )
             }
@@ -87,6 +90,17 @@ class SettingsScreenTest {
 
         // The whole row is toggleable, so tapping the label flips the switch.
         composeRule.onNodeWithText("Show hours & minutes").performClick()
+
+        assertEquals(false, toggledTo)
+    }
+
+    @Test
+    fun togglingBackupRow_invokesCallbackWithFlippedValue() {
+        var toggledTo: Boolean? = null
+        setContent(settings = Settings(backupEnabled = true), onSetBackup = { toggledTo = it })
+
+        // The Backup section sits below the fold in the test viewport, so scroll it in before tapping.
+        composeRule.onNodeWithText("Back up milestones").performScrollTo().performClick()
 
         assertEquals(false, toggledTo)
     }

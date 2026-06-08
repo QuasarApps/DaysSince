@@ -179,6 +179,7 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
                             settings = settings,
                             onSetThemeMode = settingsVm::setThemeMode,
                             onToggleUnits = settingsVm::setShowUnits,
+                            onSetBackup = settingsVm::setBackupEnabled,
                             onBack = { navController.popBackStack() },
                         )
                     }

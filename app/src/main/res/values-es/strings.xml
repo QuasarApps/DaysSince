@@ -78,4 +78,9 @@
     <string name="splash_tagline">Cuenta el tiempo</string>
 
     <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Copia de seguridad y privacidad</string>
+    <string name="settings_backup_title">Hacer copia de seguridad de los hitos</string>
+    <string name="settings_backup_subtitle">Incluye tus hitos en la copia de seguridad de Google de este dispositivo para que se restauren en un teléfono nuevo.</string>
+    <string name="settings_privacy_note">Púlsar guarda todo en tu dispositivo: sin cuentas, sin servidores y sin seguimiento. Con la copia de seguridad activada, tus hitos se incluyen en la copia de seguridad de Google de tu dispositivo.</string>
 </resources>

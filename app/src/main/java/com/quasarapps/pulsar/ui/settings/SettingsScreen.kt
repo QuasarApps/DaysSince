@@ -57,6 +57,7 @@ fun SettingsScreen(
     settings: Settings,
     onSetThemeMode: (ThemeMode) -> Unit,
     onToggleUnits: (Boolean) -> Unit,
+    onSetBackup: (Boolean) -> Unit = {},
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -119,13 +120,33 @@ fun SettingsScreen(
             // ---- Display ----
             SectionHeader(stringResource(R.string.settings_display_header))
             SettingsCard {
-                UnitsToggleRow(
+                SwitchSettingRow(
                     title = stringResource(R.string.settings_show_units_title),
                     subtitle = stringResource(R.string.settings_show_units_subtitle),
                     checked = settings.showUnits,
                     onCheckedChange = onToggleUnits,
                 )
             }
+
+            Spacer(Modifier.height(20.dp))
+
+            // ---- Backup & privacy ----
+            SectionHeader(stringResource(R.string.settings_backup_header))
+            SettingsCard {
+                SwitchSettingRow(
+                    title = stringResource(R.string.settings_backup_title),
+                    subtitle = stringResource(R.string.settings_backup_subtitle),
+                    checked = settings.backupEnabled,
+                    onCheckedChange = onSetBackup,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.settings_privacy_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
 
             Spacer(Modifier.height(20.dp))
 
@@ -186,7 +207,7 @@ private fun ThemeOptionRow(label: String, selected: Boolean, onSelect: () -> Uni
 }
 
 @Composable
-private fun UnitsToggleRow(
+private fun SwitchSettingRow(
     title: String,
     subtitle: String,
     checked: Boolean,
