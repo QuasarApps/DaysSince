@@ -66,7 +66,10 @@ class MilestonesViewModel internal constructor(
 
     fun deleteMilestone(id: String) {
         viewModelScope.launch {
-            _pendingUndo.value = repo.delete(id)
+            // Only arm undo / refresh when something was actually removed. A no-op delete (absent id)
+            // must not null out a previously-pending undo and dismiss its snackbar.
+            val removed = repo.delete(id) ?: return@launch
+            _pendingUndo.value = removed
             refreshWidgets()
         }
     }
