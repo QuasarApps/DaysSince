@@ -156,10 +156,16 @@ private fun MilestoneCard(
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)
 
-    // One merged TalkBack node per card — "<title>, <N days>" + "Button" — instead of the decorative
-    // number / kicker / title being traversed as three separate, unlabeled nodes.
-    val daysFragment = pluralStringResource(R.plurals.widget_a11y_days, dhm.days.toInt(), dhm.days)
-    val cardDescription = stringResource(R.string.card_a11y_content_description, milestone.title, daysFragment)
+    // One merged TalkBack node per card — "<title>, <status>" + "Button" — instead of the decorative
+    // number / kicker / title being traversed as three separate, unlabeled nodes. For a 0-day card
+    // the status mirrors the visible "new beginning" kicker rather than reading "0 days", so a screen
+    // reader hears the same celebratory state a sighted user sees.
+    val statusFragment = if (isNew) {
+        stringResource(R.string.card_new_beginning_label)
+    } else {
+        pluralStringResource(R.plurals.widget_a11y_days, dhm.days.toInt(), dhm.days)
+    }
+    val cardDescription = stringResource(R.string.card_a11y_content_description, milestone.title, statusFragment)
 
     Box(
         modifier = modifier

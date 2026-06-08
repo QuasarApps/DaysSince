@@ -98,6 +98,26 @@ class HomeScreenTest {
     }
 
     @Test
+    fun newBeginningCard_announcesCelebratoryStateNotZeroDays() {
+        setContent(
+            milestones = listOf(
+                // 0 days today (midnight is in the past, not the future) -> the "new beginning" state.
+                Milestone(
+                    id = "n",
+                    title = "Fresh start",
+                    date = LocalDate.now(),
+                    time = LocalTime.MIDNIGHT,
+                    accent = 1,
+                    createdAt = 1L,
+                ),
+            ),
+        )
+
+        // The card's spoken label reflects the new-beginning kicker rather than "0 days".
+        composeRule.onNodeWithContentDescription("A NEW BEGINNING", substring = true).assertIsDisplayed()
+    }
+
+    @Test
     fun fab_hasAccessibilityLabel_forTalkBack() {
         // The FAB merges the decorative star + "Mark" text into one node with an explicit
         // contentDescription, so TalkBack announces a single labeled button.

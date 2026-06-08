@@ -77,4 +77,6 @@
 
     <!-- Splash screen -->
     <string name="splash_tagline">Licz czas</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
 </resources>
