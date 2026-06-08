@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -32,13 +34,15 @@ import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.ui.components.Starburst
 import com.quasarapps.pulsar.ui.components.rememberReduceMotion
+import com.quasarapps.pulsar.ui.theme.PulsarDarkColors
 import kotlinx.coroutines.delay
 
 // The splash is always the dark cosmic brand surface (like the launcher icon), independent of the
 // light/dark app theme, so the cold-start system splash and this screen read as one continuous moment.
-private val SplashBase = Color(0xFF0D0712)
+// The base surface and mark are sourced from the canonical dark palette below (and the XML splash
+// background is kept in sync with PulsarDarkColors.background) so they can't drift; only the glow,
+// which exists nowhere else, is a splash-local constant.
 private val SplashGlow = Color(0xFF3A1457)
-private val MarkColor = Color(0xFFF6D9FF)
 
 private const val EnterMillis = 650
 private const val HoldMillis = 550
@@ -70,10 +74,15 @@ fun SplashScreen(onFinished: () -> Unit) {
     val markScale = 0.85f + 0.15f * p
     // Text trails the mark in slightly.
     val textAlpha = ((p - 0.4f) / 0.6f).coerceIn(0f, 1f)
+    val baseColor = PulsarDarkColors.background
+    val markColor = PulsarDarkColors.onPrimaryContainer
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            // Treat the splash as a single modal a11y surface. The caller clears the semantics of the
+            // content behind it while it's up, so a screen reader stays within the splash.
+            .semantics { isTraversalGroup = true }
             // Swallow all touches so nothing falls through to the app content behind the overlay
             // while the splash is up. (No-op clickable would mislabel the splash as a button.)
             .pointerInput(Unit) {
@@ -86,7 +95,7 @@ fun SplashScreen(onFinished: () -> Unit) {
             .drawBehind {
                 drawRect(
                     Brush.radialGradient(
-                        colors = listOf(SplashGlow, SplashBase),
+                        colors = listOf(SplashGlow, baseColor),
                         center = center,
                         radius = size.minDimension * 0.75f,
                     ),
@@ -97,7 +106,7 @@ fun SplashScreen(onFinished: () -> Unit) {
         verticalArrangement = Arrangement.Center,
     ) {
         Starburst(
-            color = MarkColor,
+            color = markColor,
             modifier = Modifier
                 .size(92.dp)
                 .graphicsLayer {
