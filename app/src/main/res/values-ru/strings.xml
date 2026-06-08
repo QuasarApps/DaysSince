@@ -21,7 +21,6 @@
     <string name="home_fab_mark">Отметить</string>
     <string name="home_fab_content_description">Добавить событие</string>
     <string name="card_days_since_label">ДНЕЙ ПРОШЛО</string>
-    <string name="card_on_date_at_time">%1$s в %2$s</string>
     <string name="empty_title">Пока нет событий</string>
     <string name="empty_subtitle">Считайте дни с момента чего-то важного для вас.</string>
     <string name="card_new_beginning_label">НОВОЕ НАЧАЛО</string>

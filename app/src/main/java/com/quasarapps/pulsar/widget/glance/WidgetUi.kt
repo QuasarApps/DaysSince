@@ -1,12 +1,19 @@
 package com.quasarapps.pulsar.widget.glance
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Shader
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.action.actionStartActivity
@@ -16,6 +23,7 @@ import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
+import androidx.glance.layout.ContentScale
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
@@ -42,8 +50,26 @@ private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorP
     return ColorProvider(if (transparent) accent.end else accent.onAccent)
 }
 
-private fun backgroundColor(milestone: Milestone?): ColorProvider {
-    return ColorProvider(accentOrDefault(milestone?.accent ?: 0).start)
+/**
+ * A diagonal (corner-to-corner) accent gradient as a small bitmap, matching the app's card/hero
+ * gradient. Glance's background modifier can't take a Compose Brush, so the gradient is rasterized
+ * from the same accent palette colors (no drift) and stretched to fill the widget via FillBounds.
+ */
+private fun accentGradientBitmap(accentIndex: Int): Bitmap {
+    val accent = accentOrDefault(accentIndex)
+    val size = 144
+    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    Canvas(bitmap).drawPaint(
+        Paint().apply {
+            isDither = true
+            shader = LinearGradient(
+                0f, 0f, size.toFloat(), size.toFloat(),
+                accent.start.toArgb(), accent.end.toArgb(),
+                Shader.TileMode.CLAMP,
+            )
+        },
+    )
+    return bitmap
 }
 
 @Composable
@@ -71,7 +97,10 @@ private fun WidgetScaffold(
             baseModifier.padding(4.dp)
         } else {
             baseModifier
-                .background(backgroundColor(milestone))
+                .background(
+                    ImageProvider(accentGradientBitmap(milestone?.accent ?: 0)),
+                    contentScale = ContentScale.FillBounds,
+                )
                 .cornerRadius(20.dp)
                 .padding(8.dp)
         }

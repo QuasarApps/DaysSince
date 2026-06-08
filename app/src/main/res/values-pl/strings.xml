@@ -21,7 +21,6 @@
     <string name="home_fab_mark">Oznacz</string>
     <string name="home_fab_content_description">Dodaj wydarzenie</string>
     <string name="card_days_since_label">DNI OD</string>
-    <string name="card_on_date_at_time">%1$s o %2$s</string>
     <string name="empty_title">Brak wydarzeń</string>
     <string name="empty_subtitle">Licz dni od czegoś, co jest dla Ciebie ważne.</string>
     <string name="card_new_beginning_label">NOWY POCZĄTEK</string>
