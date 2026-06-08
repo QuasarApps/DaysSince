@@ -24,8 +24,8 @@ import com.quasarapps.pulsar.R
  * the downloadable one upgrades it in if/when it loads — so there's no fallback-to-system flash.
  *
  * Chakra Petch is bundled as static per-weight files; Hanken Grotesk is bundled once as its variable
- * font, with each weight selected via the `wght` variation axis. License texts (OFL) for both live in
- * app/licenses/.
+ * font, with each weight selected via the `wght` variation axis. Both faces are OFL; their license
+ * texts are packaged into the app under assets/licenses/.
  */
 private val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
