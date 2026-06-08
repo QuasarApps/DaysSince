@@ -3,9 +3,12 @@ package com.quasarapps.pulsar.widget
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -24,12 +27,18 @@ class WidgetRefreshSchedulerTest {
     @Before
     fun clearWork() {
         workManager.cancelUniqueWork(WidgetRefreshWorker.UNIQUE_WORK_NAME).result.get()
+        workManager.cancelUniqueWork(WidgetRefreshScheduler.IMMEDIATE_WORK_NAME).result.get()
     }
 
     @After
     fun cleanup() {
         workManager.cancelUniqueWork(WidgetRefreshWorker.UNIQUE_WORK_NAME).result.get()
+        workManager.cancelUniqueWork(WidgetRefreshScheduler.IMMEDIATE_WORK_NAME).result.get()
     }
+
+    private fun hasActiveWork(uniqueName: String): Boolean =
+        workManager.getWorkInfosForUniqueWork(uniqueName).get()
+            .any { it.state == WorkInfo.State.ENQUEUED || it.state == WorkInfo.State.RUNNING }
 
     @Test
     fun ensureScheduled_enqueuesASingleUniquePeriodicWork() {
@@ -53,5 +62,27 @@ class WidgetRefreshSchedulerTest {
             .get()
         // KEEP -> the second call must not create a duplicate.
         assertEquals(1, infos.size)
+    }
+
+    @Test
+    fun refreshNow_withNoWidgetsPlaced_enqueuesNothing() {
+        // No widgets are placed in the test environment, so the one-off refresh is gated off.
+        val operation = WidgetRefreshScheduler.refreshNow(context)
+
+        assertNull(operation)
+        assertTrue(
+            "no immediate refresh work should be queued without a placed widget",
+            !hasActiveWork(WidgetRefreshScheduler.IMMEDIATE_WORK_NAME),
+        )
+    }
+
+    @Test
+    fun ensureScheduledIfWidgetsPlaced_withNoWidgetsPlaced_doesNotSchedule() {
+        WidgetRefreshScheduler.ensureScheduledIfWidgetsPlaced(context)
+
+        assertTrue(
+            "periodic refresh must not be scheduled when no widget is placed",
+            !hasActiveWork(WidgetRefreshWorker.UNIQUE_WORK_NAME),
+        )
     }
 }

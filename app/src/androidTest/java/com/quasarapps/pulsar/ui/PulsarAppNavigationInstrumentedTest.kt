@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.quasarapps.pulsar.R
+import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.data.MilestonesRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -20,6 +21,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.time.LocalDate
+import java.time.LocalTime
 
 /**
  * End-to-end navigation test that drives the real [PulsarApp] — the production NavHost wired to
@@ -110,5 +113,32 @@ class PulsarAppNavigationInstrumentedTest {
         // Back returns to the home empty state.
         composeRule.onNodeWithContentDescription("Back").performClick()
         composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
+    }
+
+    @Test
+    fun widgetDeepLink_opensMilestoneDetailAndSkipsSplash() {
+        // Seed the milestone a widget would be bound to.
+        val deepLinkTitle = "Deep Linked Milestone"
+        runBlocking {
+            MilestonesRepository(appContext).upsert(
+                Milestone(
+                    id = "deeplink-id",
+                    title = deepLinkTitle,
+                    date = LocalDate.now().minusDays(2),
+                    time = LocalTime.NOON,
+                    createdAt = 1L,
+                ),
+            )
+        }
+
+        // A widget tap delivers a DeepLinkTarget; the app skips the splash and navigates straight in.
+        composeRule.setContent { PulsarApp(deepLink = DeepLinkTarget("deeplink-id", token = 0L)) }
+
+        composeRule.waitUntil(timeoutMillis = 10_000) {
+            composeRule.onAllNodesWithText(deepLinkTitle).fetchSemanticsNodes().isNotEmpty()
+        }
+        composeRule.onAllNodesWithText(deepLinkTitle).onFirst().assertIsDisplayed()
+        // "DAYS" is the detail hero's unit label (Home uses "DAYS SINCE"), so it pins us to detail.
+        composeRule.onNodeWithText("DAYS").assertIsDisplayed()
     }
 }

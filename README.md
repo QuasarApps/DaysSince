@@ -102,18 +102,22 @@ They share:
 - A tap target that opens `MainActivity` deep-linked to the bound
   milestone's detail screen.
 
-Update cadence has three layers:
+Update cadence has two layers, both **WorkManager** (`WidgetRefreshWorker`):
 
-- An explicit `updateAll()` immediately after every milestone or binding change.
-- A **WorkManager** periodic job (`WidgetRefreshWorker`) that re-renders every
-  placed widget about **once an hour**, skipped while the battery is low. It's
-  scheduled while any widget is placed and cancelled once the last is removed.
-  An hour is the deliberate battery-vs-freshness trade: *days* is the headline
-  unit and only changes once a day, so the wide widget's hours/minutes are a
-  nice-to-have rather than worth more frequent wake-ups.
-- The platform's `updatePeriodMillis` (6 h for the days widget, 30 min for the
-  d/h/m widget) as a backstop — it's coalesced/deferred by the system, so the
-  WorkManager job is what makes the refresh reliable.
+- A one-off, immediately after every milestone or binding change, so placed
+  widgets re-render promptly. It's unconstrained (lands within ~a second) and
+  durable across the app being backgrounded or killed right after the edit;
+  it enqueues nothing when no widget is placed.
+- A periodic job that re-renders every placed widget about **once an hour**,
+  skipped while the battery is low. It's scheduled while any widget is placed,
+  re-armed on app start, and cancelled once the last widget is removed. An hour
+  is the deliberate battery-vs-freshness trade: *days* is the headline unit and
+  only changes once a day, so the wide widget's hours/minutes are a nice-to-have
+  rather than worth more frequent wake-ups.
+
+The widgets set `updatePeriodMillis="0"`, so there's no platform AlarmManager
+refresh competing with — and ignoring the battery constraint of — the
+WorkManager job, which is the single source of periodic refresh.
 
 In the foreground the app itself ticks once per minute, aligned to the minute
 boundary, so the in-app detail screen stays live to the minute.

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- updatePeriodMillis=0: no platform AlarmManager refresh. The battery-aware WorkManager job
+     (WidgetRefreshScheduler) is the single periodic refresh — it skips while the battery is low
+     (which the platform alarm wouldn't) and avoids a second, redundant refresh cadence. -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.quasarapps.pulsar.widget.WidgetConfigActivity"
     android:description="@string/widget_dhm_description"
@@ -9,5 +12,5 @@
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
     android:targetCellHeight="1"
-    android:updatePeriodMillis="1800000"
+    android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />
