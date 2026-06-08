@@ -37,9 +37,9 @@ class MainActivity : ComponentActivity() {
         // re-delivering here would wrongly snap back to the milestone's detail.
         if (savedInstanceState == null) deliverDeepLink(intent)
 
-        // Re-arm the periodic widget refresh if any widget is placed (no-op otherwise). With the
-        // widgets' updatePeriodMillis=0 there's no platform alarm, so this is the recovery path if
-        // the persisted WorkManager job was ever lost.
+        // Re-arm the periodic widget refresh if any widget is placed (no-op otherwise). This restores
+        // the hourly job promptly if it was ever lost, rather than waiting for the next coarse
+        // updatePeriodMillis tick (~6 h) to re-arm it via onUpdate.
         WidgetRefreshScheduler.ensureScheduledIfWidgetsPlaced(this)
 
         setContent {

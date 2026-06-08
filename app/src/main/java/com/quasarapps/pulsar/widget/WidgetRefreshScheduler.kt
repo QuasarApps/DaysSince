@@ -68,9 +68,10 @@ object WidgetRefreshScheduler {
     /**
      * Re-arms the periodic refresh on app start, but only if a widget is actually placed — so a user
      * with no widgets never schedules background work. (Unlike [ensureScheduled], which is called
-     * from `onUpdate` where a widget is known to exist.) This covers the case where the persisted
-     * periodic work was lost — e.g. the OS dropped it, or an app-data clear wiped WorkManager's db —
-     * since with `updatePeriodMillis=0` there's no platform alarm to fall back on.
+     * from `onUpdate` where a widget is known to exist.) This restores the hourly job promptly if it
+     * was ever lost — e.g. the OS dropped it, or an app-data clear wiped WorkManager's db — rather
+     * than waiting for the next coarse `updatePeriodMillis` tick (~6 h), which would otherwise be the
+     * only thing left to re-arm it (an `onUpdate` also calls [ensureScheduled]).
      */
     fun ensureScheduledIfWidgetsPlaced(context: Context) {
         if (hasPlacedWidgets(context)) ensureScheduled(context)
