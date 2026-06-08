@@ -2,7 +2,6 @@ package com.quasarapps.pulsar
 
 import java.time.Clock
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -91,12 +90,22 @@ object ElapsedTime {
      * Whether a milestone reads as a "new beginning": exactly 0 elapsed [days] **and** its start is
      * not in the future. The future guard matters because a later-today time clamps the day count to
      * 0 (see [sincePickedDhm]) yet isn't a genuine new beginning. [days] is passed in (rather than
-     * recomputed) so callers reuse their live, ticking day count; [now] is injectable for tests.
+     * recomputed) so callers reuse their live, ticking day count; [clock]/[zoneId] are injectable for
+     * tests.
+     *
+     * The future check resolves the start with the same [ZonedDateTime] instant model [sincePickedDhm]
+     * uses, so a DST-gap local time (e.g. 02:30 on a spring-forward day) can't be treated as future by
+     * the day-count clamp but not-future here — which would desync the highlight from the count.
      */
     fun isNewBeginning(
         days: Long,
         date: LocalDate,
         time: LocalTime,
-        now: LocalDateTime = LocalDateTime.now(),
-    ): Boolean = days == 0L && !LocalDateTime.of(date, time).isAfter(now)
+        clock: Clock = Clock.systemDefaultZone(),
+        zoneId: ZoneId = ZoneId.systemDefault(),
+    ): Boolean {
+        val start = ZonedDateTime.of(date, time, zoneId)
+        val now = ZonedDateTime.now(clock.withZone(zoneId))
+        return days == 0L && !start.isAfter(now)
+    }
 }
