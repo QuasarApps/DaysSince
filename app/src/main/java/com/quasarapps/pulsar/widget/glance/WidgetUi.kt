@@ -7,6 +7,7 @@ import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Shader
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -50,6 +51,9 @@ private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorP
     return ColorProvider(if (transparent) accent.end else accent.onAccent)
 }
 
+/** Pixel size of the (square) rasterized gradient; small + stretched to fill keeps the payload tiny. */
+private const val GradientBitmapSizePx = 144
+
 /**
  * A diagonal (corner-to-corner) accent gradient as a small bitmap, matching the app's card/hero
  * gradient. Glance's background modifier can't take a Compose Brush, so the gradient is rasterized
@@ -57,13 +61,12 @@ private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorP
  */
 private fun accentGradientBitmap(accentIndex: Int): Bitmap {
     val accent = accentOrDefault(accentIndex)
-    val size = 144
-    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val bitmap = Bitmap.createBitmap(GradientBitmapSizePx, GradientBitmapSizePx, Bitmap.Config.ARGB_8888)
     Canvas(bitmap).drawPaint(
         Paint().apply {
             isDither = true
             shader = LinearGradient(
-                0f, 0f, size.toFloat(), size.toFloat(),
+                0f, 0f, GradientBitmapSizePx.toFloat(), GradientBitmapSizePx.toFloat(),
                 accent.start.toArgb(), accent.end.toArgb(),
                 Shader.TileMode.CLAMP,
             )
@@ -82,6 +85,10 @@ private fun WidgetScaffold(
     GlanceTheme {
         val context = LocalContext.current
         val fg = foregroundColor(milestone, transparent)
+        // Cache the rasterized gradient per accent so a periodic refresh (a day-count change that
+        // leaves the accent unchanged) reuses the bitmap instead of redrawing it each recomposition.
+        val accentIndex = milestone?.accent ?: 0
+        val background = remember(accentIndex) { accentGradientBitmap(accentIndex) }
         val launch = Intent(context, MainActivity::class.java).apply {
             if (milestone != null) putExtra(MainActivity.EXTRA_MILESTONE_ID, milestone.id)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -97,10 +104,7 @@ private fun WidgetScaffold(
             baseModifier.padding(4.dp)
         } else {
             baseModifier
-                .background(
-                    ImageProvider(accentGradientBitmap(milestone?.accent ?: 0)),
-                    contentScale = ContentScale.FillBounds,
-                )
+                .background(ImageProvider(background), contentScale = ContentScale.FillBounds)
                 .cornerRadius(20.dp)
                 .padding(8.dp)
         }
