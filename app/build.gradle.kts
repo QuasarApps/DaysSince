@@ -163,6 +163,22 @@ kotlin {
     }
 }
 
+kover {
+    reports {
+        verify {
+            // A regression *floor*, not a quality target. Kover measures the JVM unit/Robolectric
+            // suite only — the instrumented (androidTest) suite isn't counted — so the bound is set
+            // well below the current ~71% line coverage. That way legitimately adding code that's
+            // exercised only by instrumented tests can't trip the gate, while a catastrophic drop
+            // (deleting a swathe of tests, adding a large untested module) still fails CI.
+            // Enforced via `:app:koverVerify` in the debug CI job.
+            rule {
+                minBound(60)
+            }
+        }
+    }
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
