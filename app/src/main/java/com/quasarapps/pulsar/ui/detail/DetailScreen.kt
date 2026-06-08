@@ -106,11 +106,16 @@ fun DetailScreen(
                 )
             },
     ) {
-        // Soft scrim so white text stays legible across all accents (incl. the light Solar).
+        // Legibility scrim so white text/icons meet WCAG AA over every accent. The lightest accent
+        // (Solar #FFC36B) is the worst case: bare white on it is only ~1.6:1. The radial hero blooms
+        // brightest in the upper-left — exactly where the top bar icons and title sit — so the scrim
+        // is heaviest where it's needed least visible. ~0.30 top → ~0.50 bottom lifts white-on-Solar
+        // to ~3.2:1 at the top (AA-Large for the title/icons) and ~5.7:1 lower down (AA for body
+        // text); the darker accents clear AA comfortably at these levels.
         Box(
             Modifier
                 .matchParentSize()
-                .background(Brush.verticalGradient(listOf(Color(0x33000000), Color(0x66000000)))),
+                .background(Brush.verticalGradient(listOf(Color(0x4D000000), Color(0x80000000)))),
         )
 
         Column(

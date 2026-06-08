@@ -74,10 +74,21 @@ class HomeScreenInstrumentedTest {
     fun populatedList_rendersTitlesAndFab() {
         setContent(milestones = listOf(milestone("a", "Sober"), milestone("b", "Gym streak")))
 
-        composeRule.onNodeWithText("Sober").assertIsDisplayed()
-        composeRule.onNodeWithText("Gym streak").assertIsDisplayed()
+        // Each card now merges its number/kicker/title into one labeled node, so the title Text is
+        // only in the unmerged tree.
+        composeRule.onNodeWithText("Sober", useUnmergedTree = true).assertIsDisplayed()
+        composeRule.onNodeWithText("Gym streak", useUnmergedTree = true).assertIsDisplayed()
         // The FAB merges its children for TalkBack, so its "Mark" label is only in the unmerged tree.
         composeRule.onNodeWithText("Mark", useUnmergedTree = true).assertIsDisplayed()
+    }
+
+    @Test
+    fun card_mergesIntoLabeledNode_forTalkBack() {
+        setContent(milestones = listOf(milestone("a", "Sober")))
+
+        // The number / kicker / title merge into one node whose contentDescription leads with the
+        // title, so TalkBack announces a single labeled "Sober, N days" button per card.
+        composeRule.onNodeWithContentDescription("Sober", substring = true).assertIsDisplayed()
     }
 
     @Test
@@ -95,7 +106,8 @@ class HomeScreenInstrumentedTest {
             onOpen = { opened = it },
         )
 
-        composeRule.onNodeWithText("Sober").performClick()
+        // The merged card node carries the contentDescription ("Sober, N days"); click it by that.
+        composeRule.onNodeWithContentDescription("Sober", substring = true).performClick()
 
         assertEquals("abc", opened)
     }
