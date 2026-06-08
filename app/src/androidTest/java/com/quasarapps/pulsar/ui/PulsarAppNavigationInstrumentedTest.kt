@@ -55,12 +55,20 @@ class PulsarAppNavigationInstrumentedTest {
         runBlocking { repo.snapshot().forEach { repo.delete(it.id) } }
     }
 
+    /** Wait out the launch splash overlay (its tagline is unique to it) so it stops intercepting taps. */
+    private fun awaitSplashGone() {
+        composeRule.waitUntil(timeoutMillis = 10_000) {
+            composeRule.onAllNodesWithText("Count the time").fetchSemanticsNodes().isEmpty()
+        }
+    }
+
     @Test
     fun addMilestone_fromEmptyState_persistsAndShowsCardOnHome() {
         // Real device: let the clock run. The nav fade transitions and the async DataStore write +
         // recomposition all need real frames to progress; freezing the clock stalls them (and the
         // delay-based minute-tick loop is idle between ticks, so it never blocks waitForIdle).
         composeRule.setContent { PulsarApp() }
+        awaitSplashGone()
 
         // 1. Empty state.
         composeRule.onNodeWithText("No milestones yet").assertIsDisplayed()
@@ -87,6 +95,7 @@ class PulsarAppNavigationInstrumentedTest {
     @Test
     fun settingsGear_opensSettingsThenBackReturnsHome() {
         composeRule.setContent { PulsarApp() }
+        awaitSplashGone()
 
         // The gear lives in the home top bar (present in the empty state too).
         composeRule.onNodeWithContentDescription("Settings").performClick()

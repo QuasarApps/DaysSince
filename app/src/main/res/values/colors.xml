@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash window background: the dark cosmic brand surface (matches the launcher icon and the
+         in-app splash), shown before Compose draws. Kept in sync with PulsarDarkColors.background. -->
+    <color name="splash_background">#0D0712</color>
+</resources>

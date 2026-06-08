@@ -74,4 +74,7 @@
     <string name="settings_about_header">מידע</string>
     <string name="settings_version_label">גרסה</string>
     <string name="settings_made_by">פותח על ידי Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">ספור את הזמן</string>
 </resources>
