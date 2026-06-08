@@ -78,4 +78,9 @@
     <string name="splash_tagline">ספור את הזמן</string>
 
     <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">גיבוי ופרטיות</string>
+    <string name="settings_backup_title">גיבוי האירועים</string>
+    <string name="settings_backup_subtitle">כלול את האירועים שלך בגיבוי Google של המכשיר הזה כדי שישוחזרו בטלפון חדש.</string>
+    <string name="settings_privacy_note">Pulsar שומר הכול במכשיר שלך — בלי חשבונות, בלי שרתים ובלי מעקב. כשהגיבוי מופעל, האירועים שלך נכללים בגיבוי Google של המכשיר.</string>
 </resources>

@@ -101,6 +101,13 @@
     <string name="settings_version_label">Version</string>
     <string name="settings_made_by">Made by Quasar Apps</string>
 
+    <!-- Backup & privacy section -->
+    <string name="settings_backup_header">Backup &amp; privacy</string>
+    <string name="settings_backup_title">Back up milestones</string>
+    <string name="settings_backup_subtitle">Include your milestones in this device\'s Google backup so they restore on a new phone.</string>
+    <!-- Short privacy disclosure shown under the backup toggle. -->
+    <string name="settings_privacy_note">Pulsar stores everything on your device — no accounts, no servers, and nothing is tracked. With backup on, your milestones are included in your device\'s Google backup.</string>
+
     <!-- Splash screen tagline, shown under the Pulsar wordmark. -->
     <string name="splash_tagline">Count the time</string>
 </resources>

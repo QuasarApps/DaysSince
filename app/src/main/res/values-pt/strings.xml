@@ -78,4 +78,9 @@
     <string name="splash_tagline">Conte o tempo</string>
 
     <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Backup e privacidade</string>
+    <string name="settings_backup_title">Fazer backup dos marcos</string>
+    <string name="settings_backup_subtitle">Inclua seus marcos no backup do Google deste dispositivo para que sejam restaurados em um novo telefone.</string>
+    <string name="settings_privacy_note">O Pulsar armazena tudo no seu dispositivo — sem contas, sem servidores e sem rastreamento. Com o backup ativado, seus marcos são incluídos no backup do Google do seu dispositivo.</string>
 </resources>

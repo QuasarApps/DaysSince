@@ -82,4 +82,9 @@
 
     <!-- a11y card label "<title>، <status>" — uses the Arabic comma. -->
     <string name="card_a11y_content_description">%1$s، %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">النسخ الاحتياطي والخصوصية</string>
+    <string name="settings_backup_title">النسخ الاحتياطي للأحداث</string>
+    <string name="settings_backup_subtitle">ضمِّن أحداثك في النسخة الاحتياطية من Google على هذا الجهاز ليتم استعادتها على هاتف جديد.</string>
+    <string name="settings_privacy_note">يخزّن نباض كل شيء على جهازك — بدون حسابات أو خوادم أو تتبع. عند تفعيل النسخ الاحتياطي، تُضمَّن أحداثك في النسخة الاحتياطية من Google على جهازك.</string>
 </resources>

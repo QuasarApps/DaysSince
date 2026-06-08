@@ -33,4 +33,8 @@ class SettingsViewModel internal constructor(
     fun setShowUnits(show: Boolean) {
         viewModelScope.launch { repo.setShowUnits(show) }
     }
+
+    fun setBackupEnabled(enabled: Boolean) {
+        viewModelScope.launch { repo.setBackupEnabled(enabled) }
+    }
 }

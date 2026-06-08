@@ -46,7 +46,8 @@ import com.quasarapps.pulsar.data.Settings
 import com.quasarapps.pulsar.data.ThemeMode
 
 /**
- * App settings: theme mode, the detail-screen units toggle, and an About section.
+ * App settings: theme mode, the detail-screen units toggle, a Backup &amp; privacy section (backup
+ * toggle + privacy note), and an About section.
  *
  * Stateless — the current [settings] and the edit callbacks are hoisted to the caller (which holds
  * the [SettingsViewModel]), keeping this screen easy to preview and test.
@@ -57,6 +58,7 @@ fun SettingsScreen(
     settings: Settings,
     onSetThemeMode: (ThemeMode) -> Unit,
     onToggleUnits: (Boolean) -> Unit,
+    onSetBackup: (Boolean) -> Unit = {},
     onBack: () -> Unit,
 ) {
     Scaffold(
@@ -119,13 +121,33 @@ fun SettingsScreen(
             // ---- Display ----
             SectionHeader(stringResource(R.string.settings_display_header))
             SettingsCard {
-                UnitsToggleRow(
+                SwitchSettingRow(
                     title = stringResource(R.string.settings_show_units_title),
                     subtitle = stringResource(R.string.settings_show_units_subtitle),
                     checked = settings.showUnits,
                     onCheckedChange = onToggleUnits,
                 )
             }
+
+            Spacer(Modifier.height(20.dp))
+
+            // ---- Backup & privacy ----
+            SectionHeader(stringResource(R.string.settings_backup_header))
+            SettingsCard {
+                SwitchSettingRow(
+                    title = stringResource(R.string.settings_backup_title),
+                    subtitle = stringResource(R.string.settings_backup_subtitle),
+                    checked = settings.backupEnabled,
+                    onCheckedChange = onSetBackup,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.settings_privacy_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
 
             Spacer(Modifier.height(20.dp))
 
@@ -186,7 +208,7 @@ private fun ThemeOptionRow(label: String, selected: Boolean, onSelect: () -> Uni
 }
 
 @Composable
-private fun UnitsToggleRow(
+private fun SwitchSettingRow(
     title: String,
     subtitle: String,
     checked: Boolean,

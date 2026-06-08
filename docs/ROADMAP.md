@@ -115,16 +115,28 @@ Currently `compileSdk = 35` / `targetSdk = 35` (Android 15). When Android 16 (SD
 
 ## Phase 5 — UX features & privacy (product backlog)
 
-Net-new product value. Larger, spec-worthy items — schedule per product priority.
+Net-new product value, re-planned into sequenced PRs (value/effort ordered). Drag-reorder and the
+speculative refactors are explicitly parked (bottom).
 
-| # | Item | Effort | Risk |
-|---|------|--------|------|
-| 36 | Undo (snackbar) for delete | M | 🟢 |
-| 39 | Lifecycle-aware pause of the per-second detail ticker | S | 🟡 |
-| 38 | Empty widget-config deep-links straight to "add milestone" | M | 🟢 |
-| 37 | Sort / reorder options on Home | L | 🟡 |
-| 34 | Option to exclude milestone titles from cloud backup | M | 🟡 |
-| 35 | Privacy note in About / docs | S | 🟢 |
+| PR | Items | Theme | Status |
+|----|-------|-------|--------|
+| 1 | #34 (backup **toggle**, not exclude-only) + #35 (privacy note) + flaky-test fix | Privacy & backup control | ✅ this PR |
+| 2 | #36 undo delete | Data-loss safety net | pending |
+| 3 | flaky-test fix¹ + #39 ticker lifecycle + #15 large-font verification | Quality & efficiency | pending |
+| 4 | #37 (sort modes) + #17 (grid / `animateItem`) | Home ordering | pending |
+| 5 | #27 accent/new-beginning snapshot tests (Roborazzi) | Visual regression net | optional |
+
+¹ flaky-test hardening folded into PR 1 (CI stability for the rest of the run).
+
+**#34 decision:** implemented as a **"Back up milestones" toggle** (default on) via a custom
+`MilestoneBackupAgent` that gates Auto Backup on the setting — not a title-only exclusion, and not
+app-level encryption (key-management would break restore; Android already encrypts Auto Backup with
+the lockscreen key). #35 discloses this in-app.
+
+### Parked — revisit on a real trigger, not pre-emptively
+- **#17 drag-reorder** *(the L half of #37)* — needs a persisted order field + drag gesture; sort modes (PR 4) cover most of the need. *(Note: the grid/`animateItem` half of #17 is being pulled into PR 4.)*
+- **#20 / #21** repo DI / `ViewModelProvider.Factory` — DataStore is already a process singleton; lateral churn.
+- **#23** type-safe Compose navigation — low ROI for a 5-route graph.
 
 ---
 

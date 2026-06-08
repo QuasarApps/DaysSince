@@ -27,6 +27,12 @@ data class Settings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     /** Whether the detail screen shows the live hours/minutes/seconds breakdown under the day count. */
     val showUnits: Boolean = true,
+    /**
+     * Whether milestone data may be included in the device's cloud/transfer backup. Default true
+     * (preserves restore-on-new-device). When false, [com.quasarapps.pulsar.backup.MilestoneBackupAgent]
+     * skips the backup so milestone data — including titles — stays only on this device.
+     */
+    val backupEnabled: Boolean = true,
 )
 
 // A store dedicated to settings, separate from the milestones store, so the two evolve independently.
@@ -51,6 +57,7 @@ class SettingsRepository internal constructor(
         Settings(
             themeMode = ThemeMode.fromStorage(prefs[KEY_THEME_MODE]),
             showUnits = prefs[KEY_SHOW_UNITS] ?: true,
+            backupEnabled = prefs[KEY_BACKUP_ENABLED] ?: true,
         )
     }.distinctUntilChanged()
 
@@ -64,8 +71,13 @@ class SettingsRepository internal constructor(
         dataStore.edit { it[KEY_SHOW_UNITS] = show }
     }
 
+    suspend fun setBackupEnabled(enabled: Boolean) {
+        dataStore.edit { it[KEY_BACKUP_ENABLED] = enabled }
+    }
+
     companion object {
         private val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
         private val KEY_SHOW_UNITS = booleanPreferencesKey("show_units")
+        private val KEY_BACKUP_ENABLED = booleanPreferencesKey("backup_enabled")
     }
 }
