@@ -199,6 +199,8 @@ dependencies {
     // Navigation + lifecycle (multi-counter screens)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // LocalLifecycleOwner + repeatOnLifecycle, to pause the foreground tickers off-screen.
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // Persistence (milestones + widget bindings)
     implementation(libs.androidx.datastore.preferences)
