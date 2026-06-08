@@ -121,12 +121,14 @@ fun PulsarApp(initialMilestoneId: String? = null) {
                         EditMilestoneScreen(
                             existing = existing,
                             onSave = { title, date, time, accent ->
+                                // Only update — never create — from the edit route. If `existing` is
+                                // null here the milestone is gone (deleted, or a stale/invalid id), so
+                                // just dismiss rather than silently spawning a new one. (New milestones
+                                // come exclusively from the ADD route.)
                                 if (existing != null) {
                                     vm.updateMilestone(
                                         existing.copy(title = title, date = date, time = time, accent = accent),
                                     )
-                                } else {
-                                    vm.addMilestone(title, date, time, accent)
                                 }
                                 navController.popBackStack()
                             },

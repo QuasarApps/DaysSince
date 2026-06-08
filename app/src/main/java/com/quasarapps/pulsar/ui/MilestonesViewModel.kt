@@ -3,6 +3,7 @@ package com.quasarapps.pulsar.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.data.MilestonesRepository
 import com.quasarapps.pulsar.widget.MilestoneWidgets
@@ -24,12 +25,20 @@ class MilestonesViewModel internal constructor(
     val milestones: StateFlow<List<Milestone>> = repo.milestones
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
+    /**
+     * Localized fallback title for a milestone the user left blank. Resolved from resources (not a
+     * hardcoded literal) so a blank title persists the user's-language default — e.g. "Meilenstein"
+     * on a German device — matching what the edit screen's preview already shows.
+     */
+    private val defaultTitle: String
+        get() = getApplication<Application>().getString(R.string.milestone_default_title)
+
     fun addMilestone(title: String, date: LocalDate, time: LocalTime, accent: Int) {
         viewModelScope.launch {
             repo.upsert(
                 Milestone(
                     id = Milestone.newId(),
-                    title = title.trim().ifBlank { "Milestone" },
+                    title = title.trim().ifBlank { defaultTitle },
                     date = date,
                     time = time,
                     accent = accent,
@@ -41,7 +50,7 @@ class MilestonesViewModel internal constructor(
 
     fun updateMilestone(milestone: Milestone) {
         viewModelScope.launch {
-            repo.upsert(milestone.copy(title = milestone.title.trim().ifBlank { "Milestone" }))
+            repo.upsert(milestone.copy(title = milestone.title.trim().ifBlank { defaultTitle }))
             refreshWidgets()
         }
     }

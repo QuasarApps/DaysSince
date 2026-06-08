@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.Operation
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.quasarapps.pulsar.widget.glance.DaysHoursMinutesWidgetReceiver
 import com.quasarapps.pulsar.widget.glance.DaysWidgetReceiver
 import java.util.concurrent.TimeUnit
@@ -75,6 +76,22 @@ object WidgetRefreshScheduler {
             ExistingWorkPolicy.REPLACE,
             request,
         )
+    }
+
+    /**
+     * Removes the saved bindings for [appWidgetIds] after their widgets are deleted, so the
+     * bindings map can't grow without bound as widgets are added and removed over time.
+     *
+     * Runs the (suspend) DataStore write inside [WidgetRefreshWorker] rather than synchronously in
+     * the receiver's `onDeleted`: the receiver runs on the broadcast thread and its superclass
+     * already claims the single `goAsync()` slot, so this is the safe place to do durable async work.
+     * Enqueued non-uniquely so concurrent deletions each carry (and remove) their own ids.
+     */
+    fun unbindWidgets(context: Context, appWidgetIds: IntArray): Operation {
+        val request = OneTimeWorkRequestBuilder<WidgetRefreshWorker>()
+            .setInputData(workDataOf(WidgetRefreshWorker.KEY_UNBIND_IDS to appWidgetIds))
+            .build()
+        return WorkManager.getInstance(context).enqueue(request)
     }
 
     /** Cancels the periodic refresh once no widgets of either type remain placed. */
