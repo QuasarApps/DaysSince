@@ -75,7 +75,7 @@ class EditMilestoneScreenTest {
     fun newMilestone_previewShowsNewBeginning() {
         setContent(existing = null)
         // A new milestone defaults to "now" (0 days), so the preview shows the new-beginning kicker.
-        composeRule.onNodeWithText("A NEW BEGINNING").assertExists()
+        composeRule.onNodeWithText("A NEW BEGINNING").assertIsDisplayed()
     }
 
     @Test
@@ -83,7 +83,7 @@ class EditMilestoneScreenTest {
         setContent(
             existing = Milestone("a", "Sober", sampleDate, sampleTime, accent = 2, createdAt = 1L),
         )
-        composeRule.onNodeWithText("DAYS SINCE").assertExists()
+        composeRule.onNodeWithText("DAYS SINCE").assertIsDisplayed()
     }
 
     @Test

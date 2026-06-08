@@ -52,6 +52,7 @@ import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
 import com.quasarapps.pulsar.ui.theme.QuasarBrush
 import com.quasarapps.pulsar.ui.theme.accentBrush
 import com.quasarapps.pulsar.ui.theme.accentOrDefault
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,7 +135,8 @@ private fun MilestoneCard(
     modifier: Modifier = Modifier,
 ) {
     val dhm = rememberElapsedDhm(milestone.date, milestone.time)
-    val isNew = dhm.days == 0L
+    // 0 days AND not in the future (a later time today clamps to 0 but isn't a "new beginning").
+    val isNew = dhm.days == 0L && !LocalDateTime.of(milestone.date, milestone.time).isAfter(LocalDateTime.now())
     val accent = accentOrDefault(milestone.accent)
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)

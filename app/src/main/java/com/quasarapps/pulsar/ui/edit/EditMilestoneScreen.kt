@@ -5,7 +5,7 @@ package com.quasarapps.pulsar.ui.edit
 import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,6 +58,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -73,6 +76,7 @@ import com.quasarapps.pulsar.ui.theme.accentOrDefault
 import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -247,7 +251,9 @@ fun EditMilestoneScreen(
 @Composable
 private fun PreviewStrip(title: String, date: LocalDate, time: LocalTime, accent: Int) {
     val dhm = rememberElapsedDhm(date, time)
-    val isNew = dhm.days == 0L
+    // 0 days AND not in the future: sincePickedDhm clamps a future pick (e.g. a later time today)
+    // to 0 days, but that isn't a "new beginning" — only a genuinely current/past one is.
+    val isNew = dhm.days == 0L && !LocalDateTime.of(date, time).isAfter(LocalDateTime.now())
     val onColor = if (isNew) Color.White else accentOrDefault(accent).onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(accent)
     Box(
@@ -342,6 +348,7 @@ private fun AccentPicker(selected: Int, onSelect: (Int) -> Unit) {
     ) {
         MilestoneAccents.forEachIndexed { index, accent ->
             val isSelected = index == selected
+            val label = stringResource(accent.labelRes)
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -352,15 +359,14 @@ private fun AccentPicker(selected: Int, onSelect: (Int) -> Unit) {
                         color = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Transparent,
                         shape = CircleShape,
                     )
-                    .clickable { onSelect(index) },
+                    // Label every swatch (not just the selected one) so TalkBack announces each as a
+                    // named, selectable radio option rather than an unlabeled clickable.
+                    .selectable(selected = isSelected, role = Role.RadioButton, onClick = { onSelect(index) })
+                    .semantics { contentDescription = label },
                 contentAlignment = Alignment.Center,
             ) {
                 if (isSelected) {
-                    Icon(
-                        Icons.Filled.Check,
-                        contentDescription = stringResource(accent.labelRes),
-                        tint = accent.onAccent,
-                    )
+                    Icon(Icons.Filled.Check, contentDescription = null, tint = accent.onAccent)
                 }
             }
         }
