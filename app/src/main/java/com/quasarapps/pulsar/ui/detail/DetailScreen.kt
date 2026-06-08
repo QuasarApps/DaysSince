@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -33,6 +35,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -44,17 +48,20 @@ import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
 import com.quasarapps.pulsar.ui.components.CountUpNumber
-import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
-import com.quasarapps.pulsar.ui.theme.accentBrush
+import com.quasarapps.pulsar.ui.components.rememberElapsedDhms
+import com.quasarapps.pulsar.ui.theme.accentStops
 import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+
+private val SpaceEdge = Color(0xFF060309)
 
 @Composable
 fun DetailScreen(
     milestone: Milestone?,
     onBack: () -> Unit,
     onEdit: () -> Unit,
+    onReset: () -> Unit,
     onDelete: () -> Unit,
 ) {
     if (milestone == null) {
@@ -62,9 +69,10 @@ fun DetailScreen(
         return
     }
 
-    val dhm = rememberElapsedDhm(milestone.date, milestone.time)
-    val brush = accentBrush(milestone.accent)
+    val dhms = rememberElapsedDhms(milestone.date, milestone.time)
+    val (accentStart, accentEnd) = accentStops(milestone.accent)
     var menuOpen by remember { mutableStateOf(false) }
+    var confirmReset by remember { mutableStateOf(false) }
     var confirmDelete by remember { mutableStateOf(false) }
 
     val locale = LocalConfiguration.current.locales[0]
@@ -78,14 +86,22 @@ fun DetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(brush),
+            // Radial accent hero blooming from the upper-left out to the cosmic edge.
+            .drawBehind {
+                drawRect(
+                    Brush.radialGradient(
+                        colorStops = arrayOf(0f to accentStart, 0.7f to accentEnd, 1f to SpaceEdge),
+                        center = Offset(size.width * 0.3f, size.height * 0.2f),
+                        radius = size.maxDimension * 1.15f,
+                    ),
+                )
+            },
     ) {
+        // Soft scrim so white text stays legible across all accents (incl. the light Solar).
         Box(
             Modifier
                 .matchParentSize()
-                .background(
-                    Brush.verticalGradient(listOf(Color(0x33000000), Color(0x66000000))),
-                ),
+                .background(Brush.verticalGradient(listOf(Color(0x33000000), Color(0x66000000)))),
         )
 
         Column(
@@ -122,6 +138,11 @@ fun DetailScreen(
                             leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null) },
                         )
                         DropdownMenuItem(
+                            text = { Text(stringResource(R.string.detail_action_reset)) },
+                            onClick = { menuOpen = false; confirmReset = true },
+                            leadingIcon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+                        )
+                        DropdownMenuItem(
                             text = { Text(stringResource(R.string.action_delete)) },
                             onClick = { menuOpen = false; confirmDelete = true },
                             leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null) },
@@ -130,7 +151,7 @@ fun DetailScreen(
                 }
             }
 
-            // Milestone name, pinned to the top of the screen.
+            // Milestone name, pinned near the top.
             Spacer(Modifier.height(12.dp))
             Text(
                 text = milestone.title,
@@ -148,10 +169,10 @@ fun DetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 CountUpNumber(
-                    target = dhm.days,
+                    target = dhms.days,
                     style = MaterialTheme.typography.displayLarge.copy(
-                        fontSize = 112.sp,
-                        lineHeight = 112.sp,
+                        fontSize = 100.sp,
+                        lineHeight = 100.sp,
                         fontWeight = FontWeight.Bold,
                     ),
                     color = Color.White,
@@ -160,21 +181,21 @@ fun DetailScreen(
                 Text(
                     text = stringResource(R.string.detail_days_label),
                     style = MaterialTheme.typography.titleMedium,
+                    letterSpacing = 3.sp,
                     color = Color.White.copy(alpha = 0.9f),
                 )
                 Spacer(Modifier.height(28.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-                    GlassStat(value = dhm.hours, label = stringResource(R.string.detail_hours_label))
-                    GlassStat(value = dhm.minutes, label = stringResource(R.string.detail_minutes_label))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    GlassStat(value = dhms.hours, label = stringResource(R.string.detail_hours_label))
+                    GlassStat(value = dhms.minutes, label = stringResource(R.string.detail_minutes_label))
+                    GlassStat(value = dhms.seconds, label = stringResource(R.string.detail_seconds_label))
                 }
-                // "since <date> at <time>" sits just under the hours/minutes, as part of the hero.
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = stringResource(
-                        R.string.detail_since_date_at_time,
-                        dateText,
-                        timeText,
-                    ),
+                    text = stringResource(R.string.detail_since_date_at_time, dateText, timeText),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.White.copy(alpha = 0.85f),
                     textAlign = TextAlign.Center,
@@ -184,18 +205,32 @@ fun DetailScreen(
             Spacer(Modifier.weight(1f))
 
             // Footer
-            Column(
+            Text(
+                text = stringResource(R.string.detail_widget_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.7f),
+                textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(R.string.detail_widget_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.7f),
-                    textAlign = TextAlign.Center,
-                )
-            }
+            )
         }
+    }
+
+    if (confirmReset) {
+        AlertDialog(
+            onDismissRequest = { confirmReset = false },
+            title = { Text(stringResource(R.string.detail_reset_dialog_title)) },
+            text = { Text(stringResource(R.string.detail_reset_dialog_message)) },
+            confirmButton = {
+                TextButton(onClick = { confirmReset = false; onReset() }) {
+                    Text(stringResource(R.string.action_reset))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmReset = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            },
+        )
     }
 
     if (confirmDelete) {
@@ -220,13 +255,14 @@ fun DetailScreen(
 }
 
 @Composable
-private fun GlassStat(value: Long, label: String) {
+private fun RowScope.GlassStat(value: Long, label: String) {
     Column(
         modifier = Modifier
+            .weight(1f)
             .clip(MaterialTheme.shapes.medium)
             .background(Color.White.copy(alpha = 0.16f))
             .border(1.dp, Color.White.copy(alpha = 0.22f), MaterialTheme.shapes.medium)
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -238,6 +274,7 @@ private fun GlassStat(value: Long, label: String) {
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
+            letterSpacing = 1.5.sp,
             color = Color.White.copy(alpha = 0.85f),
         )
     }

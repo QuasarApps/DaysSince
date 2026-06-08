@@ -15,6 +15,7 @@
     <string name="action_ok">OK</string>
     <string name="action_edit">Edytuj</string>
     <string name="action_delete">Usuń</string>
+    <string name="action_reset">Resetuj</string>
 
     <string name="home_title">Pulsar</string>
     <string name="home_fab_mark">Oznacz</string>
@@ -27,9 +28,13 @@
 
     <string name="detail_back_content_description">Wstecz</string>
     <string name="detail_more_options_content_description">Więcej opcji</string>
+    <string name="detail_action_reset">Zresetuj do teraz</string>
+    <string name="detail_reset_dialog_title">Zresetować do teraz?</string>
+    <string name="detail_reset_dialog_message">Licznik zacznie się od teraz.</string>
     <string name="detail_days_label">DNI</string>
     <string name="detail_hours_label">GODZINY</string>
     <string name="detail_minutes_label">MINUTY</string>
+    <string name="detail_seconds_label">SEKUNDY</string>
     <string name="detail_since_date_at_time">od %1$s o %2$s</string>
     <string name="detail_widget_hint">Dodaj widżet do ekranu głównego, aby mieć to na widoku.</string>
     <string name="detail_delete_dialog_title">Usunąć wydarzenie?</string>

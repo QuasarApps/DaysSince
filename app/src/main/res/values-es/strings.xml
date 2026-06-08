@@ -15,6 +15,7 @@
     <string name="action_ok">Aceptar</string>
     <string name="action_edit">Editar</string>
     <string name="action_delete">Eliminar</string>
+    <string name="action_reset">Restablecer</string>
 
     <string name="home_title">Púlsar</string>
     <string name="home_fab_mark">Marcar</string>
@@ -27,9 +28,13 @@
 
     <string name="detail_back_content_description">Atrás</string>
     <string name="detail_more_options_content_description">Más opciones</string>
+    <string name="detail_action_reset">Restablecer a ahora</string>
+    <string name="detail_reset_dialog_title">¿Restablecer a ahora?</string>
+    <string name="detail_reset_dialog_message">Esto reinicia la cuenta desde ahora.</string>
     <string name="detail_days_label">DÍAS</string>
     <string name="detail_hours_label">HORAS</string>
     <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_seconds_label">SEGUNDOS</string>
     <string name="detail_since_date_at_time">desde el %1$s a las %2$s</string>
     <string name="detail_widget_hint">Añade un widget desde tu pantalla de inicio para tenerlo siempre a la vista.</string>
     <string name="detail_delete_dialog_title">¿Eliminar hito?</string>

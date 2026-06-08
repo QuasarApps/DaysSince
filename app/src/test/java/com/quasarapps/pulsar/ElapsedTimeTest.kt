@@ -61,6 +61,31 @@ class ElapsedTimeTest {
     }
 
     @Test
+    fun sincePickedDhms_breaksDownToSeconds() {
+        val pickedDate = LocalDate.of(2026, 1, 6)
+        val pickedTime = LocalTime.of(10, 0, 0)
+
+        // 1 day, 2 hours, 3 minutes, 4 seconds later.
+        val now = Instant.parse("2026-01-07T12:03:04Z")
+        val clock = Clock.fixed(now, utc)
+
+        val dhms = ElapsedTime.sincePickedDhms(pickedDate, pickedTime, clock = clock, zoneId = utc)
+        assertEquals(ElapsedTime.ElapsedDhm(days = 1, hours = 2, minutes = 3, seconds = 4), dhms)
+    }
+
+    @Test
+    fun sincePickedDhms_futureClampsToZero() {
+        val pickedDate = LocalDate.of(2026, 1, 8)
+        val pickedTime = LocalTime.of(0, 0)
+
+        val now = Instant.parse("2026-01-07T00:00:00Z")
+        val clock = Clock.fixed(now, utc)
+
+        val dhms = ElapsedTime.sincePickedDhms(pickedDate, pickedTime, clock = clock, zoneId = utc)
+        assertEquals(ElapsedTime.ElapsedDhm(days = 0, hours = 0, minutes = 0, seconds = 0), dhms)
+    }
+
+    @Test
     fun sincePicked_future_returns0() {
         val pickedDate = LocalDate.of(2026, 1, 8)
         val pickedTime = LocalTime.of(0, 0)

@@ -31,6 +31,24 @@ fun rememberElapsedDhm(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDhm
     return remember(date, time, nowTick) { ElapsedTime.sincePickedDhm(date, time) }
 }
 
+/**
+ * Elapsed days/hours/minutes/seconds since [date]/[time], recomputed every second (aligned to the
+ * second boundary). For the live detail screen only — it's foreground-bound, so the per-second
+ * cadence is fine; the loop is delay-based so it stays idle between ticks (waitForIdle settles).
+ */
+@Composable
+fun rememberElapsedDhms(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDhm {
+    var nowTick by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            val now = System.currentTimeMillis()
+            delay((1_000L - (now % 1_000L)).coerceIn(1L, 1_000L))
+            nowTick = System.currentTimeMillis()
+        }
+    }
+    return remember(date, time, nowTick) { ElapsedTime.sincePickedDhms(date, time) }
+}
+
 /** True when the user has disabled animations system-wide (Settings > Accessibility / Developer). */
 @Composable
 fun rememberReduceMotion(): Boolean {

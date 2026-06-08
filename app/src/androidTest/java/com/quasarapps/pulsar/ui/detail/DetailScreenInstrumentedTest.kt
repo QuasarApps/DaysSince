@@ -41,14 +41,21 @@ class DetailScreenInstrumentedTest {
         milestone: Milestone? = sample,
         onBack: () -> Unit = {},
         onEdit: () -> Unit = {},
+        onReset: () -> Unit = {},
         onDelete: () -> Unit = {},
     ) {
-        // We don't freeze the clock (real-device tests): CountUpNumber's animation is finite and
-        // rememberElapsedDhm's loop is delay-based, so waitForIdle settles. Assertions avoid the
-        // animated day count and target static labels/titles instead.
+        // We don't freeze the clock (real-device tests): CountUpNumber's animation is finite and the
+        // elapsed loop is delay-based, so waitForIdle settles. Assertions avoid the animated day
+        // count and target static labels/titles instead.
         composeRule.setContent {
             PulsarTheme {
-                DetailScreen(milestone = milestone, onBack = onBack, onEdit = onEdit, onDelete = onDelete)
+                DetailScreen(
+                    milestone = milestone,
+                    onBack = onBack,
+                    onEdit = onEdit,
+                    onReset = onReset,
+                    onDelete = onDelete,
+                )
             }
         }
     }
@@ -96,6 +103,24 @@ class DetailScreenInstrumentedTest {
         composeRule.onNodeWithText("Edit").performClick()
 
         assertTrue(edited)
+    }
+
+    @Test
+    fun resetFlow_requiresConfirmation_thenInvokesOnReset() {
+        var reset = false
+        setContent(onReset = { reset = true })
+
+        composeRule.onNodeWithContentDescription("More options").performClick()
+        composeRule.onNodeWithText("Reset to now").performClick()
+
+        // The confirmation dialog appears; reset only fires after confirming.
+        composeRule.onNodeWithText("Reset to now?").assertIsDisplayed()
+        assertTrue(!reset)
+
+        // The confirm button ("Reset") is distinct from the menu item ("Reset to now"), so there's
+        // no coexistence ambiguity while the menu animates out.
+        composeRule.onNodeWithText("Reset").performClick()
+        assertTrue(reset)
     }
 
     @Test

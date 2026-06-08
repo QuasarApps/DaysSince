@@ -46,15 +46,22 @@ class DetailScreenTest {
         milestone: Milestone? = sample,
         onBack: () -> Unit = {},
         onEdit: () -> Unit = {},
+        onReset: () -> Unit = {},
         onDelete: () -> Unit = {},
     ) {
-        // CountUpNumber animates and rememberElapsedDhm loops forever; freeze the virtual clock so
-        // the test settles under Robolectric. Transitions are then driven explicitly via
+        // CountUpNumber animates and the elapsed loop runs forever; freeze the virtual clock so the
+        // test settles under Robolectric. Transitions are then driven explicitly via
         // settleTransitions() where a popup needs to finish animating.
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
             PulsarTheme {
-                DetailScreen(milestone = milestone, onBack = onBack, onEdit = onEdit, onDelete = onDelete)
+                DetailScreen(
+                    milestone = milestone,
+                    onBack = onBack,
+                    onEdit = onEdit,
+                    onReset = onReset,
+                    onDelete = onDelete,
+                )
             }
         }
     }
@@ -110,6 +117,22 @@ class DetailScreenTest {
         composeRule.onNodeWithText("Edit").performClick()
 
         assertTrue(edited)
+    }
+
+    @Test
+    fun resetIsGatedBehindAConfirmationDialog() {
+        var reset = false
+        setContent(onReset = { reset = true })
+
+        composeRule.onNodeWithContentDescription("More options").performClick()
+        settleTransitions()
+        composeRule.onNodeWithText("Reset to now").performClick()
+        settleTransitions()
+
+        // Choosing "Reset to now" opens a confirmation dialog and must NOT reset yet — the safety
+        // gate. (The full confirm -> onReset path is exercised in DetailScreenInstrumentedTest.)
+        composeRule.onNodeWithText("Reset to now?").assertIsDisplayed()
+        assertTrue("reset must not fire until the user confirms", !reset)
     }
 
     @Test
