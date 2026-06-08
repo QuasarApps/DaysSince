@@ -91,15 +91,25 @@ keeps all instrumented nav tests green.
 
 Keep the project healthy and current. Mostly infra; can run in parallel with Phases 2–3.
 
-| # | Item | Effort | Risk |
-|---|------|--------|------|
-| 31 | Kover coverage threshold gate in CI | S | 🟢 |
-| 32 | Renovate/Dependabot + version-catalog update automation | S | 🟢 |
-| 30 | Dependency bump pass (Compose BOM, navigation, etc.) | M | 🟡 |
-| 29 | Resolve the `MonochromeLauncherIcon` TODO (needs vector icon source) | M | 🟡 |
-| 33 | Plan the compileSdk/targetSdk 36 migration | M | 🟡 |
+| # | Item | Effort | Risk | Status |
+|---|------|--------|------|--------|
+| 31 | Kover coverage threshold gate in CI | S | 🟢 | ✅ done |
+| 32 | Renovate/Dependabot + version-catalog update automation | S | 🟢 | ✅ done (Dependabot) |
+| 30 | Dependency bump pass (Compose BOM, navigation, etc.) | M | 🟡 | → via Dependabot PRs (#32) |
+| 29 | Resolve the `MonochromeLauncherIcon` TODO (needs vector icon source) | M | 🟡 | ⛔ blocked on the vector icon asset |
+| 33 | Plan the compileSdk/targetSdk 36 migration | M | 🟡 | ✅ plan below |
 
 **Acceptance:** CI enforces a coverage floor; a bot opens dependency-update PRs; build green on bumped versions.
+
+### #33 — compileSdk / targetSdk 36 migration plan
+
+Currently `compileSdk = 35` / `targetSdk = 35` (Android 15). When Android 16 (SDK 36) tooling is stable, migrate as a dedicated PR:
+
+1. **Tooling:** install the SDK 36 platform; confirm the AGP version in use supports `compileSdk = 36` (bump AGP first if needed — let Dependabot surface it).
+2. **Bump `compileSdk = 36`** first, keeping `targetSdk = 35`. Build + run lint: `compileSdk`-only changes surface new deprecations / lint checks without opting into behavior changes. Fix any new errors.
+3. **Bump `targetSdk = 36`** and review the Android 16 behavior changes that apply to this app: predictive-back, edge-to-edge enforcement (already edge-to-edge — verify insets), foreground-service / scheduling changes (we use WorkManager + an `updatePeriodMillis` alarm — verify the widget refresh still behaves), and any notification changes (none used today).
+4. **Test:** full unit + instrumented suite on an API 36 managed device (add a `pixel*api36` GMD alongside the API 30 one, or bump it) and a manual device pass on the widget + deep-link + edit flows.
+5. **Update** the `OldTargetApi` lint note in `app/lint.xml` and this roadmap once shipped.
 
 ---
 

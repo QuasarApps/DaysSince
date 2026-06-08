@@ -1,0 +1,32 @@
+version: 2
+
+# Automated dependency-update PRs. Gradle updates cover the version catalog
+# (gradle/libs.versions.toml) and build scripts; github-actions covers the
+# action versions pinned in .github/workflows/. PRs target `develop` (the
+# integration branch where CI + review happen), matching the normal flow.
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    target-branch: develop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Roll all minor/patch bumps into a single weekly PR to keep the noise down;
+      # major bumps still open individually so they get a deliberate review.
+      gradle-minor-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    target-branch: develop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        update-types:
+          - minor
+          - patch
