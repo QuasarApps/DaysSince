@@ -157,7 +157,9 @@ private fun SortAction(current: SortOrder, onSelect: (SortOrder) -> Unit) {
             SortOrder.entries.forEach { order ->
                 DropdownMenuItem(
                     text = { Text(sortOrderLabel(order)) },
-                    onClick = { open = false; onSelect(order) },
+                    // Re-selecting the active order is a no-op: skip it so we don't write the same
+                    // value back to DataStore.
+                    onClick = { open = false; if (order != current) onSelect(order) },
                     // A trailing check marks the active order without shifting the other labels.
                     trailingIcon = {
                         if (order == current) Icon(Icons.Filled.Check, contentDescription = null)
