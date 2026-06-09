@@ -47,11 +47,3 @@ val NewBeginningBrush: Brush = Brush.radialGradient(
         1.0f to Color(0xFF3A0E6E),
     ),
 )
-
-/**
- * A soft top-down legibility scrim. Layered over the accent gradient behind white text so contrast
- * holds up on lighter accents (e.g. Solar).
- */
-val LegibilityScrim: Brush = Brush.verticalGradient(
-    colors = listOf(Color(0x00000000), Color(0x40000000)),
-)

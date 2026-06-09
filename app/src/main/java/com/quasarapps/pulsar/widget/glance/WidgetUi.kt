@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.createBitmap
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
@@ -62,7 +63,7 @@ private const val GradientBitmapSizePx = 144
  */
 private fun accentGradientBitmap(accentIndex: Int): Bitmap {
     val accent = accentOrDefault(accentIndex)
-    val bitmap = Bitmap.createBitmap(GradientBitmapSizePx, GradientBitmapSizePx, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(GradientBitmapSizePx, GradientBitmapSizePx)
     Canvas(bitmap).drawPaint(
         Paint().apply {
             isDither = true
