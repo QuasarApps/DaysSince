@@ -34,7 +34,7 @@ class MilestoneTest {
         val before = System.currentTimeMillis()
         val milestone = Milestone(
             id = "a",
-            title = "Sober",
+            title = "Birthday",
             date = LocalDate.of(2025, 1, 1),
             time = LocalTime.of(9, 0),
         )

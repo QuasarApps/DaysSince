@@ -20,7 +20,7 @@ class MilestoneJsonInstrumentedTest {
     @Test
     fun encodeThenDecode_roundTripsAllFields() {
         val original = listOf(
-            Milestone("a", "Sober", LocalDate.of(2025, 6, 15), LocalTime.of(9, 30), accent = 3, createdAt = 100L),
+            Milestone("a", "Birthday", LocalDate.of(2025, 6, 15), LocalTime.of(9, 30), accent = 3, createdAt = 100L),
             Milestone("b", "Gym", LocalDate.of(2024, 1, 1), LocalTime.of(0, 0), accent = 0, createdAt = 200L),
         )
 

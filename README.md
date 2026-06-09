@@ -1,7 +1,7 @@
 # Pulsar
 
 A small Android app for tracking the days, hours, and minutes since the
-milestones that matter to you — sober time, last gym session, an anniversary,
+milestones that matter to you — your last night out, the last time you went to the gym, an anniversary,
 whatever. Each milestone gets a bold gradient card in the app and an optional
 home-screen widget.
 
@@ -99,7 +99,7 @@ They share:
 - A `previewLayout` so the widget picker shows a real-looking preview
   instead of a grey square on Android 12+.
 - A `contentDescription` so TalkBack reads e.g.
-  *"365 days since Sober, 1st of January 2026"*.
+  *"365 days since Last night out, 1st of January 2026"*.
 - A tap target that opens `MainActivity` deep-linked to the bound
   milestone's detail screen.
 

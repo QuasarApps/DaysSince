@@ -79,11 +79,11 @@ class HomeScreenInstrumentedTest {
 
     @Test
     fun populatedList_rendersTitlesAndFab() {
-        setContent(milestones = listOf(milestone("a", "Sober"), milestone("b", "Gym streak")))
+        setContent(milestones = listOf(milestone("a", "Birthday"), milestone("b", "Gym streak")))
 
         // Each card now merges its number/kicker/title into one labeled node, so the title Text is
         // only in the unmerged tree.
-        composeRule.onNodeWithText("Sober", useUnmergedTree = true).assertIsDisplayed()
+        composeRule.onNodeWithText("Birthday", useUnmergedTree = true).assertIsDisplayed()
         composeRule.onNodeWithText("Gym streak", useUnmergedTree = true).assertIsDisplayed()
         // The FAB merges its children for TalkBack, so its "Mark" label is only in the unmerged tree.
         composeRule.onNodeWithText("Mark", useUnmergedTree = true).assertIsDisplayed()
@@ -91,11 +91,11 @@ class HomeScreenInstrumentedTest {
 
     @Test
     fun card_mergesIntoLabeledNode_forTalkBack() {
-        setContent(milestones = listOf(milestone("a", "Sober")))
+        setContent(milestones = listOf(milestone("a", "Birthday")))
 
         // The number / kicker / title merge into one node whose contentDescription leads with the
-        // title, so TalkBack announces a single labeled "Sober, N days" button per card.
-        composeRule.onNodeWithContentDescription("Sober", substring = true).assertIsDisplayed()
+        // title, so TalkBack announces a single labeled "Birthday, N days" button per card.
+        composeRule.onNodeWithContentDescription("Birthday", substring = true).assertIsDisplayed()
     }
 
     @Test
@@ -120,7 +120,7 @@ class HomeScreenInstrumentedTest {
 
     @Test
     fun fab_hasAccessibilityLabel_forTalkBack() {
-        setContent(milestones = listOf(milestone("a", "Sober")))
+        setContent(milestones = listOf(milestone("a", "Birthday")))
 
         composeRule.onNodeWithContentDescription("Add milestone").assertIsDisplayed()
     }
@@ -129,12 +129,12 @@ class HomeScreenInstrumentedTest {
     fun tappingCard_invokesOnOpenWithThatMilestoneId() {
         var opened: String? = null
         setContent(
-            milestones = listOf(milestone("abc", "Sober")),
+            milestones = listOf(milestone("abc", "Birthday")),
             onOpen = { opened = it },
         )
 
-        // The merged card node carries the contentDescription ("Sober, N days"); click it by that.
-        composeRule.onNodeWithContentDescription("Sober", substring = true).performClick()
+        // The merged card node carries the contentDescription ("Birthday, N days"); click it by that.
+        composeRule.onNodeWithContentDescription("Birthday", substring = true).performClick()
 
         assertEquals("abc", opened)
     }
@@ -142,7 +142,7 @@ class HomeScreenInstrumentedTest {
     @Test
     fun sortControl_selectingAnOption_invokesCallback() {
         var picked: SortOrder? = null
-        setContent(milestones = listOf(milestone("a", "Sober")), onSetSortOrder = { picked = it })
+        setContent(milestones = listOf(milestone("a", "Birthday")), onSetSortOrder = { picked = it })
 
         composeRule.onNodeWithContentDescription("Sort").performClick()
         composeRule.onNodeWithText("Alphabetical").performClick()
@@ -153,7 +153,7 @@ class HomeScreenInstrumentedTest {
     @Test
     fun tappingFab_invokesOnAdd() {
         var added = false
-        setContent(milestones = listOf(milestone("a", "Sober")), onAdd = { added = true })
+        setContent(milestones = listOf(milestone("a", "Birthday")), onAdd = { added = true })
 
         composeRule.onNodeWithContentDescription("Add milestone").performClick()
 

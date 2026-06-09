@@ -29,7 +29,7 @@ class DetailScreenInstrumentedTest {
 
     private val sample = Milestone(
         id = "a",
-        title = "Sober",
+        title = "Birthday",
         date = LocalDate.of(2025, 6, 15),
         time = LocalTime.of(9, 30),
         accent = 2,
@@ -81,7 +81,7 @@ class DetailScreenInstrumentedTest {
         // The title and since-line live in the bottom footer, which can clip below the fold in
         // landscape. This test is about the content being rendered/wired correctly, not its
         // viewport position, so assert existence rather than display.
-        composeRule.onNodeWithText("Sober").assertExists()
+        composeRule.onNodeWithText("Birthday").assertExists()
         composeRule.onNodeWithText("since June 15, 2025", substring = true).assertExists()
     }
 

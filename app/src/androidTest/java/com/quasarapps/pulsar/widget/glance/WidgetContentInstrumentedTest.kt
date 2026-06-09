@@ -47,7 +47,7 @@ class WidgetContentInstrumentedTest {
 
     private val milestone = Milestone(
         id = "a",
-        title = "Sober",
+        title = "Birthday",
         date = LocalDate.of(2020, 1, 1),
         time = LocalTime.of(0, 0),
         accent = 1,
@@ -86,7 +86,7 @@ class WidgetContentInstrumentedTest {
         val expectedDescription = context.getString(
             R.string.widget_days_content_description,
             daysFragment,
-            "Sober",
+            "Birthday",
             dateText,
         )
         onNode(hasContentDescriptionEqualTo(expectedDescription)).assertExists()
@@ -116,7 +116,7 @@ class WidgetContentInstrumentedTest {
         val res = context.resources
         val expectedDescription = context.getString(
             R.string.widget_dhm_content_description,
-            "Sober",
+            "Birthday",
             res.getQuantityString(R.plurals.widget_a11y_days, expected.days.toInt(), expected.days),
             res.getQuantityString(R.plurals.widget_a11y_hours, expected.hours.toInt(), expected.hours),
             res.getQuantityString(

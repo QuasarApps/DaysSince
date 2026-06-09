@@ -19,7 +19,7 @@ This policy explains that in full, as required for the Google Play listing.
 
 Pulsar stores only the milestones you create. Each milestone consists of:
 
-- a title you type (e.g. "Quit smoking"),
+- a title you type (e.g. "Last night out"),
 - a date and time you pick,
 - a colour accent, and
 - the moment the milestone was created.

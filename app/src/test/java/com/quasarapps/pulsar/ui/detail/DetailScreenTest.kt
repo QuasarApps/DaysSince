@@ -36,7 +36,7 @@ class DetailScreenTest {
 
     private val sample = Milestone(
         id = "a",
-        title = "Sober",
+        title = "Birthday",
         date = LocalDate.of(2025, 6, 15),
         time = LocalTime.of(9, 30),
         accent = 2,
@@ -95,7 +95,7 @@ class DetailScreenTest {
     fun rendersTitleAndSinceLine() {
         setContent()
 
-        composeRule.onNodeWithText("Sober").assertIsDisplayed()
+        composeRule.onNodeWithText("Birthday").assertIsDisplayed()
         composeRule.onNodeWithText("DAYS").assertIsDisplayed()
         composeRule.onNodeWithText("since June 15, 2025", substring = true).assertIsDisplayed()
     }

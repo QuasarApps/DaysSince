@@ -74,11 +74,11 @@ class MilestonesRepositoryTest {
 
     @Test
     fun upsert_insertsNewMilestone() = runTest(dispatcher) {
-        repo.upsert(milestone("a", title = "Sober"))
+        repo.upsert(milestone("a", title = "Birthday"))
 
         val all = repo.snapshot()
         assertEquals(1, all.size)
-        assertEquals("Sober", all.single().title)
+        assertEquals("Birthday", all.single().title)
     }
 
     @Test
