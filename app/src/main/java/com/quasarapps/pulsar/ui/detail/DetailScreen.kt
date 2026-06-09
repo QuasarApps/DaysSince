@@ -71,9 +71,8 @@ fun DetailScreen(
         return
     }
 
-    // Only the H/M/S row needs per-second updates. When units are hidden, the day count is all that
-    // shows and it only needs per-minute resolution — so use the cheaper minute ticker and leave the
-    // per-second effect uncreated. Toggling showUnits just cancels one effect and starts the other.
+    // Only the H/M/S row needs per-second updates; when units are hidden the day count needs only
+    // per-minute resolution, so use the cheaper minute ticker.
     val dhms = if (showUnits) {
         rememberElapsedDhms(milestone.date, milestone.time)
     } else {
@@ -105,12 +104,10 @@ fun DetailScreen(
                 )
             },
     ) {
-        // Legibility scrim so white text/icons meet WCAG AA over every accent. The lightest accent
-        // (Solar #FFC36B) is the worst case: bare white on it is only ~1.6:1. The radial hero blooms
-        // brightest in the upper-left — exactly where the top bar icons and title sit — so the scrim
-        // is heaviest where it's needed least visible. ~0.30 top → ~0.50 bottom lifts white-on-Solar
-        // to ~3.2:1 at the top (AA-Large for the title/icons) and ~5.7:1 lower down (AA for body
-        // text); the darker accents clear AA comfortably at these levels.
+        // Legibility scrim so white text/icons meet WCAG AA over every accent. The lightest (Solar)
+        // is worst case — bare white is only ~1.6:1. ~0.30 top → ~0.50 bottom lifts white-on-Solar to
+        // ~3.2:1 at the top (AA-Large for title/icons) and ~5.7:1 lower (AA for body); darker accents
+        // clear AA comfortably.
         Box(
             Modifier
                 .matchParentSize()
@@ -199,8 +196,7 @@ fun DetailScreen(
                     color = Color.White.copy(alpha = 0.9f),
                 )
                 Spacer(Modifier.height(28.dp))
-                // The live hours/minutes/seconds breakdown is opt-out via Settings (Show hours &
-                // minutes). The day count and the since-line below always stay.
+                // The H/M/S breakdown is opt-out via Settings; the day count and since-line always stay.
                 if (showUnits) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

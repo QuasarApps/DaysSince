@@ -6,11 +6,8 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 /**
- * JSON (de)serialization for the milestone list. Extracted from the repository so the
- * encode/decode logic can be unit-tested without DataStore.
- *
- * Decoding is defensive: malformed or partial data yields an empty list / sensible defaults
- * rather than throwing.
+ * JSON (de)serialization for the milestone list, extracted from the repository so it can be unit-
+ * tested without DataStore. Decoding is defensive: bad data yields an empty list / sensible defaults.
  */
 internal object MilestoneJson {
 
@@ -23,11 +20,9 @@ internal object MilestoneJson {
                     put("title", m.title)
                     put("date", m.date.toString())
                     put("time", m.time.toString())
-                    // Persist a stable key rather than the list index, so reordering or inserting
-                    // accents in a later release doesn't silently recolor existing milestones.
-                    // (Downgrade caveat: an older build reading this data sees a string where it
-                    // expects an int and falls back to Dynamic. App downgrades aren't supported, so
-                    // this is acceptable.)
+                    // Persist a stable key, not the list index, so reordering accents later doesn't
+                    // recolor existing milestones. (An older build reading this falls back to Dynamic;
+                    // downgrades aren't supported, so that's acceptable.)
                     put("accent", AccentKeys.keyForIndex(m.accent))
                     put("createdAt", m.createdAt)
                 }
@@ -51,8 +46,7 @@ internal object MilestoneJson {
                     title = o.optString("title"),
                     date = date,
                     time = time,
-                    // New data stores a stable string key; pre-existing data stored the raw list
-                    // index as a number. Accept both — the index path is preserved for upgrades.
+                    // New data stores a stable string key; legacy data stored the raw index. Accept both.
                     accent = when (val raw = o.opt("accent")) {
                         is Number -> raw.toInt()
                         is String -> AccentKeys.indexForKey(raw)

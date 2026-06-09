@@ -46,8 +46,8 @@ import com.quasarapps.pulsar.util.LocalizedDateFormat
 import java.time.Clock
 
 private fun foregroundColor(milestone: Milestone?, transparent: Boolean): ColorProvider {
-    // On a transparent background the accent's bright end stays legible over the wallpaper; on the
-    // solid accent background, use the accent's own on-color (white, or dark for the light Solar).
+    // Transparent: the accent's bright end stays legible over the wallpaper. Solid: the accent's
+    // own on-color (white, or dark for the light Solar).
     val accent = accentOrDefault(milestone?.accent ?: 0)
     return ColorProvider(if (transparent) accent.end else accent.onAccent)
 }
@@ -86,8 +86,8 @@ private fun WidgetScaffold(
     GlanceTheme {
         val context = LocalContext.current
         val fg = foregroundColor(milestone, transparent)
-        // Cache the rasterized gradient per accent so a periodic refresh (a day-count change that
-        // leaves the accent unchanged) reuses the bitmap instead of redrawing it each recomposition.
+        // Cache the rasterized gradient per accent, so a refresh that leaves the accent unchanged
+        // reuses the bitmap instead of redrawing it.
         val accentIndex = milestone?.accent ?: 0
         val background = remember(accentIndex) { accentGradientBitmap(accentIndex) }
         val launch = Intent(context, MainActivity::class.java).apply {
@@ -120,8 +120,7 @@ private fun WidgetScaffold(
 internal fun DaysWidgetContent(
     milestone: Milestone?,
     transparent: Boolean = false,
-    // Injectable clock so the rendered count is deterministic under test; production uses the
-    // device's wall clock.
+    // Injectable clock for deterministic tests; production uses the device clock.
     clock: Clock = Clock.systemDefaultZone(),
 ) {
     val context = LocalContext.current
@@ -159,8 +158,7 @@ internal fun DaysWidgetContent(
 internal fun DaysHoursMinutesWidgetContent(
     milestone: Milestone?,
     transparent: Boolean = false,
-    // Injectable clock so the rendered breakdown is deterministic under test; production uses the
-    // device's wall clock.
+    // Injectable clock for deterministic tests; production uses the device clock.
     clock: Clock = Clock.systemDefaultZone(),
 ) {
     val context = LocalContext.current
@@ -180,8 +178,8 @@ internal fun DaysHoursMinutesWidgetContent(
         res.getQuantityString(R.plurals.widget_a11y_minutes, dhm.minutes.toInt(), dhm.minutes),
     )
     val daysText = cappedDays(dhm.days, context)
-    // Size all three stats off the (widest) days value so they shrink together and the row keeps
-    // fitting the 2x1 footprint as the day count grows — Glance has no text auto-size.
+    // Size all three stats off the widest (days) value so they shrink together and keep fitting
+    // the 2x1 footprint — Glance has no text auto-size.
     val statFontSize = dhmStatFontSize(daysText)
     WidgetScaffold(milestone, transparent, description) { fg ->
         // Three stats in a row, sized to fit a 2x1 footprint (narrower than the old 3x1 strip).

@@ -15,31 +15,24 @@ import com.quasarapps.pulsar.widget.WidgetRefreshScheduler
 
 class MainActivity : ComponentActivity() {
 
-    // The most recent deep-link target delivered by a launch intent, held as Compose state so the
-    // content re-navigates when a new one arrives. Because the activity is `singleTop`, a widget tap
-    // while the app is already running comes in via onNewIntent (not a fresh onCreate), so updating
-    // this is what carries the user to the tapped milestone without tearing down their in-app state.
+    // Most recent widget-tap deep link, as Compose state so the content re-navigates on each new one.
+    // The activity is singleTop, so a tap while running arrives via onNewIntent, not a fresh onCreate.
     private var deepLink by mutableStateOf<DeepLinkTarget?>(null)
 
-    // Monotonic per-delivery token so successive taps are distinct values — even of the *same*
-    // milestone — and therefore re-trigger navigation rather than being coalesced as "no change".
+    // Per-delivery token so successive taps of the *same* milestone are distinct values and re-navigate.
     private var deliveryCount = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Show the system splash (brand background + launcher mark) during cold start, then hand off
-        // to the app theme. The richer wordmark + tagline moment is the in-app Compose splash.
+        // System splash during cold start; the richer wordmark/tagline moment is the in-app Compose splash.
         installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        // Only consume the launch intent on a genuine fresh start. On a configuration-change
-        // recreation (e.g. rotation) the NavController restores the back stack itself, so
-        // re-delivering here would wrongly snap back to the milestone's detail.
+        // Only consume the launch intent on a genuine fresh start — on a config-change recreation the
+        // NavController restores the back stack itself, so re-delivering would snap back to the detail.
         if (savedInstanceState == null) deliverDeepLink(intent)
 
-        // Re-arm the periodic widget refresh if any widget is placed (no-op otherwise). This restores
-        // the hourly job promptly if it was ever lost, rather than waiting for the next coarse
-        // updatePeriodMillis tick (~6 h) to re-arm it via onUpdate.
+        // Re-arm the periodic widget refresh if any widget is placed (no-op otherwise), in case it was lost.
         WidgetRefreshScheduler.ensureScheduledIfWidgetsPlaced(this)
 
         setContent {
@@ -49,8 +42,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        // Keep getIntent() current (so a later recreation re-reads the right intent) and route the
-        // newly-tapped milestone to the running composition.
+        // Keep getIntent() current for a later recreation, and route the tapped milestone to the composition.
         setIntent(intent)
         deliverDeepLink(intent)
     }

@@ -12,20 +12,14 @@ import com.quasarapps.pulsar.R
 
 /*
  * Pulsar uses two brand faces:
+ * - Chakra Petch — geometric, tabular figures; the "readout" voice for counters/display/labels.
+ * - Hanken Grotesk — humanist grotesque; titles, body, buttons.
  *
- * - Chakra Petch — semi-techno, geometric, tabular figures. The "spacecraft readout" voice; used
- *   for counters, display/headline text, and the small tracked uppercase labels.
- * - Hanken Grotesk — warm humanist grotesque; used for titles, body, and buttons.
- *
- * Each family is declared as a downloadable Google Font (preferred — shared across apps, kept fresh)
- * paired with a bundled fallback for every weight it uses, so the brand face still renders when the
- * font provider is unavailable: offline, on first launch before the download completes, or on a
- * device without Google Play services. Compose resolves the bundled (blocking) font immediately and
- * the downloadable one upgrades it in if/when it loads — so there's no fallback-to-system flash.
- *
- * Chakra Petch is bundled as static per-weight files; Hanken Grotesk is bundled once as its variable
- * font, with each weight selected via the `wght` variation axis. Both faces are OFL; their license
- * texts are packaged into the app under assets/licenses/.
+ * Each is a downloadable Google Font paired with a bundled fallback for every weight, so the brand
+ * face still renders offline / before the download / without Play services (Compose shows the bundled
+ * font immediately and upgrades to the downloadable one with no flash). Chakra Petch is bundled as
+ * static per-weight files; Hanken Grotesk once as its variable font (weight via the `wght` axis).
+ * Both are OFL; license texts are under assets/licenses/.
  */
 private val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -60,10 +54,7 @@ val BodyFontFamily = FontFamily(
     hankenFallback(FontWeight.ExtraBold),
 )
 
-/**
- * One weight of the bundled Hanken Grotesk *variable* font: the `wght` axis is pinned to [weight] so
- * a single file covers every weight the type scale uses.
- */
+/** One weight of the bundled Hanken Grotesk variable font: `wght` pinned to [weight]. */
 @OptIn(ExperimentalTextApi::class)
 private fun hankenFallback(weight: FontWeight) = BundledFont(
     resId = R.font.hanken_grotesk,
@@ -74,12 +65,9 @@ private fun hankenFallback(weight: FontWeight) = BundledFont(
 private val baseline = Typography()
 
 /**
- * M3 type scale re-skinned in the Pulsar voice (sizes kept; families/weights swapped):
- * - display & headline → Chakra Petch (the cosmic readout)
- * - title, body, label → Hanken Grotesk (titles extra-bold, labels/buttons bold)
- *
- * The small tracked-uppercase "kicker" captions (e.g. "DAYS SINCE", unit labels) are styled at the
- * call site with [DisplayFontFamily] + letter spacing, since M3 has no dedicated role for them.
+ * M3 type scale re-skinned in the Pulsar voice (sizes kept; families/weights swapped): display &
+ * headline → Chakra Petch; title/body/label → Hanken Grotesk. The tracked-uppercase "kicker" captions
+ * (e.g. "DAYS SINCE") are styled at the call site with [DisplayFontFamily], since M3 has no role for them.
  */
 val PulsarTypography = Typography(
     displayLarge = baseline.displayLarge.copy(fontFamily = DisplayFontFamily, fontWeight = FontWeight.Bold),

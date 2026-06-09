@@ -7,12 +7,9 @@ import androidx.compose.ui.graphics.Color
 import com.quasarapps.pulsar.R
 
 /*
- * The Pulsar brand palette — a fixed identity (no Material You / wallpaper adaptation). The app
- * ships exactly these dark and light schemes on every device; light/dark follows the system unless
- * the user overrides it in Settings.
- *
- * Dark is the canonical brand surface (cosmic purple-black, never neutral grey); light is the
- * daytime counterpart. Values come from the Pulsar design system ("Quasar Spectrum").
+ * The Pulsar brand palette — a fixed identity (no Material You). The app ships these dark and light
+ * schemes on every device; light/dark follows the system unless overridden in Settings. Dark is the
+ * canonical brand surface (cosmic purple-black). Values come from the Pulsar design system.
  */
 
 val PulsarDarkColors = darkColorScheme(
@@ -92,16 +89,13 @@ val PulsarLightColors = lightColorScheme(
 )
 
 /**
- * Per-milestone accent. Drives the card / hero gradient and the widget background.
+ * Per-milestone accent. Drives the card/hero gradient and the widget background.
  *
- * @param key a stable identifier persisted with a milestone. Unlike the list position (which
- *   silently remaps a milestone's color if the palette is ever reordered) and [labelRes] (whose
- *   resolved text is user-facing and localized), [key] never changes once shipped. The order here
- *   must stay in sync with `data.AccentKeys`; `AccentTest` enforces that.
- * @param labelRes a string resource for the human-readable, localized accent name. Used as the
- *   accessibility label in the accent picker; resolve with `stringResource`/`getString`.
- * @param onAccent a legible foreground for text/icons drawn on the accent (white for most; dark
- *   on the light Solar gradient).
+ * @param key stable identifier persisted with a milestone (never changes once shipped, unlike the
+ *   list position or localized [labelRes]). Order must stay in sync with `data.AccentKeys` (enforced
+ *   by `AccentTest`).
+ * @param labelRes localized accent name, used as the accent picker's accessibility label.
+ * @param onAccent legible foreground for text/icons on the accent (white for most; dark on Solar).
  */
 data class Accent(
     val key: String,

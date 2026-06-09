@@ -18,25 +18,16 @@ import java.util.concurrent.TimeUnit
 /**
  * Schedules the periodic [WidgetRefreshWorker] while at least one widget is placed.
  *
- * "Days since" is the headline unit and changes at most once a day; the Days·Hours·Minutes widget's
- * hours/minutes are a nice-to-have. So this favours battery over freshness — an hourly refresh that
- * is skipped while the battery is low, rather than WorkManager's 15-minute floor or the battery cost
- * of per-minute exact alarms. That still brings the DHM widget from ~6 h stale down to ~1 h, at a
- * fraction of the wake-ups, and comfortably catches the once-a-day rollover that actually matters.
- *
- * This battery-aware WorkManager job is the *primary* periodic refresh: it's armed from each
- * provider's `onUpdate`, re-armed on app start via [ensureScheduledIfWidgetsPlaced], and persisted
- * across reboots by WorkManager. The widgets also keep a coarse (6 h) `updatePeriodMillis` platform
- * alarm as a backstop — far sparser than this hourly job (so it no longer competes the way the old
- * 30-min cadence did), but, unlike WorkManager, it still fires while the app is dormant, which keeps
- * the *day count* from sitting on the wrong day across a midnight when the app goes unopened.
+ * Favours battery over freshness: an hourly refresh skipped on low battery, rather than WorkManager's
+ * 15-minute floor or per-minute alarms. That brings the DHM widget from ~6 h stale to ~1 h and catches
+ * the once-a-day rollover that matters. This is the *primary* periodic refresh (armed from each
+ * provider's `onUpdate`, re-armed on app start via [ensureScheduledIfWidgetsPlaced], persisted across
+ * reboots). The widgets also keep a coarse 6 h `updatePeriodMillis` alarm as a backstop that, unlike
+ * WorkManager, still fires while the app is dormant — keeping the day count off the wrong day.
  */
 object WidgetRefreshScheduler {
 
-    /**
-     * Tunable refresh cadence. Hourly (not WorkManager's 15-minute minimum) because the day count is
-     * the headline unit and battery matters more than to-the-minute hour/minute freshness.
-     */
+    /** Refresh cadence — hourly (battery matters more than to-the-minute freshness). */
     const val REFRESH_INTERVAL_MINUTES = 60L
 
     private val widgetProviders = listOf(
@@ -45,13 +36,11 @@ object WidgetRefreshScheduler {
     )
 
     /**
-     * Ensures the periodic refresh is running. Idempotent ([ExistingPeriodicWorkPolicy.KEEP]) so it
-     * can be called from every `onUpdate` without resetting the schedule. Returns the enqueue
-     * [Operation] (callers can ignore it; tests await it for determinism).
+     * Ensures the periodic refresh is running. Idempotent ([ExistingPeriodicWorkPolicy.KEEP]), so safe
+     * to call from every `onUpdate`. Returns the enqueue [Operation] (tests await it for determinism).
      */
     fun ensureScheduled(context: Context): Operation {
-        // Don't wake the device to redraw a widget when power is scarce; a slightly stale count is
-        // an acceptable trade. The widget catches up on the next run once the battery isn't low.
+        // Don't wake the device on low battery; a slightly stale count is an acceptable trade.
         val constraints = Constraints.Builder()
             .setRequiresBatteryNotLow(true)
             .build()
@@ -66,12 +55,9 @@ object WidgetRefreshScheduler {
     }
 
     /**
-     * Re-arms the periodic refresh on app start, but only if a widget is actually placed — so a user
-     * with no widgets never schedules background work. (Unlike [ensureScheduled], which is called
-     * from `onUpdate` where a widget is known to exist.) This restores the hourly job promptly if it
-     * was ever lost — e.g. the OS dropped it, or an app-data clear wiped WorkManager's db — rather
-     * than waiting for the next coarse `updatePeriodMillis` tick (~6 h), which would otherwise be the
-     * only thing left to re-arm it (an `onUpdate` also calls [ensureScheduled]).
+     * Re-arms the periodic refresh on app start, but only if a widget is placed (so a user with none
+     * never schedules background work). Restores the hourly job promptly if it was ever lost — e.g.
+     * the OS dropped it or an app-data clear wiped WorkManager's db.
      */
     fun ensureScheduledIfWidgetsPlaced(context: Context) {
         if (hasPlacedWidgets(context)) ensureScheduled(context)
@@ -81,14 +67,10 @@ object WidgetRefreshScheduler {
     const val IMMEDIATE_WORK_NAME = "milestone_widget_refresh_now"
 
     /**
-     * Enqueues a one-off refresh after a milestone change so placed widgets re-render promptly —
-     * the single redraw path for an edit (no redundant in-process `updateAll` alongside it).
-     *
-     * Routed through WorkManager (rather than an in-process `updateAll`) so the refresh still runs if
-     * the app is backgrounded or its process is torn down right after the edit; the one-off is
-     * unconstrained, so it runs within ~a second — imperceptible while the user is still in-app.
-     * [ExistingWorkPolicy.REPLACE] collapses rapid successive edits into a single refresh of the
-     * latest data. Returns null (enqueuing nothing) when no widget is placed.
+     * Enqueues a one-off refresh after a milestone change so placed widgets re-render promptly. Routed
+     * through WorkManager so it still runs if the app is torn down right after the edit; unconstrained,
+     * so it lands within ~a second. [ExistingWorkPolicy.REPLACE] collapses rapid edits into one
+     * refresh. Returns null when no widget is placed.
      */
     fun refreshNow(context: Context): Operation? {
         if (!hasPlacedWidgets(context)) return null
@@ -101,13 +83,10 @@ object WidgetRefreshScheduler {
     }
 
     /**
-     * Removes the saved bindings for [appWidgetIds] after their widgets are deleted, so the
-     * bindings map can't grow without bound as widgets are added and removed over time.
-     *
-     * Runs the (suspend) DataStore write inside [WidgetRefreshWorker] rather than synchronously in
-     * the receiver's `onDeleted`: the receiver runs on the broadcast thread and its superclass
-     * already claims the single `goAsync()` slot, so this is the safe place to do durable async work.
-     * Enqueued non-uniquely so concurrent deletions each carry (and remove) their own ids.
+     * Removes the saved bindings for deleted [appWidgetIds] so the bindings map stays bounded. Runs
+     * the suspend write inside [WidgetRefreshWorker] rather than the receiver's `onDeleted` (whose
+     * broadcast thread / single `goAsync()` slot is already claimed). Enqueued non-uniquely so
+     * concurrent deletions each carry their own ids.
      */
     fun unbindWidgets(context: Context, appWidgetIds: IntArray): Operation {
         val request = OneTimeWorkRequestBuilder<WidgetRefreshWorker>()

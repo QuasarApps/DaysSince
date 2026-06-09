@@ -82,8 +82,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-// LocalDate/LocalTime aren't Parcelable/Serializable-friendly for the saver bundle, so persist them
-// as primitives (epoch day / nano-of-day) across configuration changes.
+// LocalDate/LocalTime aren't Parcelable, so persist them as primitives (epoch day / nano-of-day).
 private val LocalDateSaver = Saver<LocalDate, Long>(
     save = { it.toEpochDay() },
     restore = { LocalDate.ofEpochDay(it) },
@@ -101,13 +100,10 @@ fun EditMilestoneScreen(
 ) {
     val context = LocalContext.current
 
-    // rememberSaveable so a configuration change (e.g. rotation) doesn't wipe what the user has
-    // entered. LocalDate/LocalTime aren't Parcelable, so they go through small Savers below.
-    //
-    // Keyed on existing?.id: in the edit route `existing` is Flow-backed and can be null on the
-    // first composition, then resolve once milestones load. Keying re-initializes the fields from
-    // the milestone when it arrives (and when switching ids) while still surviving rotation for the
-    // same milestone (the id is stable across the config change).
+    // rememberSaveable so rotation doesn't wipe entered text (LocalDate/LocalTime via the Savers above).
+    // Keyed on existing?.id: in the edit route `existing` is Flow-backed and null on first composition,
+    // so keying re-initializes the fields once it loads (and when switching ids) while still surviving
+    // rotation for the same milestone.
     var title by rememberSaveable(existing?.id) { mutableStateOf(existing?.title ?: "") }
     var date by rememberSaveable(existing?.id, stateSaver = LocalDateSaver) {
         mutableStateOf(existing?.date ?: LocalDate.now())
@@ -237,9 +233,8 @@ fun EditMilestoneScreen(
             confirmButton = {
                 TextButton(onClick = {
                     val picked = LocalTime.of(state.hour, state.minute)
-                    // If the date is today, a later-than-now time would clamp the count to 0 with no
-                    // explanation (sincePickedDhm treats a future instant as 0). Mirror the date
-                    // picker's future guard and snap back to the current minute instead.
+                    // If the date is today, a future time would clamp the count to 0 (sincePickedDhm
+                    // treats a future instant as 0), so snap back to the current minute.
                     val now = LocalTime.now()
                     time = if (date == LocalDate.now() && picked.isAfter(now)) {
                         now.withSecond(0).withNano(0)
@@ -366,8 +361,7 @@ private fun AccentPicker(selected: Int, onSelect: (Int) -> Unit) {
                         color = if (isSelected) MaterialTheme.colorScheme.onBackground else Color.Transparent,
                         shape = CircleShape,
                     )
-                    // Label every swatch (not just the selected one) so TalkBack announces each as a
-                    // named, selectable radio option rather than an unlabeled clickable.
+                    // Label every swatch so TalkBack announces each as a named, selectable radio option.
                     .selectable(selected = isSelected, role = Role.RadioButton, onClick = { onSelect(index) })
                     .semantics { contentDescription = label },
                 contentAlignment = Alignment.Center,
