@@ -15,7 +15,7 @@ FUNKCJE
 • Ekran szczegółów z gradientem na całą szerokość, płynną animacją odliczania oraz podziałem na dni / godziny / minuty / sekundy.
 • Sortuj kamienie milowe według daty dodania, liczby dni lub alfabetycznie.
 • Cofnij przypadkowe usunięcie jednym dotknięciem.
-• Zresetuj kamień milowy do „teraz", aby rozpocząć nową serię.
+• Zresetuj kamień milowy do „teraz”, aby rozpocząć nową serię.
 • Motyw jasny, ciemny lub zgodny z systemem.
 • Zliczanie dni uwzględniające zmianę czasu, więc dzień to zawsze prawdziwy dzień kalendarzowy.
 • Opcjonalna kopia zapasowa Google, dzięki której Twoje kamienie milowe przetrwają zmianę telefonu — to Ty decydujesz, czy jest włączona.

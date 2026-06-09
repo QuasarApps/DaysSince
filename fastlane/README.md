@@ -44,9 +44,10 @@ qualifiers. The mapping for the locales Pulsar ships:
 
 ## Translation status
 
-✅ **All 10 locales are translated** into their native languages
-(short_description, full_description, changelogs/default). `title.txt` is the
-brand name `Pulsar` in every locale and needs no translation.
+✅ **All 10 listing locales are in their native language.** `en-US` is the
+English source; the 9 locales below have been translated (short_description,
+full_description, changelogs/default). `title.txt` is the brand name `Pulsar`
+in every locale and needs no translation.
 
 - [x] `de-DE` — short_description, full_description, changelogs/default
 - [x] `es-ES` — short_description, full_description, changelogs/default
