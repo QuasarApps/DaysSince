@@ -120,13 +120,16 @@ speculative refactors are explicitly parked (bottom).
 
 | PR | Items | Theme | Status |
 |----|-------|-------|--------|
-| 1 | #34 (backup **toggle**, not exclude-only) + #35 (privacy note) + flaky-test fix | Privacy & backup control | ✅ this PR |
-| 2 | #36 undo delete | Data-loss safety net | pending |
-| 3 | flaky-test fix¹ + #39 ticker lifecycle + #15 large-font verification | Quality & efficiency | pending |
+| 1 | #34 (backup **toggle**, not exclude-only) + #35 (privacy note) + flaky-test fix | Privacy & backup control | ✅ done (#60) |
+| 2 | #36 undo delete | Data-loss safety net | ✅ done (#61) |
+| 3 | #39 ticker lifecycle pause | Quality & efficiency | ✅ this PR |
 | 4 | #37 (sort modes) + #17 (grid / `animateItem`) | Home ordering | pending |
 | 5 | #27 accent/new-beginning snapshot tests (Roborazzi) | Visual regression net | optional |
 
-¹ flaky-test hardening folded into PR 1 (CI stability for the rest of the run).
+¹ flaky-test hardening was folded into PR 1 (CI stability for the rest of the run).
+² #15 (large-font detail-hero check) was originally bundled with #39 but is **deferred**: the real
+fix is a non-trivial scrollable-vs-`weight`-centering rework, and whether it's even needed must be
+confirmed on-device at a large font scale — not a blind change. Stays a tracked follow-up.
 
 **#34 decision:** implemented as a **"Back up milestones" toggle** (default on) via a custom
 `MilestoneBackupAgent` that gates Auto Backup on the setting — not a title-only exclusion, and not
