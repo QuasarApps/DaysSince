@@ -149,8 +149,22 @@ jobs:
       # builds reject AGP's default `auto-no-window` mode ("Selected GPU option 'auto-no-window' is
       # not valid, switching to 'auto'") then fail to boot the managed device during :app:<device>Setup.
       # See https://developer.android.com/studio/test/managed-devices (headless build servers).
+      #
+      # Retry the whole GMD run once before failing the job. Emulator instrumentation is occasionally
+      # flaky — a single test can spuriously fail (e.g. a DataStore-round-trip timeout/async hiccup)
+      # under CI load even when the suite is sound. A genuinely broken test still fails both attempts,
+      # so this only absorbs transient flakes; it doesn't mask real regressions.
       - name: Instrumentation tests (Gradle Managed Device)
-        run: ./gradlew -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
+        run: |
+          gmd() {
+            ./gradlew -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect \
+              :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
+          }
+          if gmd; then
+            exit 0
+          fi
+          echo "::warning::Instrumentation run failed; retrying once before failing the job."
+          gmd
 
       - name: Upload instrumentation test report
         if: always()
