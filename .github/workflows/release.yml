@@ -106,12 +106,15 @@ jobs:
 
       # Reconstruct the keystore on the runner from a base64 secret. Generate the
       # secret locally with:  base64 -w0 upload-keystore.jks   (see RELEASING.md).
-      # printf '%s' (not echo) avoids appending a trailing newline to the secret.
+      # `tr -d '[:space:]'` strips any stray whitespace the secret may carry — a
+      # trailing CR/LF is easy to introduce when pasting or piping the value, and
+      # `base64 --decode` tolerates '\n' but rejects '\r' as "invalid input",
+      # which would otherwise fail the release at decode time.
       - name: Decode upload keystore
         if: github.event_name == 'push'
         env:
           PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
-        run: printf '%s' "$PULSAR_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
+        run: printf '%s' "$PULSAR_KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
 
       - name: Build signed App Bundle
         if: github.event_name == 'push'
