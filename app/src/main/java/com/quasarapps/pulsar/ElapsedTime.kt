@@ -9,10 +9,7 @@ import java.time.temporal.ChronoUnit
 
 object ElapsedTime {
 
-    /**
-     * Elapsed time, broken down. [seconds] is only populated by [sincePickedDhms] — the minute-
-     * resolution [sincePickedDhm] (used by widgets) leaves it 0.
-     */
+    /** Elapsed time, broken down. [seconds] is only set by [sincePickedDhms]; [sincePickedDhm] leaves it 0. */
     data class ElapsedDhm(
         val days: Long,
         val hours: Long,
@@ -20,11 +17,7 @@ object ElapsedTime {
         val seconds: Long = 0,
     )
 
-    /**
-     * Whole days since the user-picked date & time in the device time zone.
-     *
-     * This delegates to [sincePickedDhm] so the DHM breakdown is the single source of truth.
-     */
+    /** Whole days since the picked date/time. Delegates to [sincePickedDhm] (the single source of truth). */
     fun sincePicked(
         pickedDate: LocalDate,
         pickedTime: LocalTime,
@@ -35,12 +28,9 @@ object ElapsedTime {
     }
 
     /**
-     * Elapsed time since the picked date/time broken down into days/hours/minutes.
-     *
-     * - Clamps to 0d 0h 0m if the picked timestamp is in the future.
-     * - Uses whole minutes (seconds are ignored), for stable widget rendering.
-     * - Uses [ZonedDateTime] so DST transitions (spring-forward / fall-back) are accounted for
-     *   correctly rather than always assuming 24-hour days.
+     * Elapsed days/hours/minutes since the picked date/time. Clamps to zero if the start is in the
+     * future, uses whole minutes (stable widget rendering), and uses [ZonedDateTime] so DST
+     * transitions are handled rather than assuming 24-hour days.
      */
     fun sincePickedDhm(
         pickedDate: LocalDate,
@@ -62,9 +52,8 @@ object ElapsedTime {
     }
 
     /**
-     * Elapsed time broken down to the second, for the live detail screen. Same DST-correct,
-     * future-clamped behaviour as [sincePickedDhm] but at second resolution (so the detail's seconds
-     * tile ticks). Days/hours/minutes match [sincePickedDhm] for the same instant.
+     * Like [sincePickedDhm] but to the second, for the live detail screen (so the seconds tile ticks).
+     * Same DST-correct, future-clamped behaviour; d/h/m match [sincePickedDhm] for the same instant.
      */
     fun sincePickedDhms(
         pickedDate: LocalDate,
@@ -87,15 +76,10 @@ object ElapsedTime {
     }
 
     /**
-     * Whether a milestone reads as a "new beginning": exactly 0 elapsed [days] **and** its start is
-     * not in the future. The future guard matters because a later-today time clamps the day count to
-     * 0 (see [sincePickedDhm]) yet isn't a genuine new beginning. [days] is passed in (rather than
-     * recomputed) so callers reuse their live, ticking day count; [clock]/[zoneId] are injectable for
-     * tests.
-     *
-     * The future check resolves the start with the same [ZonedDateTime] instant model [sincePickedDhm]
-     * uses, so a DST-gap local time (e.g. 02:30 on a spring-forward day) can't be treated as future by
-     * the day-count clamp but not-future here — which would desync the highlight from the count.
+     * Whether a milestone reads as a "new beginning": 0 elapsed [days] and a start not in the future
+     * (a later-today time clamps days to 0 but isn't a genuine new beginning). [days] is passed in so
+     * callers reuse their live count; the future check uses the same [ZonedDateTime] model as
+     * [sincePickedDhm], keeping a DST-gap local time consistent with the day count.
      */
     fun isNewBeginning(
         days: Long,

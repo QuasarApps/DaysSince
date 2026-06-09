@@ -118,9 +118,8 @@ fun HomeScreen(
                     .padding(padding),
             )
         } else {
-            // Two-column grid keyed per milestone id, so a re-sort animates each card to its new
-            // slot (animateItem) instead of snapping. Cards size independently (min 150dp); we trade
-            // the old per-row height equalization for stable keys + animated reordering.
+            // Two-column grid keyed per id, so a re-sort animates each card to its new slot
+            // (animateItem) instead of snapping. Cards size independently (min 150dp).
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
@@ -157,8 +156,7 @@ private fun SortAction(current: SortOrder, onSelect: (SortOrder) -> Unit) {
             SortOrder.entries.forEach { order ->
                 DropdownMenuItem(
                     text = { Text(sortOrderLabel(order)) },
-                    // Re-selecting the active order is a no-op: skip it so we don't write the same
-                    // value back to DataStore.
+                    // Skip re-selecting the active order so we don't write the same value back.
                     onClick = { open = false; if (order != current) onSelect(order) },
                     // A trailing check marks the active order without shifting the other labels.
                     trailingIcon = {
@@ -191,10 +189,8 @@ private fun MilestoneCard(
     val onColor = if (isNew) Color.White else accent.onAccent
     val brush = if (isNew) NewBeginningBrush else accentBrush(milestone.accent)
 
-    // One merged TalkBack node per card — "<title>, <status>" + "Button" — instead of the decorative
-    // number / kicker / title being traversed as three separate, unlabeled nodes. For a 0-day card
-    // the status mirrors the visible "new beginning" kicker rather than reading "0 days", so a screen
-    // reader hears the same celebratory state a sighted user sees.
+    // One merged TalkBack node per card ("<title>, <status>", Button) instead of three separate
+    // unlabeled nodes. For a 0-day card the status mirrors the visible "new beginning" kicker.
     val statusFragment = if (isNew) {
         stringResource(R.string.card_new_beginning_label)
     } else {
@@ -262,15 +258,14 @@ private fun MarkFab(onAdd: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(9.dp),
         modifier = Modifier
-            // In landscape the system nav bar sits on the right edge; add the End inset so the FAB
-            // clears the software buttons (Scaffold only adds the BOTTOM inset here).
+            // Landscape: add the End inset so the FAB clears the right-edge nav bar (Scaffold only
+            // adds the BOTTOM inset here).
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.End))
             .shadow(16.dp, RoundedCornerShape(50), spotColor = Color(0xFFD131BC))
             .clip(RoundedCornerShape(50))
             .background(QuasarBrush)
             .clickable(role = Role.Button, onClick = onAdd)
-            // Merge into one node so TalkBack announces a single "Add milestone" button rather than
-            // the decorative star + "Mark" text separately.
+            // Merge into one node so TalkBack announces a single "Add milestone" button.
             .semantics(mergeDescendants = true) { contentDescription = fabCd }
             .padding(horizontal = 22.dp, vertical = 16.dp),
     ) {

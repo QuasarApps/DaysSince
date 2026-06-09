@@ -5,9 +5,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 /**
- * A single "days since" counter.
- *
- * [accent] indexes into `MilestoneAccents` in ui.theme; 0 means "Dynamic" (Material You).
+ * A single "days since" counter. [accent] indexes into `MilestoneAccents` in ui.theme (0 = default).
  */
 data class Milestone(
     val id: String,

@@ -6,17 +6,12 @@ import androidx.work.WorkerParameters
 import com.quasarapps.pulsar.data.MilestonesRepository
 
 /**
- * Periodic worker that re-renders every placed widget so the Days·Hours·Minutes widget's
- * hours/minutes don't sit stale between data changes.
+ * Re-renders every placed widget so the DHM widget's hours/minutes don't sit stale between data
+ * changes. Scheduling/cancellation is owned by [WidgetRefreshScheduler]; this worker just refreshes.
  *
- * Scheduling (and cancellation when no widgets remain) is owned by [WidgetRefreshScheduler]; this
- * worker just performs the refresh.
- *
- * It also doubles as the cleanup path for removed widgets: when started with [KEY_UNBIND_IDS] in its
- * input data (see [WidgetRefreshScheduler.unbindWidgets]), it instead drops those widgets' bindings.
- * Doing the (suspend) DataStore write here — rather than in the receiver's `onDeleted` — keeps it off
- * the short-lived broadcast thread and clear of the single `goAsync()` slot that
- * [com.quasarapps.pulsar.widget.glance.MilestoneGlanceWidgetReceiver]'s superclass already uses.
+ * It also doubles as the cleanup path for removed widgets: started with [KEY_UNBIND_IDS] (see
+ * [WidgetRefreshScheduler.unbindWidgets]) it drops those bindings instead. Doing the suspend write
+ * here keeps it off the receiver's broadcast thread and single `goAsync()` slot.
  */
 class WidgetRefreshWorker(
     appContext: Context,
@@ -26,9 +21,8 @@ class WidgetRefreshWorker(
     override suspend fun doWork(): Result {
         val unbindIds = inputData.getIntArray(KEY_UNBIND_IDS)
         if (unbindIds != null && unbindIds.isNotEmpty()) {
-            // Cleanup path (a widget was removed): just drop the binding(s). Removing a deleted
-            // widget's binding can't change what any *remaining* widget shows, so there's nothing to
-            // re-render — skip refreshAll() and the extra wakeups it would cost.
+            // Cleanup path (widget removed): just drop the binding(s). This can't change what any
+            // remaining widget shows, so skip refreshAll() and its wakeups.
             val repo = MilestonesRepository(applicationContext)
             unbindIds.forEach { repo.unbindWidget(it) }
             return Result.success()

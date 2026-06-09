@@ -55,16 +55,14 @@ private object Routes {
 }
 
 /**
- * A milestone-detail deep link delivered by a widget tap. [token] is a per-delivery nonce from the
- * host activity: it makes two taps of the same milestone distinct values so each re-navigates,
- * while leaving recomposition (same value) a no-op.
+ * A milestone-detail deep link from a widget tap. [token] is a per-delivery nonce so repeated taps of
+ * the same milestone are distinct values (each re-navigates), while recomposition stays a no-op.
  */
 data class DeepLinkTarget(val milestoneId: String, val token: Long)
 
 @Composable
 fun PulsarApp(deepLink: DeepLinkTarget? = null) {
-    // Settings drive the theme, so they're read above PulsarTheme. Until the first DataStore value
-    // arrives the default (follow-system) applies, then it reconciles to the stored choice.
+    // Read above PulsarTheme so the stored theme can drive it (follow-system until DataStore loads).
     val settingsVm: SettingsViewModel = viewModel()
     val settings by settingsVm.settings.collectAsState()
     val darkTheme = when (settings.themeMode) {
@@ -79,25 +77,19 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             val vm: MilestonesViewModel = viewModel()
             val milestones by vm.milestones.collectAsState()
 
-            // Splash overlay state, declared before the content so it can gate the content's a11y.
-            // Shown on a normal cold launch and skipped when opened via a widget deep-link (so the
-            // tapped milestone appears immediately). rememberSaveable keeps a rotation mid-splash from
-            // replaying it (and from re-showing after an onNewIntent, when it's already dismissed).
+            // Splash overlay state (declared before the content so it can gate the content's a11y).
+            // Skipped on a widget deep-link so the tapped milestone shows immediately; rememberSaveable
+            // stops a rotation mid-splash from replaying it.
             var splashDone by rememberSaveable { mutableStateOf(deepLink != null) }
 
-            // Deep-link from a widget tap: jump straight to that milestone's detail.
-            //
-            // Keyed on [deepLink] (a new value per delivery), so it fires for a cold-start tap and
-            // again for each later onNewIntent tap — even of the same milestone. It does NOT re-fire
-            // on recomposition or Activity recreation: the host only delivers a deep link on a fresh
-            // start or onNewIntent (never on a rotation recreate), so after a rotation [deepLink] is
-            // null here and the NavController restores its own back stack untouched. launchSingleTop
-            // avoids stacking a duplicate detail when the same milestone is tapped twice in a row.
+            // Deep-link from a widget tap: jump straight to that milestone's detail. Keyed on [deepLink]
+            // (new per delivery) so it fires for each tap — even of the same milestone — but not on
+            // recomposition/rotation (the host only delivers on a fresh start or onNewIntent).
+            // launchSingleTop avoids stacking a duplicate detail on a double tap.
             LaunchedEffect(deepLink) {
                 if (deepLink != null) {
-                    // Dismiss the splash so it can't linger over the deep-linked detail — covers a
-                    // tap arriving via onNewIntent while a launcher cold-start's splash is still up.
-                    // (On a cold-start deep link splashDone is already true, so this is a no-op.)
+                    // Dismiss the splash so it can't linger over the deep-linked detail (no-op on a
+                    // cold-start deep link, where splashDone is already true).
                     splashDone = true
                     navController.navigate(Routes.detail(deepLink.milestoneId)) {
                         launchSingleTop = true
@@ -105,10 +97,9 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
                 }
             }
 
-            // Undo-delete: the view model exposes the most recent deletion; surface it as an app-level
-            // snackbar (delete happens on Detail then pops back to Home, so the host can't live on a
-            // single screen). Tapping Undo restores the milestone + its widget bindings; a dismiss or
-            // timeout drops it.
+            // Undo-delete: surface the view model's most recent deletion as an app-level snackbar
+            // (delete pops Detail→Home, so the host can't live on one screen). Undo restores the
+            // milestone + its widget bindings; dismiss/timeout drops it.
             val context = LocalContext.current
             val snackbarHostState = remember { SnackbarHostState() }
             val pendingUndo by vm.pendingUndo.collectAsState()
@@ -126,9 +117,8 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
                 }
             }
 
-            // App content (the NavHost composes/warms underneath the splash). While the splash is up,
-            // clear the semantics of everything behind it so a screen reader stays within the modal
-            // splash instead of traversing Home during the launch moment.
+            // App content (composes underneath the splash). While the splash is up, clear the
+            // semantics behind it so a screen reader stays within the modal splash.
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -136,8 +126,7 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             ) {
                 NavHost(navController = navController, startDestination = Routes.HOME) {
                     composable(Routes.HOME) {
-                        // Apply the user's sort here (both the list and the chosen order are in scope);
-                        // remember so it only re-sorts when the list or order actually changes.
+                        // Apply the user's sort (remembered so it only re-sorts when list/order change).
                         val sorted = remember(milestones, settings.sortOrder) {
                             settings.sortOrder.sort(milestones)
                         }
@@ -171,10 +160,8 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
                         EditMilestoneScreen(
                             existing = existing,
                             onSave = { title, date, time, accent ->
-                                // Only update — never create — from the edit route. If `existing` is
-                                // null here the milestone is gone (deleted, or a stale/invalid id), so
-                                // just dismiss rather than silently spawning a new one. (New milestones
-                                // come exclusively from the ADD route.)
+                                // Only update from the edit route — if `existing` is null the milestone
+                                // is gone, so just dismiss rather than spawning a new one.
                                 if (existing != null) {
                                     vm.updateMilestone(
                                         existing.copy(title = title, date = date, time = time, accent = accent),

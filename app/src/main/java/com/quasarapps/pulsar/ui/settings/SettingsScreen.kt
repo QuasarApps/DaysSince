@@ -46,11 +46,8 @@ import com.quasarapps.pulsar.data.Settings
 import com.quasarapps.pulsar.data.ThemeMode
 
 /**
- * App settings: theme mode, the detail-screen units toggle, a Backup &amp; privacy section (backup
- * toggle + privacy note), and an About section.
- *
- * Stateless — the current [settings] and the edit callbacks are hoisted to the caller (which holds
- * the [SettingsViewModel]), keeping this screen easy to preview and test.
+ * App settings: theme mode, the detail-screen units toggle, a Backup &amp; privacy section, and About.
+ * Stateless — [settings] and the edit callbacks are hoisted to the caller, keeping it easy to test.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -191,8 +188,8 @@ private fun ThemeOptionRow(label: String, selected: Boolean, onSelect: () -> Uni
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            // selectable carries the Role.RadioButton + selected state for TalkBack; the inner
-            // RadioButton is decorative (onClick = null) so the whole row is one a11y target.
+            // selectable carries the Role/selected state for TalkBack; the inner RadioButton is
+            // decorative (onClick = null) so the row is one a11y target.
             .selectable(selected = selected, role = Role.RadioButton, onClick = onSelect)
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,

@@ -52,24 +52,20 @@ data class Settings(
     /** How the Home list is ordered. */
     val sortOrder: SortOrder = SortOrder.RECENTLY_ADDED,
     /**
-     * Whether milestone data may be included in the device's cloud/transfer backup. Default true
-     * (preserves restore-on-new-device). When false, [com.quasarapps.pulsar.backup.MilestoneBackupAgent]
-     * skips the backup so milestone data — including titles — stays only on this device.
+     * Whether milestone data may be included in the device backup (default true). When false,
+     * [com.quasarapps.pulsar.backup.MilestoneBackupAgent] skips the backup so data stays on-device.
      */
     val backupEnabled: Boolean = true,
 )
 
-// A store dedicated to settings, separate from the milestones store, so the two evolve independently.
-// NOTE: a given DataStore name may only be instantiated once per process; this name is intentionally
-// distinct from MilestonesRepository's "pulsar_store".
+// Settings store, separate from the milestones store. A DataStore name may only be instantiated once
+// per process, so this name is intentionally distinct from MilestonesRepository's "pulsar_store".
 private val Context.settingsDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "pulsar_settings")
 
 /**
- * Single source of truth for app [Settings], backed by Preferences DataStore.
- *
- * A test store can be injected via the internal constructor so unit tests get an isolated, empty
- * store backed by a throwaway temp file (mirrors [MilestonesRepository]).
+ * Single source of truth for app [Settings], backed by Preferences DataStore. A test store can be
+ * injected via the internal constructor for isolated unit tests (mirrors [MilestonesRepository]).
  */
 class SettingsRepository internal constructor(
     private val dataStore: DataStore<Preferences>,

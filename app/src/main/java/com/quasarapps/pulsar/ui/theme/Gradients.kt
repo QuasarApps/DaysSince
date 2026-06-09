@@ -20,10 +20,7 @@ fun accentBrush(accentIndex: Int): Brush {
     )
 }
 
-/**
- * The signature Quasar gradient — magenta → violet → indigo. The brand "handshake", used for the
- * extended FAB and other always-on-brand moments.
- */
+/** The signature Quasar gradient (magenta → violet → indigo) — used for the FAB and brand moments. */
 val QuasarBrush: Brush = Brush.linearGradient(
     listOf(
         Color(0xFFFFE8FB),
@@ -34,10 +31,7 @@ val QuasarBrush: Brush = Brush.linearGradient(
     ),
 )
 
-/**
- * The radial "new beginning" gradient earned by a 0-day milestone (the reward state) — a white-hot
- * core blooming out to deep violet.
- */
+/** The radial "new beginning" gradient for a 0-day milestone — a white-hot core blooming to violet. */
 val NewBeginningBrush: Brush = Brush.radialGradient(
     colorStops = arrayOf(
         0.0f to Color(0xFFFFF0FB),

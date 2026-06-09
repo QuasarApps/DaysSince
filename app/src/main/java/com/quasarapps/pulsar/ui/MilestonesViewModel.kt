@@ -27,11 +27,7 @@ class MilestonesViewModel internal constructor(
     val milestones: StateFlow<List<Milestone>> = repo.milestones
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    /**
-     * Localized fallback title for a milestone the user left blank. Resolved from resources (not a
-     * hardcoded literal) so a blank title persists the user's-language default — e.g. "Meilenstein"
-     * on a German device — matching what the edit screen's preview already shows.
-     */
+    /** Localized fallback for a blank title (from resources, so it persists in the user's language). */
     private val defaultTitle: String
         get() = getApplication<Application>().getString(R.string.milestone_default_title)
 
@@ -57,17 +53,14 @@ class MilestonesViewModel internal constructor(
         }
     }
 
-    /**
-     * The most recent delete, available to undo, or null if there's nothing pending. The UI observes
-     * this to show an "Undo" snackbar; [undoDelete] or [clearPendingUndo] clear it.
-     */
+    /** Most recent delete, available to undo (or null). Cleared by [undoDelete] / [clearPendingUndo]. */
     private val _pendingUndo = MutableStateFlow<RemovedMilestone?>(null)
     val pendingUndo: StateFlow<RemovedMilestone?> = _pendingUndo.asStateFlow()
 
     fun deleteMilestone(id: String) {
         viewModelScope.launch {
-            // Only arm undo / refresh when something was actually removed. A no-op delete (absent id)
-            // must not null out a previously-pending undo and dismiss its snackbar.
+            // Only arm undo/refresh when something was removed — a no-op delete (absent id) must not
+            // clear a previously-pending undo and dismiss its snackbar.
             val removed = repo.delete(id) ?: return@launch
             _pendingUndo.value = removed
             refreshWidgets()
@@ -90,11 +83,9 @@ class MilestonesViewModel internal constructor(
     }
 
     /**
-     * Pushes the latest data to placed widgets after a change via a single WorkManager one-off.
-     * Routing through WorkManager (rather than an in-process `updateAll` too) keeps it to one redraw
-     * and makes it durable if the app is backgrounded / torn down right after the edit; the one-off
-     * is unconstrained so it lands within ~a second. Enqueues nothing when no widget is placed, and
-     * is guarded because WorkManager isn't initialized in plain (non-instrumented) unit tests.
+     * Pushes latest data to placed widgets via a single WorkManager one-off — durable if the app is
+     * torn down right after the edit, and unconstrained so it lands within ~a second. No-op when no
+     * widget is placed; guarded because WorkManager isn't initialized in plain unit tests.
      */
     private fun refreshWidgets() {
         runCatching { WidgetRefreshScheduler.refreshNow(getApplication()) }

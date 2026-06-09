@@ -12,12 +12,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.json.JSONObject
 
-// Milestone data + widget bindings. Deliberately separate from SettingsRepository's "pulsar_settings"
-// store so the two evolve independently; a given DataStore name may only be instantiated once per
-// process, so these names must stay distinct. The `by preferencesDataStore` delegate makes this a
-// per-process singleton, which is why constructing MilestonesRepository(context) ad hoc (from the
-// view model, widgets, the config activity, and the refresh worker) is cheap and safe — each is a
-// thin wrapper over the same underlying store.
+// Milestone data + widget bindings; separate from SettingsRepository's "pulsar_settings" store. The
+// `by preferencesDataStore` delegate is a per-process singleton, so constructing
+// MilestonesRepository(context) ad hoc (view model, widgets, config activity, worker) is cheap — each
+// is a thin wrapper over the same store.
 private val Context.milestonesDataStore: DataStore<Preferences> by
     preferencesDataStore(name = "pulsar_store")
 
@@ -34,9 +32,8 @@ data class WidgetRenderData(
 )
 
 /**
- * Everything [MilestonesRepository.delete] removed for one milestone — the milestone itself and the
- * widget bindings that pointed at it — so [MilestonesRepository.restore] can reverse the delete
- * verbatim (same id, createdAt, accent, and re-bound widgets) for an undo.
+ * What [MilestonesRepository.delete] removed for one milestone (the milestone + its widget bindings),
+ * so [MilestonesRepository.restore] can reverse the delete verbatim for an undo.
  */
 data class RemovedMilestone(
     val milestone: Milestone,
@@ -45,10 +42,8 @@ data class RemovedMilestone(
 
 /**
  * Single source of truth for milestones and widget bindings, backed by Preferences DataStore.
- *
- * Milestones are stored as a JSON array string (see [MilestoneJson]); widget bindings as a
- * JSON object string mapping appWidgetId -> {id, transparent}. Old data that stored only the
- * milestone id as a bare string is decoded back into a [WidgetBinding] with transparent=false.
+ * Milestones are a JSON array (see [MilestoneJson]); bindings a JSON object of appWidgetId ->
+ * {id, transparent} (legacy bare-string ids decode to transparent=false).
  */
 class MilestonesRepository internal constructor(
     private val dataStore: DataStore<Preferences>,
@@ -72,9 +67,8 @@ class MilestonesRepository internal constructor(
     }
 
     /**
-     * Removes the milestone [id] and any widget bindings pointing at it, returning a
-     * [RemovedMilestone] snapshot of what was removed (or null if [id] wasn't present) so the caller
-     * can offer an undo via [restore].
+     * Removes the milestone [id] and any widget bindings pointing at it, returning a [RemovedMilestone]
+     * for undo via [restore] (or null if [id] wasn't present).
      */
     suspend fun delete(id: String): RemovedMilestone? {
         var removed: RemovedMilestone? = null
@@ -90,9 +84,8 @@ class MilestonesRepository internal constructor(
     }
 
     /**
-     * Reverses a [delete] for undo: re-inserts the [removed] milestone (no-op if it somehow exists
-     * again) and re-applies its widget bindings. The milestone keeps its original createdAt, so it
-     * returns to its original position in the createdAt-sorted list.
+     * Reverses a [delete] for undo: re-inserts the [removed] milestone (if absent) and re-applies its
+     * widget bindings. It keeps its original createdAt, so it returns to its original list position.
      */
     suspend fun restore(removed: RemovedMilestone) {
         dataStore.edit { prefs ->
@@ -129,10 +122,9 @@ class MilestonesRepository internal constructor(
     }
 
     /**
-     * Reactive render state for a placed widget: the bound milestone (or null if unbound/missing)
-     * and its transparent flag. Emits on every relevant data change so a widget that collects it
-     * re-renders with fresh data — this is what makes an edited milestone show up on the widget
-     * immediately, rather than only the milestone captured when the widget was first composed.
+     * Reactive render state for a placed widget: the bound milestone (or null) and its transparent
+     * flag. Emits on every data change, so a collecting widget re-renders with fresh data (an edited
+     * milestone shows immediately, not just the one captured when first composed).
      */
     fun widgetRenderDataFlow(appWidgetId: Int): Flow<WidgetRenderData> =
         dataStore.data.map { prefs ->
@@ -162,9 +154,8 @@ class MilestonesRepository internal constructor(
         }
 
         /**
-         * Decodes the bindings JSON, accepting both the current `{id, transparent}` shape and
-         * the legacy plain-string shape (just the milestone id), upgrading legacy values to a
-         * [WidgetBinding] with transparent=false.
+         * Decodes the bindings JSON, accepting both the current `{id, transparent}` shape and the
+         * legacy plain-string id (upgraded to a [WidgetBinding] with transparent=false).
          */
         internal fun decodeBindings(json: String?): Map<Int, WidgetBinding> {
             if (json.isNullOrBlank()) return emptyMap()

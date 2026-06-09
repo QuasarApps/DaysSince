@@ -18,12 +18,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 
 /**
- * Renders [target] with tabular figures (digits keep a fixed width so the number doesn't jump),
- * animating a count-up from 0 on first appearance unless the user has reduced motion.
- *
- * The font auto-shrinks from [style]'s size so even a large day count fits on one line (no
- * truncation). It's sized to the final [target] string — the widest the count-up ever reaches — so
- * the size stays constant throughout the animation rather than jumping as digits are added.
+ * Renders [target] with tabular figures (fixed-width digits, so the number doesn't jump), animating a
+ * count-up from 0 on first appearance unless reduced motion is on. The font auto-shrinks from [style]'s
+ * size to fit one line, sized to the final [target] so it stays constant throughout the animation.
  */
 @Composable
 fun CountUpNumber(
@@ -53,8 +50,7 @@ fun CountUpNumber(
         val fittedSize = remember(targetText, maxWidth, baseSize) {
             val maxWidthPx = with(density) { maxWidth.toPx() }
             var size = baseSize
-            // Measure with the same tabular-figures feature used when rendering, so digit widths
-            // match and a tight fit doesn't end up clipping.
+            // Measure with the same tnum feature used when rendering, so a tight fit doesn't clip.
             while (
                 size.value > MIN_FONT_SP &&
                 measurer.measure(
@@ -82,7 +78,6 @@ fun CountUpNumber(
     }
 }
 
-// Shrink in ~6% steps down to a sensible floor; the floor is only reached by implausibly large
-// day counts and still renders fully on one line on a phone.
+// Shrink in ~6% steps down to a floor only reached by implausibly large day counts.
 private const val STEP = 0.94f
 private const val MIN_FONT_SP = 24f

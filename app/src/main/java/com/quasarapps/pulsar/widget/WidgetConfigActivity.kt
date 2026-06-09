@@ -62,9 +62,8 @@ import com.quasarapps.pulsar.util.LocalizedDateFormat
 import kotlinx.coroutines.launch
 
 /**
- * Launched when a widget is placed (declared via android:configure). Lets the user pick which
- * milestone this widget instance tracks (and whether to render with a transparent background),
- * binds it, and finishes with RESULT_OK.
+ * Launched when a widget is placed (android:configure). Lets the user pick the milestone this widget
+ * tracks (and whether to render transparently), binds it, and finishes with RESULT_OK.
  */
 class WidgetConfigActivity : ComponentActivity() {
 
@@ -201,9 +200,8 @@ private fun TransparentToggle(checked: Boolean, onToggle: () -> Unit) {
 
 @Composable
 private fun MilestoneRow(milestone: Milestone, onClick: () -> Unit) {
-    // Computed inline rather than remember()-ed: it's wall-clock-dependent, so caching it would let
-    // the "X days since" go stale (e.g. across midnight) while this picker is open. sincePickedDhm is
-    // cheap, so recomputing per recomposition is the cheaper-than-a-bug trade.
+    // Computed inline, not remember()-ed: it's wall-clock-dependent, so caching could let the count go
+    // stale (e.g. across midnight) while the picker is open. sincePickedDhm is cheap.
     val days = ElapsedTime.sincePickedDhm(milestone.date, milestone.time).days
     val locale = LocalConfiguration.current.locales[0]
     val dateText = remember(milestone.date, locale) {

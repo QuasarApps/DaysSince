@@ -17,12 +17,9 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 /**
- * Elapsed days/hours/minutes since [date]/[time], recomputed each time the wall clock crosses a
- * minute boundary (aligned to the boundary so the displayed minute never lags by up to 59s).
- *
- * The ticker only runs while the owning lifecycle is RESUMED — off-screen (backgrounded, or a
- * covering screen) it stops, so it doesn't burn wake-ups updating a value nobody can see. On every
- * resume it recomputes immediately so the count is never stale on return.
+ * Elapsed days/hours/minutes since [date]/[time], recomputed on each minute boundary (aligned so the
+ * displayed minute never lags). The ticker only runs while the lifecycle is RESUMED — off-screen it
+ * stops (no wasted wake-ups) and recomputes immediately on resume so the count is never stale.
  */
 @Composable
 fun rememberElapsedDhm(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDhm {
@@ -43,9 +40,8 @@ fun rememberElapsedDhm(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDhm
 }
 
 /**
- * Elapsed days/hours/minutes/seconds since [date]/[time], recomputed every second (aligned to the
- * second boundary) for the live detail screen. Like [rememberElapsedDhm], the per-second loop only
- * runs while RESUMED (so it doesn't tick in the background) and recomputes immediately on resume.
+ * Like [rememberElapsedDhm] but to the second (aligned to the second boundary), for the live detail
+ * screen. The per-second loop also only runs while RESUMED and recomputes immediately on resume.
  */
 @Composable
 fun rememberElapsedDhms(date: LocalDate, time: LocalTime): ElapsedTime.ElapsedDhm {

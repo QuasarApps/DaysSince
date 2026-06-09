@@ -1,16 +1,11 @@
 package com.quasarapps.pulsar.data
 
 /**
- * Canonical, stable identifiers for milestone accents — the persistence contract for
- * [Milestone.accent].
- *
- * The list position is the accent *index* used at runtime (and the bare integer that pre-key data
- * persisted); the string entry at that position is the stable *key* that new data persists, so the
- * visual palette can be reordered/extended later without recoloring milestones.
- *
- * This lives in the data layer (not `ui.theme`) on purpose: key↔index resolution is a persistence
- * concern, and keeping it here means [MilestoneJson] doesn't have to depend on the UI. The order
- * here must stay in sync with `ui.theme.MilestoneAccents`; `AccentTest` enforces that.
+ * Canonical, stable identifiers for milestone accents — the persistence contract for [Milestone.accent].
+ * The list position is the runtime *index* (and the legacy persisted integer); the entry at that
+ * position is the stable *key* new data persists, so the palette can be reordered later without
+ * recoloring milestones. Lives in the data layer (not `ui.theme`) so [MilestoneJson] needn't depend on
+ * the UI; the order must stay in sync with `ui.theme.MilestoneAccents` (enforced by `AccentTest`).
  */
 internal object AccentKeys {
 
@@ -28,11 +23,7 @@ internal object AccentKeys {
     /** Index used for missing/unknown accents — the default accent ("magenta"). */
     const val DEFAULT_INDEX = 0
 
-    /**
-     * Stable key for the accent at [index]. Out-of-range indices fall back to the default accent
-     * key, mirroring `ui.theme.accentOrDefault`, so an encode of a corrupt index still yields a
-     * real key.
-     */
+    /** Stable key for the accent at [index]; out-of-range falls back to the default key. */
     fun keyForIndex(index: Int): String = ordered.getOrElse(index) { ordered[DEFAULT_INDEX] }
 
     /** Index for a stable [key]; a null/blank/unknown key falls back to [DEFAULT_INDEX]. */

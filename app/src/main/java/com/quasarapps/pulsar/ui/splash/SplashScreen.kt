@@ -37,11 +37,9 @@ import com.quasarapps.pulsar.ui.components.rememberReduceMotion
 import com.quasarapps.pulsar.ui.theme.PulsarDarkColors
 import kotlinx.coroutines.delay
 
-// The splash is always the dark cosmic brand surface (like the launcher icon), independent of the
-// light/dark app theme, so the cold-start system splash and this screen read as one continuous moment.
-// The base surface and mark are sourced from the canonical dark palette below (and the XML splash
-// background is kept in sync with PulsarDarkColors.background) so they can't drift; only the glow,
-// which exists nowhere else, is a splash-local constant.
+// The splash is always the dark cosmic brand surface (like the launcher icon), independent of the app
+// theme, so the system splash and this screen read as one moment. Surface/mark come from the canonical
+// dark palette (the XML splash background is kept in sync) so they can't drift; only the glow is local.
 private val SplashGlow = Color(0xFF3A1457)
 
 private const val EnterMillis = 650
@@ -49,11 +47,9 @@ private const val HoldMillis = 550
 private const val ReduceHoldMillis = 500
 
 /**
- * Branded launch splash: the pulsar mark, the wordmark, and the tagline on the cosmic brand surface.
- *
- * The mark and text ease in (unless the user has reduced motion), then [onFinished] fires after a
- * short hold so the caller can dismiss it. Shown as an overlay above the app content, which composes
- * underneath so the home screen is ready when the splash clears.
+ * Branded launch splash: the pulsar mark, wordmark, and tagline on the cosmic brand surface. The mark
+ * and text ease in (unless reduced motion), then [onFinished] fires after a short hold. Shown as an
+ * overlay above the app content, which composes underneath so Home is ready when the splash clears.
  */
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
@@ -80,11 +76,9 @@ fun SplashScreen(onFinished: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            // Treat the splash as a single modal a11y surface. The caller clears the semantics of the
-            // content behind it while it's up, so a screen reader stays within the splash.
+            // Treat the splash as a single modal a11y surface (the caller clears the content behind it).
             .semantics { isTraversalGroup = true }
-            // Swallow all touches so nothing falls through to the app content behind the overlay
-            // while the splash is up. (No-op clickable would mislabel the splash as a button.)
+            // Swallow all touches so nothing falls through to the content behind the overlay.
             .pointerInput(Unit) {
                 awaitPointerEventScope {
                     while (true) {
