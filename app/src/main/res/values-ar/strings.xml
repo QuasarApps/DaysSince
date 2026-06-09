@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">نباض</string>
+
+    <string name="accent_magenta">أرجواني</string>
+    <string name="accent_indigo">نيلي</string>
+    <string name="accent_violet">بنفسجي</string>
+    <string name="accent_nebula">سديم</string>
+    <string name="accent_aurora">شفق</string>
+    <string name="accent_solar">شمسي</string>
+    <string name="accent_ember">جمرة</string>
+    <string name="accent_deep">عميق</string>
+
+    <string name="action_save">حفظ</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_ok">حسنًا</string>
+    <string name="action_edit">تعديل</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_reset">إعادة التعيين</string>
+
+    <string name="home_title">نباض</string>
+    <string name="home_fab_mark">تحديد</string>
+    <string name="home_fab_content_description">إضافة حدث</string>
+    <string name="card_days_since_label">الأيام منذ</string>
+    <string name="empty_title">لا توجد أحداث بعد</string>
+    <string name="empty_subtitle">تتبّع الأيام منذ شيء يهمّك.</string>
+    <string name="card_new_beginning_label">بداية جديدة</string>
+
+    <string name="detail_back_content_description">رجوع</string>
+    <string name="detail_more_options_content_description">خيارات أخرى</string>
+    <string name="detail_action_reset">إعادة التعيين إلى الآن</string>
+    <string name="detail_reset_dialog_title">إعادة التعيين إلى الآن؟</string>
+    <string name="detail_reset_dialog_message">سيبدأ العدّ من جديد من الآن.</string>
+    <string name="detail_days_label">أيام</string>
+    <string name="detail_hours_label">ساعات</string>
+    <string name="detail_minutes_label">دقائق</string>
+    <string name="detail_seconds_label">ثواني</string>
+    <string name="detail_since_date_at_time">منذ %1$s الساعة %2$s</string>
+    <string name="detail_widget_hint">أضف أداة إلى شاشتك الرئيسية لإبقاء هذا في مرأى العين.</string>
+    <string name="detail_delete_snackbar">تم حذف ”%1$s“</string>
+    <string name="action_undo">تراجع</string>
+    <string name="detail_missing">لم يعد هذا الحدث متاحًا.</string>
+    <string name="detail_go_back">العودة</string>
+
+    <string name="edit_title_new">حدث جديد</string>
+    <string name="edit_title_edit">تعديل الحدث</string>
+    <string name="edit_title_field_label">العنوان</string>
+    <string name="edit_title_field_placeholder">مثال: الإقلاع عن التدخين</string>
+    <string name="edit_field_date">التاريخ</string>
+    <string name="edit_field_time">الوقت</string>
+    <string name="edit_accent_header">اللون</string>
+    <string name="milestone_default_title">حدث</string>
+
+    <string name="widget_config_title">اختر حدثًا</string>
+    <string name="widget_config_transparent_title">خلفية شفافة</string>
+    <string name="widget_config_transparent_subtitle">اعرض الرقم فقط على خلفية شاشتك.</string>
+    <string name="widget_config_empty_subtitle">افتح نباض لإضافة حدث، ثم ضَع الأداة مرة أخرى.</string>
+    <string name="widget_config_open_app">فتح نباض</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="zero">%1$d يوم · منذ %2$s</item>
+        <item quantity="one">%1$d يوم · منذ %2$s</item>
+        <item quantity="two">%1$d يومين · منذ %2$s</item>
+        <item quantity="few">%1$d أيام · منذ %2$s</item>
+        <item quantity="many">%1$d يومًا · منذ %2$s</item>
+        <item quantity="other">%1$d يوم · منذ %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_theme_header">المظهر</string>
+    <string name="settings_theme_system">إعداد النظام الافتراضي</string>
+    <string name="settings_theme_light">فاتح</string>
+    <string name="settings_theme_dark">داكن</string>
+    <string name="settings_display_header">العرض</string>
+    <string name="settings_show_units_title">إظهار الساعات والدقائق</string>
+    <string name="settings_show_units_subtitle">عرض الساعات والدقائق والثواني مباشرةً في شاشة تفاصيل الحدث.</string>
+    <string name="settings_about_header">حول التطبيق</string>
+    <string name="settings_version_label">الإصدار</string>
+    <string name="settings_made_by">تطوير Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">احسب الوقت</string>
+
+    <!-- a11y card label "<title>، <status>" — uses the Arabic comma. -->
+    <string name="card_a11y_content_description">%1$s، %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">النسخ الاحتياطي والخصوصية</string>
+    <string name="settings_backup_title">النسخ الاحتياطي للأحداث</string>
+    <string name="settings_backup_subtitle">ضمِّن أحداثك في النسخة الاحتياطية من Google على هذا الجهاز ليتم استعادتها على هاتف جديد.</string>
+    <string name="settings_privacy_note">يخزّن نباض كل شيء على جهازك — بدون حسابات أو خوادم أو تتبع. عند تفعيل النسخ الاحتياطي، تُضمَّن أحداثك في النسخة الاحتياطية من Google على جهازك.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">فرز</string>
+    <string name="home_sort_recently_added">المضافة حديثًا</string>
+    <string name="home_sort_most_days">الأكثر أيامًا</string>
+    <string name="home_sort_alphabetical">أبجديًا</string>
+</resources>

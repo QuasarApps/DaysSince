@@ -1,0 +1,24 @@
+Pulsar puts the moments that matter to you right on your home screen. Count the days, hours and minutes since your last night out, the last time you went to the gym, an anniversary, or a new job — with beautiful home-screen widgets and bold gradient cards.
+
+Drop a Pulsar widget on your home screen and your streak is always one glance away, no need to open the app. Choose from two sizes — a compact day count, or a wide days · hours · minutes readout — and make either one fully transparent so the number floats right on your wallpaper.
+
+WHY PULSAR
+
+• Widgets front and centre. Two home-screen sizes, an optional transparent background, and a real-looking preview in the picker — your count lives on the home screen, not buried in an app.
+• Beautifully simple. One job, done well: count up from a date and time you choose.
+• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
+
+FEATURES
+
+• Two home-screen widgets — a compact day count and a wide days · hours · minutes readout — each with an optional transparent background.
+• Track as many milestones as you like, each with its own colour accent.
+• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
+• Sort your milestones by recently added, most days, or alphabetically.
+• Undo an accidental delete with a single tap.
+• Reset a milestone to "now" to start a fresh streak.
+• Light, dark, or system theme.
+• Daylight-saving-aware day counting, so a day is always a real calendar day.
+• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
+• Available in 10 languages.
+
+Pulsar is fully offline and asks for nothing. Just the days, counting up — right on your home screen.

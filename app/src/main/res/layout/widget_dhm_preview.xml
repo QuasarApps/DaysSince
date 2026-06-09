@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Static preview shown in the widget picker. autoSize was unreliable across
-    launchers' picker rendering ("365" still wrapped to a second line in some
-    cases), so this uses a conservative fixed text size that fits comfortably
-    in any picker cell width.
+    Static preview shown in the widget picker. The sample values are intentionally <= 2 digits
+    (14 / 8 / 42) because larger numbers can still clip in the picker's preview rendering; once the
+    large-number rendering issue is fixed these can use a more representative value.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,17 +26,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="365"
+            android:text="14"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DAYS"
+            android:text="@string/widget_unit_days"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,15 +52,15 @@
             android:maxLines="1"
             android:text="8"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HRS"
+            android:text="@string/widget_unit_hours"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,14 +76,14 @@
             android:maxLines="1"
             android:text="42"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MIN"
+            android:text="@string/widget_unit_minutes"
             android:textColor="@android:color/white"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>

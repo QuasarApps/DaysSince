@@ -1,0 +1,8 @@
+# GitHub Pages (Jekyll) config for the Pulsar privacy-policy site.
+# Pages is served from this `docs/` folder. Only the privacy policy is meant to
+# be public, so ROADMAP.md is excluded from the built site.
+title: Pulsar
+description: Privacy policy for the Pulsar Android app.
+theme: jekyll-theme-cayman
+exclude:
+  - ROADMAP.md

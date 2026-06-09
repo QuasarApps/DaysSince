@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Púlsar</string>
+
+    <string name="accent_magenta">Magenta</string>
+    <string name="accent_indigo">Índigo</string>
+    <string name="accent_violet">Violeta</string>
+    <string name="accent_nebula">Nebulosa</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Brasa</string>
+    <string name="accent_deep">Profundo</string>
+
+    <string name="action_save">Guardar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_ok">Aceptar</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_reset">Restablecer</string>
+
+    <string name="home_title">Púlsar</string>
+    <string name="home_fab_mark">Marcar</string>
+    <string name="home_fab_content_description">Añadir hito</string>
+    <string name="card_days_since_label">DÍAS DESDE</string>
+    <string name="empty_title">Aún no hay hitos</string>
+    <string name="empty_subtitle">Lleva la cuenta de los días desde algo que te importa.</string>
+    <string name="card_new_beginning_label">UN NUEVO COMIENZO</string>
+
+    <string name="detail_back_content_description">Atrás</string>
+    <string name="detail_more_options_content_description">Más opciones</string>
+    <string name="detail_action_reset">Restablecer a ahora</string>
+    <string name="detail_reset_dialog_title">¿Restablecer a ahora?</string>
+    <string name="detail_reset_dialog_message">Esto reinicia la cuenta desde ahora.</string>
+    <string name="detail_days_label">DÍAS</string>
+    <string name="detail_hours_label">HORAS</string>
+    <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_seconds_label">SEGUNDOS</string>
+    <string name="detail_since_date_at_time">desde el %1$s a las %2$s</string>
+    <string name="detail_widget_hint">Añade un widget desde tu pantalla de inicio para tenerlo siempre a la vista.</string>
+    <string name="detail_delete_snackbar">Se eliminó «%1$s»</string>
+    <string name="action_undo">Deshacer</string>
+    <string name="detail_missing">Este hito ya no está disponible.</string>
+    <string name="detail_go_back">Volver</string>
+
+    <string name="edit_title_new">Nuevo hito</string>
+    <string name="edit_title_edit">Editar hito</string>
+    <string name="edit_title_field_label">Título</string>
+    <string name="edit_title_field_placeholder">p. ej. Dejar de fumar</string>
+    <string name="edit_field_date">Fecha</string>
+    <string name="edit_field_time">Hora</string>
+    <string name="edit_accent_header">Color</string>
+    <string name="milestone_default_title">Hito</string>
+
+    <string name="widget_config_title">Elige un hito</string>
+    <string name="widget_config_transparent_title">Fondo transparente</string>
+    <string name="widget_config_transparent_subtitle">Muestra solo el número sobre tu fondo de pantalla.</string>
+    <string name="widget_config_empty_subtitle">Abre Púlsar para añadir uno y vuelve a colocar el widget.</string>
+    <string name="widget_config_open_app">Abrir Púlsar</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d día · desde %2$s</item>
+        <item quantity="many">%1$d de días · desde %2$s</item>
+        <item quantity="other">%1$d días · desde %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_theme_header">Tema</string>
+    <string name="settings_theme_system">Predeterminado del sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="settings_display_header">Pantalla</string>
+    <string name="settings_show_units_title">Mostrar horas y minutos</string>
+    <string name="settings_show_units_subtitle">Muestra las horas, los minutos y los segundos en vivo en la pantalla de detalles de un hito.</string>
+    <string name="settings_about_header">Acerca de</string>
+    <string name="settings_version_label">Versión</string>
+    <string name="settings_made_by">Creado por Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Cuenta el tiempo</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Copia de seguridad y privacidad</string>
+    <string name="settings_backup_title">Hacer copia de seguridad de los hitos</string>
+    <string name="settings_backup_subtitle">Incluye tus hitos en la copia de seguridad de Google de este dispositivo para que se restauren en un teléfono nuevo.</string>
+    <string name="settings_privacy_note">Púlsar guarda todo en tu dispositivo: sin cuentas, sin servidores y sin seguimiento. Con la copia de seguridad activada, tus hitos se incluyen en la copia de seguridad de Google de tu dispositivo.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Ordenar</string>
+    <string name="home_sort_recently_added">Añadidos recientemente</string>
+    <string name="home_sort_most_days">Más días</string>
+    <string name="home_sort_alphabetical">Alfabético</string>
+</resources>

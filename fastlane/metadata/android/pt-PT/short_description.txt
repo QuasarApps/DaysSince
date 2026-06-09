@@ -1,0 +1,1 @@
+Widgets no ecrã principal que contam os dias desde os momentos que te marcam.

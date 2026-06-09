@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">פולסר</string>
+
+    <string name="accent_magenta">מגנטה</string>
+    <string name="accent_indigo">אינדיגו</string>
+    <string name="accent_violet">סגול</string>
+    <string name="accent_nebula">ערפילית</string>
+    <string name="accent_aurora">זוהר</string>
+    <string name="accent_solar">סולארי</string>
+    <string name="accent_ember">גחלת</string>
+    <string name="accent_deep">עמוק</string>
+
+    <string name="action_save">שמירה</string>
+    <string name="action_cancel">ביטול</string>
+    <string name="action_ok">אישור</string>
+    <string name="action_edit">עריכה</string>
+    <string name="action_delete">מחיקה</string>
+    <string name="action_reset">איפוס</string>
+
+    <string name="home_title">פולסר</string>
+    <string name="home_fab_mark">סמן</string>
+    <string name="home_fab_content_description">הוספת אירוע</string>
+    <string name="card_days_since_label">ימים מאז</string>
+    <string name="empty_title">אין עדיין אירועים</string>
+    <string name="empty_subtitle">עקוב אחר הימים מאז משהו שחשוב לך.</string>
+    <string name="card_new_beginning_label">התחלה חדשה</string>
+
+    <string name="detail_back_content_description">חזרה</string>
+    <string name="detail_more_options_content_description">אפשרויות נוספות</string>
+    <string name="detail_action_reset">אפס לעכשיו</string>
+    <string name="detail_reset_dialog_title">לאפס לעכשיו?</string>
+    <string name="detail_reset_dialog_message">הספירה תתחיל מחדש מעכשיו.</string>
+    <string name="detail_days_label">ימים</string>
+    <string name="detail_hours_label">שעות</string>
+    <string name="detail_minutes_label">דקות</string>
+    <string name="detail_seconds_label">שניות</string>
+    <string name="detail_since_date_at_time">מאז %1$s בשעה %2$s</string>
+    <string name="detail_widget_hint">הוסף ווידג\'ט ממסך הבית כדי לשמור על זה לנגד עיניך.</string>
+    <string name="detail_delete_snackbar">”%1$s“ נמחק</string>
+    <string name="action_undo">ביטול</string>
+    <string name="detail_missing">האירוע הזה אינו זמין יותר.</string>
+    <string name="detail_go_back">חזרה</string>
+
+    <string name="edit_title_new">אירוע חדש</string>
+    <string name="edit_title_edit">עריכת אירוע</string>
+    <string name="edit_title_field_label">כותרת</string>
+    <string name="edit_title_field_placeholder">לדוגמה: להפסיק לעשן</string>
+    <string name="edit_field_date">תאריך</string>
+    <string name="edit_field_time">שעה</string>
+    <string name="edit_accent_header">צבע</string>
+    <string name="milestone_default_title">אירוע</string>
+
+    <string name="widget_config_title">בחר אירוע</string>
+    <string name="widget_config_transparent_title">רקע שקוף</string>
+    <string name="widget_config_transparent_subtitle">הצג רק את המספר על הטפט שלך.</string>
+    <string name="widget_config_empty_subtitle">פתח את פולסר כדי להוסיף אחד, ואז מקם את הווידג\'ט שוב.</string>
+    <string name="widget_config_open_app">פתח את פולסר</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d יום · מאז %2$s</item>
+        <item quantity="two">%1$d ימים · מאז %2$s</item>
+        <item quantity="other">%1$d ימים · מאז %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">הגדרות</string>
+    <string name="settings_theme_header">ערכת נושא</string>
+    <string name="settings_theme_system">ברירת המחדל של המערכת</string>
+    <string name="settings_theme_light">בהיר</string>
+    <string name="settings_theme_dark">כהה</string>
+    <string name="settings_display_header">תצוגה</string>
+    <string name="settings_show_units_title">הצגת שעות ודקות</string>
+    <string name="settings_show_units_subtitle">הצגת שעות, דקות ושניות בזמן אמת במסך הפרטים של אירוע.</string>
+    <string name="settings_about_header">מידע</string>
+    <string name="settings_version_label">גרסה</string>
+    <string name="settings_made_by">פותח על ידי Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">ספור את הזמן</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">גיבוי ופרטיות</string>
+    <string name="settings_backup_title">גיבוי האירועים</string>
+    <string name="settings_backup_subtitle">כלול את האירועים שלך בגיבוי Google של המכשיר הזה כדי שישוחזרו בטלפון חדש.</string>
+    <string name="settings_privacy_note">Pulsar שומר הכול במכשיר שלך — בלי חשבונות, בלי שרתים ובלי מעקב. כשהגיבוי מופעל, האירועים שלך נכללים בגיבוי Google של המכשיר.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">מיון</string>
+    <string name="home_sort_recently_added">נוספו לאחרונה</string>
+    <string name="home_sort_most_days">הכי הרבה ימים</string>
+    <string name="home_sort_alphabetical">לפי א-ב</string>
+</resources>

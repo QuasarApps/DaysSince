@@ -3,19 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".DaysSinceApplication"
         android:allowBackup="true"
+        android:backupAgent=".backup.MilestoneBackupAgent"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="${appLabel}"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DaysSince">
+        android:theme="@style/Theme.Pulsar"
+        tools:targetApi="33">
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Pulsar.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +30,7 @@
         <activity
             android:name=".widget.WidgetConfigActivity"
             android:exported="true"
-            android:theme="@style/Theme.DaysSince">
+            android:theme="@style/Theme.Pulsar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

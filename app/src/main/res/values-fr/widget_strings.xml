@@ -1,0 +1,33 @@
+<resources>
+    <string name="widget_days_label">Jours depuis</string>
+    <string name="widget_days_description">Jours entiers depuis un événement de votre choix.</string>
+    <string name="widget_dhm_label">Jours · Heures · Minutes</string>
+    <string name="widget_dhm_description">Temps depuis un événement, en jours, heures et minutes.</string>
+
+    <string name="widget_setup_short">Configurer</string>
+    <string name="widget_setup_long">Appuyez pour configurer</string>
+    <string name="widget_setup_content_description">Appuyez pour choisir un événement</string>
+
+    <string name="widget_unit_days">JOURS</string>
+    <string name="widget_unit_hours">H</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d jour</item>
+        <item quantity="many">%d de jours</item>
+        <item quantity="other">%d jours</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d heure</item>
+        <item quantity="many">%d d\'heures</item>
+        <item quantity="other">%d heures</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="many">%d de minutes</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s depuis %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s : %2$s, %3$s, %4$s</string>
+</resources>

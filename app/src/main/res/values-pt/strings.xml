@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Pulsar</string>
+
+    <string name="accent_magenta">Magenta</string>
+    <string name="accent_indigo">Índigo</string>
+    <string name="accent_violet">Violeta</string>
+    <string name="accent_nebula">Nebulosa</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Brasa</string>
+    <string name="accent_deep">Profundo</string>
+
+    <string name="action_save">Salvar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="action_reset">Redefinir</string>
+
+    <string name="home_title">Pulsar</string>
+    <string name="home_fab_mark">Marcar</string>
+    <string name="home_fab_content_description">Adicionar marco</string>
+    <string name="card_days_since_label">DIAS DESDE</string>
+    <string name="empty_title">Ainda não há marcos</string>
+    <string name="empty_subtitle">Acompanhe os dias desde algo importante para você.</string>
+    <string name="card_new_beginning_label">UM NOVO COMEÇO</string>
+
+    <string name="detail_back_content_description">Voltar</string>
+    <string name="detail_more_options_content_description">Mais opções</string>
+    <string name="detail_action_reset">Redefinir para agora</string>
+    <string name="detail_reset_dialog_title">Redefinir para agora?</string>
+    <string name="detail_reset_dialog_message">A contagem recomeça a partir de agora.</string>
+    <string name="detail_days_label">DIAS</string>
+    <string name="detail_hours_label">HORAS</string>
+    <string name="detail_minutes_label">MINUTOS</string>
+    <string name="detail_seconds_label">SEGUNDOS</string>
+    <string name="detail_since_date_at_time">desde %1$s às %2$s</string>
+    <string name="detail_widget_hint">Adicione um widget à tela inicial para manter isso à vista.</string>
+    <string name="detail_delete_snackbar">“%1$s” excluído</string>
+    <string name="action_undo">Desfazer</string>
+    <string name="detail_missing">Este marco não está mais disponível.</string>
+    <string name="detail_go_back">Voltar</string>
+
+    <string name="edit_title_new">Novo marco</string>
+    <string name="edit_title_edit">Editar marco</string>
+    <string name="edit_title_field_label">Título</string>
+    <string name="edit_title_field_placeholder">ex.: Parar de fumar</string>
+    <string name="edit_field_date">Data</string>
+    <string name="edit_field_time">Hora</string>
+    <string name="edit_accent_header">Cor</string>
+    <string name="milestone_default_title">Marco</string>
+
+    <string name="widget_config_title">Escolha um marco</string>
+    <string name="widget_config_transparent_title">Fundo transparente</string>
+    <string name="widget_config_transparent_subtitle">Mostre apenas o número no seu papel de parede.</string>
+    <string name="widget_config_empty_subtitle">Abra o Pulsar para adicionar um e posicione o widget novamente.</string>
+    <string name="widget_config_open_app">Abrir o Pulsar</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d dia · desde %2$s</item>
+        <item quantity="many">%1$d de dias · desde %2$s</item>
+        <item quantity="other">%1$d dias · desde %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Configurações</string>
+    <string name="settings_theme_header">Tema</string>
+    <string name="settings_theme_system">Padrão do sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Escuro</string>
+    <string name="settings_display_header">Tela</string>
+    <string name="settings_show_units_title">Mostrar horas e minutos</string>
+    <string name="settings_show_units_subtitle">Mostra as horas, os minutos e os segundos em tempo real na tela de detalhes de um marco.</string>
+    <string name="settings_about_header">Sobre</string>
+    <string name="settings_version_label">Versão</string>
+    <string name="settings_made_by">Criado pela Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Conte o tempo</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Backup e privacidade</string>
+    <string name="settings_backup_title">Fazer backup dos marcos</string>
+    <string name="settings_backup_subtitle">Inclua seus marcos no backup do Google deste dispositivo para que sejam restaurados em um novo telefone.</string>
+    <string name="settings_privacy_note">O Pulsar armazena tudo no seu dispositivo — sem contas, sem servidores e sem rastreamento. Com o backup ativado, seus marcos são incluídos no backup do Google do seu dispositivo.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Ordenar</string>
+    <string name="home_sort_recently_added">Adicionados recentemente</string>
+    <string name="home_sort_most_days">Mais dias</string>
+    <string name="home_sort_alphabetical">Alfabética</string>
+</resources>

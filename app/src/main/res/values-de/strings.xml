@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">Pulsar</string>
+
+    <string name="accent_magenta">Magenta</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_violet">Violett</string>
+    <string name="accent_nebula">Nebel</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Glut</string>
+    <string name="accent_deep">Tief</string>
+
+    <string name="action_save">Speichern</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Bearbeiten</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_reset">Zurücksetzen</string>
+
+    <string name="home_title">Pulsar</string>
+    <string name="home_fab_mark">Markieren</string>
+    <string name="home_fab_content_description">Meilenstein hinzufügen</string>
+    <string name="card_days_since_label">TAGE SEIT</string>
+    <string name="empty_title">Noch keine Meilensteine</string>
+    <string name="empty_subtitle">Zähle die Tage seit etwas, das dir wichtig ist.</string>
+    <string name="card_new_beginning_label">EIN NEUANFANG</string>
+
+    <string name="detail_back_content_description">Zurück</string>
+    <string name="detail_more_options_content_description">Weitere Optionen</string>
+    <string name="detail_action_reset">Auf jetzt zurücksetzen</string>
+    <string name="detail_reset_dialog_title">Auf jetzt zurücksetzen?</string>
+    <string name="detail_reset_dialog_message">Die Zählung beginnt ab jetzt neu.</string>
+    <string name="detail_days_label">TAGE</string>
+    <string name="detail_hours_label">STUNDEN</string>
+    <string name="detail_minutes_label">MINUTEN</string>
+    <string name="detail_seconds_label">SEKUNDEN</string>
+    <string name="detail_since_date_at_time">seit %1$s um %2$s</string>
+    <string name="detail_widget_hint">Füge ein Widget zu deinem Startbildschirm hinzu, um dies im Blick zu behalten.</string>
+    <string name="detail_delete_snackbar">„%1$s“ gelöscht</string>
+    <string name="action_undo">Rückgängig</string>
+    <string name="detail_missing">Dieser Meilenstein ist nicht mehr verfügbar.</string>
+    <string name="detail_go_back">Zurück</string>
+
+    <string name="edit_title_new">Neuer Meilenstein</string>
+    <string name="edit_title_edit">Meilenstein bearbeiten</string>
+    <string name="edit_title_field_label">Titel</string>
+    <string name="edit_title_field_placeholder">z. B. Mit dem Rauchen aufhören</string>
+    <string name="edit_field_date">Datum</string>
+    <string name="edit_field_time">Uhrzeit</string>
+    <string name="edit_accent_header">Farbe</string>
+    <string name="milestone_default_title">Meilenstein</string>
+
+    <string name="widget_config_title">Meilenstein auswählen</string>
+    <string name="widget_config_transparent_title">Transparenter Hintergrund</string>
+    <string name="widget_config_transparent_subtitle">Nur die Zahl auf deinem Hintergrundbild anzeigen.</string>
+    <string name="widget_config_empty_subtitle">Öffne Pulsar, um einen hinzuzufügen, und platziere das Widget erneut.</string>
+    <string name="widget_config_open_app">Pulsar öffnen</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d Tag · seit %2$s</item>
+        <item quantity="other">%1$d Tage · seit %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_theme_header">Design</string>
+    <string name="settings_theme_system">Systemstandard</string>
+    <string name="settings_theme_light">Hell</string>
+    <string name="settings_theme_dark">Dunkel</string>
+    <string name="settings_display_header">Anzeige</string>
+    <string name="settings_show_units_title">Stunden und Minuten anzeigen</string>
+    <string name="settings_show_units_subtitle">Zeigt Stunden, Minuten und Sekunden live auf der Detailseite eines Meilensteins an.</string>
+    <string name="settings_about_header">Über</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_made_by">Entwickelt von Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Zähle die Zeit</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Sicherung &amp; Datenschutz</string>
+    <string name="settings_backup_title">Meilensteine sichern</string>
+    <string name="settings_backup_subtitle">Deine Meilensteine in die Google-Sicherung dieses Geräts einbeziehen, damit sie auf einem neuen Telefon wiederhergestellt werden.</string>
+    <string name="settings_privacy_note">Pulsar speichert alles auf deinem Gerät – keine Konten, keine Server, kein Tracking. Wenn die Sicherung aktiviert ist, werden deine Meilensteine in die Google-Sicherung deines Geräts aufgenommen.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Sortieren</string>
+    <string name="home_sort_recently_added">Zuletzt hinzugefügt</string>
+    <string name="home_sort_most_days">Meiste Tage</string>
+    <string name="home_sort_alphabetical">Alphabetisch</string>
+</resources>

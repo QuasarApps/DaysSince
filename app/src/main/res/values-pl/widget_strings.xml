@@ -1,0 +1,36 @@
+<resources>
+    <string name="widget_days_label">Dni od</string>
+    <string name="widget_days_description">Pełne dni od wybranego wydarzenia.</string>
+    <string name="widget_dhm_label">Dni · Godziny · Minuty</string>
+    <string name="widget_dhm_description">Czas od wydarzenia w dniach, godzinach i minutach.</string>
+
+    <string name="widget_setup_short">Skonfiguruj</string>
+    <string name="widget_setup_long">Dotknij, aby skonfigurować</string>
+    <string name="widget_setup_content_description">Dotknij, aby wybrać wydarzenie</string>
+
+    <string name="widget_unit_days">DNI</string>
+    <string name="widget_unit_hours">GODZ</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d dzień</item>
+        <item quantity="few">%d dni</item>
+        <item quantity="many">%d dni</item>
+        <item quantity="other">%d dnia</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d godzina</item>
+        <item quantity="few">%d godziny</item>
+        <item quantity="many">%d godzin</item>
+        <item quantity="other">%d godziny</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d minuta</item>
+        <item quantity="few">%d minuty</item>
+        <item quantity="many">%d minut</item>
+        <item quantity="other">%d minuty</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s od %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

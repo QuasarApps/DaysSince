@@ -1,0 +1,33 @@
+<resources>
+    <string name="widget_days_label">Giorni da</string>
+    <string name="widget_days_description">Giorni interi da un evento che scegli.</string>
+    <string name="widget_dhm_label">Giorni · Ore · Minuti</string>
+    <string name="widget_dhm_description">Tempo da un evento, in giorni, ore e minuti.</string>
+
+    <string name="widget_setup_short">Configura</string>
+    <string name="widget_setup_long">Tocca per configurare</string>
+    <string name="widget_setup_content_description">Tocca per scegliere un evento</string>
+
+    <string name="widget_unit_days">GIORNI</string>
+    <string name="widget_unit_hours">ORE</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d giorno</item>
+        <item quantity="many">%d di giorni</item>
+        <item quantity="other">%d giorni</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d ora</item>
+        <item quantity="many">%d di ore</item>
+        <item quantity="other">%d ore</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d minuto</item>
+        <item quantity="many">%d di minuti</item>
+        <item quantity="other">%d minuti</item>
+    </plurals>
+
+    <string name="widget_days_content_description">%1$s dal %2$s, %3$s</string>
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
+</resources>

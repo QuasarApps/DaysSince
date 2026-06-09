@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">Pulsar</string>
+
+    <string name="accent_magenta">Magenta</string>
+    <string name="accent_indigo">Indaco</string>
+    <string name="accent_violet">Viola</string>
+    <string name="accent_nebula">Nebulosa</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solare</string>
+    <string name="accent_ember">Brace</string>
+    <string name="accent_deep">Profondo</string>
+
+    <string name="action_save">Salva</string>
+    <string name="action_cancel">Annulla</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Modifica</string>
+    <string name="action_delete">Elimina</string>
+    <string name="action_reset">Reimposta</string>
+
+    <string name="home_title">Pulsar</string>
+    <string name="home_fab_mark">Segna</string>
+    <string name="home_fab_content_description">Aggiungi evento</string>
+    <string name="card_days_since_label">GIORNI DA</string>
+    <string name="empty_title">Ancora nessun evento</string>
+    <string name="empty_subtitle">Conta i giorni da qualcosa che conta per te.</string>
+    <string name="card_new_beginning_label">UN NUOVO INIZIO</string>
+
+    <string name="detail_back_content_description">Indietro</string>
+    <string name="detail_more_options_content_description">Altre opzioni</string>
+    <string name="detail_action_reset">Reimposta a ora</string>
+    <string name="detail_reset_dialog_title">Reimposta a ora?</string>
+    <string name="detail_reset_dialog_message">Il conteggio ripartirà da adesso.</string>
+    <string name="detail_days_label">GIORNI</string>
+    <string name="detail_hours_label">ORE</string>
+    <string name="detail_minutes_label">MINUTI</string>
+    <string name="detail_seconds_label">SECONDI</string>
+    <string name="detail_since_date_at_time">dal %1$s alle %2$s</string>
+    <string name="detail_widget_hint">Aggiungi un widget dalla schermata Home per tenerlo sempre in vista.</string>
+    <string name="detail_delete_snackbar">«%1$s» eliminato</string>
+    <string name="action_undo">Annulla</string>
+    <string name="detail_missing">Questo evento non è più disponibile.</string>
+    <string name="detail_go_back">Torna indietro</string>
+
+    <string name="edit_title_new">Nuovo evento</string>
+    <string name="edit_title_edit">Modifica evento</string>
+    <string name="edit_title_field_label">Titolo</string>
+    <string name="edit_title_field_placeholder">es. Smettere di fumare</string>
+    <string name="edit_field_date">Data</string>
+    <string name="edit_field_time">Ora</string>
+    <string name="edit_accent_header">Colore</string>
+    <string name="milestone_default_title">Evento</string>
+
+    <string name="widget_config_title">Scegli un evento</string>
+    <string name="widget_config_transparent_title">Sfondo trasparente</string>
+    <string name="widget_config_transparent_subtitle">Mostra solo il numero sullo sfondo.</string>
+    <string name="widget_config_empty_subtitle">Apri Pulsar per aggiungerne uno, poi posiziona di nuovo il widget.</string>
+    <string name="widget_config_open_app">Apri Pulsar</string>
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d giorno · dal %2$s</item>
+        <item quantity="many">%1$d di giorni · dal %2$s</item>
+        <item quantity="other">%1$d giorni · dal %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Impostazioni</string>
+    <string name="settings_theme_header">Tema</string>
+    <string name="settings_theme_system">Predefinito di sistema</string>
+    <string name="settings_theme_light">Chiaro</string>
+    <string name="settings_theme_dark">Scuro</string>
+    <string name="settings_display_header">Visualizzazione</string>
+    <string name="settings_show_units_title">Mostra ore e minuti</string>
+    <string name="settings_show_units_subtitle">Mostra ore, minuti e secondi in tempo reale nella schermata dei dettagli di un evento.</string>
+    <string name="settings_about_header">Informazioni</string>
+    <string name="settings_version_label">Versione</string>
+    <string name="settings_made_by">Creato da Quasar Apps</string>
+
+    <!-- Splash screen -->
+    <string name="splash_tagline">Conta il tempo</string>
+
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <!-- Backup & privacy -->
+    <string name="settings_backup_header">Backup e privacy</string>
+    <string name="settings_backup_title">Esegui il backup degli eventi</string>
+    <string name="settings_backup_subtitle">Includi i tuoi eventi nel backup di Google di questo dispositivo, così verranno ripristinati su un nuovo telefono.</string>
+    <string name="settings_privacy_note">Pulsar memorizza tutto sul tuo dispositivo: nessun account, nessun server e nessun tracciamento. Con il backup attivo, i tuoi eventi vengono inclusi nel backup di Google del tuo dispositivo.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Ordina</string>
+    <string name="home_sort_recently_added">Aggiunti di recente</string>
+    <string name="home_sort_most_days">Più giorni</string>
+    <string name="home_sort_alphabetical">Alfabetico</string>
+</resources>

@@ -1,6 +1,118 @@
 <resources>
-    <!-- Canonical app name. The launcher label routes through the `${appLabel}` manifest
-         placeholder so the debug variant can override to "Days Since (debug)" without losing
-         translatability of the release-variant string here. -->
-    <string name="app_name">Days Since</string>
+    <!-- Canonical app name, localized per-locale (see values-<lang>/strings.xml). Both build variants
+         resolve the `${appLabel}` manifest placeholder to this string, so the launcher label is
+         localized; the debug build is told apart by its `.debug` applicationId, not a label suffix. -->
+    <string name="app_name">Pulsar</string>
+
+    <!-- Accent color names. User-facing only as the accent picker's accessibility labels. -->
+    <string name="accent_magenta">Magenta</string>
+    <string name="accent_violet">Violet</string>
+    <string name="accent_indigo">Indigo</string>
+    <string name="accent_nebula">Nebula</string>
+    <string name="accent_aurora">Aurora</string>
+    <string name="accent_solar">Solar</string>
+    <string name="accent_ember">Ember</string>
+    <string name="accent_deep">Deep</string>
+
+    <!-- Shared actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_undo">Undo</string>
+
+    <!-- Home screen -->
+    <string name="home_title">Pulsar</string>
+    <string name="home_fab_mark">Mark</string>
+    <!-- Accessibility label for the add FAB; its decorative star + "Mark" text are merged into one
+         node, so this is what TalkBack announces. -->
+    <string name="home_fab_content_description">Add milestone</string>
+    <!-- Home sort control (top bar). -->
+    <string name="home_sort_content_description">Sort</string>
+    <string name="home_sort_recently_added">Recently added</string>
+    <string name="home_sort_most_days">Most days</string>
+    <string name="home_sort_alphabetical">Alphabetical</string>
+    <!-- translator: standalone caption shown under a large standalone number; not adjacent to it,
+         so no number agreement is needed. -->
+    <string name="card_days_since_label">DAYS SINCE</string>
+    <!-- Kicker on a milestone card the day it is created (0 days) — the "new beginning" state. -->
+    <string name="card_new_beginning_label">A NEW BEGINNING</string>
+    <!-- Accessibility label for a milestone card, announced as one node by TalkBack.
+         %1$s = milestone title, %2$s = status fragment (the elapsed-days plural e.g. "365 days", or
+         the new-beginning label for a 0-day card). Translatable so locales can adapt the joiner
+         (e.g. the Arabic comma) or the word order for natural screen-reader phrasing. -->
+    <string name="card_a11y_content_description">%1$s, %2$s</string>
+    <string name="empty_title">No milestones yet</string>
+    <string name="empty_subtitle">Track the days since something that matters to you.</string>
+
+    <!-- Detail screen -->
+    <string name="detail_back_content_description">Back</string>
+    <string name="detail_more_options_content_description">More options</string>
+    <!-- Overflow menu item: reset the milestone's start to the current moment (count back to 0). -->
+    <string name="detail_action_reset">Reset to now</string>
+    <string name="detail_reset_dialog_title">Reset to now?</string>
+    <string name="detail_reset_dialog_message">This restarts the count from now.</string>
+    <!-- translator: the next three are standalone unit captions under large standalone numbers
+         (a dashboard-style readout); they are not placed next to the number, so no plural
+         agreement is needed. -->
+    <string name="detail_days_label">DAYS</string>
+    <string name="detail_hours_label">HOURS</string>
+    <string name="detail_minutes_label">MINUTES</string>
+    <string name="detail_seconds_label">SECONDS</string>
+    <!-- %1$s = localized long date, %2$s = localized time. e.g. "since June 15, 2025 at 9:30 AM" -->
+    <string name="detail_since_date_at_time">since %1$s at %2$s</string>
+    <string name="detail_widget_hint">Add a widget from your home screen to keep this in view.</string>
+    <!-- Shown in the Undo snackbar after a delete. %1$s = milestone title. -->
+    <string name="detail_delete_snackbar">Deleted “%1$s”</string>
+    <string name="detail_missing">This milestone is no longer available.</string>
+    <string name="detail_go_back">Go back</string>
+
+    <!-- Add / edit milestone screen -->
+    <string name="edit_title_new">New milestone</string>
+    <string name="edit_title_edit">Edit milestone</string>
+    <string name="edit_title_field_label">Title</string>
+    <string name="edit_title_field_placeholder">e.g. Last night out</string>
+    <string name="edit_field_date">Date</string>
+    <string name="edit_field_time">Time</string>
+    <string name="edit_accent_header">Accent</string>
+    <!-- Fallback title used when the user leaves the title blank. -->
+    <string name="milestone_default_title">Milestone</string>
+
+    <!-- Widget configuration screen -->
+    <string name="widget_config_title">Choose a milestone</string>
+    <string name="widget_config_transparent_title">Transparent background</string>
+    <string name="widget_config_transparent_subtitle">Show just the number on your wallpaper.</string>
+    <string name="widget_config_empty_subtitle">Open Pulsar to add one, then place the widget again.</string>
+    <string name="widget_config_open_app">Open Pulsar</string>
+    <!-- %1$d = whole days, %2$s = localized long date. e.g. "12 days · since January 1, 2026".
+         The count is passed both as the quantity selector and as %1$d. -->
+    <plurals name="widget_config_row_subtitle">
+        <item quantity="one">%1$d day · since %2$s</item>
+        <item quantity="other">%1$d days · since %2$s</item>
+    </plurals>
+
+    <!-- Settings screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_theme_header">Theme</string>
+    <string name="settings_theme_system">System default</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_display_header">Display</string>
+    <string name="settings_show_units_title">Show hours &amp; minutes</string>
+    <string name="settings_show_units_subtitle">Show the live hours, minutes and seconds on a milestone\'s detail screen.</string>
+    <string name="settings_about_header">About</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_made_by">Made by Quasar Apps</string>
+
+    <!-- Backup & privacy section -->
+    <string name="settings_backup_header">Backup &amp; privacy</string>
+    <string name="settings_backup_title">Back up milestones</string>
+    <string name="settings_backup_subtitle">Include your milestones in this device\'s Google backup so they restore on a new phone.</string>
+    <!-- Short privacy disclosure shown under the backup toggle. -->
+    <string name="settings_privacy_note">Pulsar stores everything on your device — no accounts, no servers, and nothing is tracked. With backup on, your milestones are included in your device\'s Google backup.</string>
+
+    <!-- Splash screen tagline, shown under the Pulsar wordmark. -->
+    <string name="splash_tagline">Count the time</string>
 </resources>

@@ -3,4 +3,40 @@
     <string name="widget_days_description">Whole days since a milestone you choose.</string>
     <string name="widget_dhm_label">Days · Hours · Minutes</string>
     <string name="widget_dhm_description">Time since a milestone, in days, hours and minutes.</string>
+
+    <!-- Unconfigured (no milestone bound) prompts. -->
+    <string name="widget_setup_short">Set up</string>
+    <string name="widget_setup_long">Tap to set up</string>
+    <string name="widget_setup_content_description">Tap to choose a milestone</string>
+
+    <!-- In-widget unit labels. translator: standalone captions under large standalone numbers
+         (a dashboard-style readout); not adjacent to the number, so no plural agreement is needed. -->
+    <string name="widget_unit_days">DAYS</string>
+    <string name="widget_unit_hours">HRS</string>
+    <string name="widget_unit_minutes">MIN</string>
+
+    <!-- Shown instead of the day count once it exceeds 9999 (the widget can't fit more digits).
+         translatable=false: it mirrors the widget's Western-digit number rendering, so it isn't
+         localized per-locale; it lives here only to keep the literal out of code. -->
+    <string name="widget_days_capped" translatable="false">9999+</string>
+
+    <!-- Accessibility descriptions. These are spoken by TalkBack, so the count and noun ARE
+         adjacent and must agree. The count fragments below are composed into the templates. -->
+    <plurals name="widget_a11y_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="widget_a11y_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="widget_a11y_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+
+    <!-- %1$s = days fragment (e.g. "12 days"), %2$s = title, %3$s = localized long date. -->
+    <string name="widget_days_content_description">%1$s since %2$s, %3$s</string>
+    <!-- %1$s = title, %2$s/%3$s/%4$s = days/hours/minutes fragments. -->
+    <string name="widget_dhm_content_description">%1$s: %2$s, %3$s, %4$s</string>
 </resources>

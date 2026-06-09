@@ -6,25 +6,38 @@ on:
   push:
     branches: [develop, main]
 
+# Cancel superseded runs for the same ref (e.g. rapid pushes to a PR) so the slow emulator job
+# isn't queued up multiple times over.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   debug:
     name: debug build + tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      # Match the Gradle daemon JVM pinned in gradle/gradle-daemon-jvm.properties (JetBrains
+      # Runtime 21). Providing JBR 21 here lets Gradle reuse this JDK for the build daemon instead
+      # of auto-provisioning JBR from the foojay download URLs on every cold run.
+      - name: Set up JBR 21
+        uses: actions/setup-java@v5
         with:
-          distribution: temurin
-          java-version: '17'
+          distribution: jetbrains
+          java-version: '21'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
-      - name: assembleDebug + unit tests
-        run: ./gradlew :app:assembleDebug :app:testDebugUnitTest --no-daemon --stacktrace
+      # koverVerify enforces the coverage floor (configured in app/build.gradle.kts); it reuses the
+      # testDebugUnitTest run above for coverage data.
+      - name: assembleDebug + unit tests + coverage gate
+        run: ./gradlew :app:assembleDebug :app:testDebugUnitTest :app:koverVerify --no-daemon --stacktrace
 
   # Build the release variant and run release-mode lint in parallel with the
   # debug job so R8 / ProGuard rule regressions and policy-level lint findings
@@ -36,24 +49,127 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      # Match the Gradle daemon JVM pinned in gradle/gradle-daemon-jvm.properties (JetBrains
+      # Runtime 21). Providing JBR 21 here lets Gradle reuse this JDK for the build daemon instead
+      # of auto-provisioning JBR from the foojay download URLs on every cold run.
+      - name: Set up JBR 21
+        uses: actions/setup-java@v5
         with:
-          distribution: temurin
-          java-version: '17'
+          distribution: jetbrains
+          java-version: '21'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: assembleRelease + lintRelease
         run: ./gradlew :app:assembleRelease :app:lintRelease --no-daemon --stacktrace
 
       - name: Upload release lint report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lint-release-report
           path: app/build/reports/lint-results-release.*
+          if-no-files-found: ignore
+
+  # Run the androidTest (instrumentation) suite on a Gradle Managed Device (GMD). The device is
+  # declared in app/build.gradle.kts, so AGP provisions/boots/tears down the emulator and the exact
+  # same `:app:pixel2api30DebugAndroidTest` command runs here and locally. Kept as its own job so its
+  # slowness doesn't gate the fast JVM jobs.
+  instrumentation:
+    name: instrumentation tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # Match the Gradle daemon JVM pinned in gradle/gradle-daemon-jvm.properties (JetBrains
+      # Runtime 21). Providing JBR 21 here lets Gradle reuse this JDK for the build daemon instead
+      # of auto-provisioning JBR from the foojay download URLs on every cold run.
+      - name: Set up JBR 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: jetbrains
+          java-version: '21'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # The emulator needs hardware acceleration; expose /dev/kvm to the runner.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # GMD's setup task downloads the ATD system image via sdkmanager, which is licence-gated.
+      # Accept all SDK licences up front so the install isn't blocked. (`yes` gets SIGPIPE once
+      # sdkmanager stops reading, so the pipe's non-zero exit is expected and ignored.)
+      - name: Accept Android SDK licences
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      # Runner default env vars (ANDROID_SDK_ROOT) aren't available in the ${{ env.* }} expression
+      # context, so re-export the SDK root into the job env. Without this the cache `path` below
+      # resolves to "/system-images/..." and silently no-ops, re-downloading the image every run.
+      - name: Expose SDK path
+        run: echo "SDK_ROOT=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
+
+      # Cache the downloaded ATD system image (the slow part). The managed device itself is recreated
+      # and booted fresh each run, which is reliable — it avoids the cross-run emulator-snapshot
+      # fragility that a booted-snapshot cache is prone to.
+      #
+      # Key suffix `-v2`: a hosted-runner tooling bump left AGP's managed-device setup
+      # (`:app:<device>Setup`) failing with `MissingValueException` against the previously-cached
+      # image. Busting the key forces a fresh image download under the current tooling.
+      - name: Cache ATD system image
+        uses: actions/cache@v5
+        with:
+          path: ${{ env.SDK_ROOT }}/system-images/android-30/aosp_atd
+          key: gmd-system-image-aosp-atd-30-v2
+
+      # Install the emulator runtime, platform-tools and the ATD system image up front instead of
+      # relying on AGP's managed-device setup to auto-resolve them. When a runner tooling update
+      # leaves one of those components unresolved, AGP's setup task throws an opaque
+      # `MissingValueException`; installing them explicitly here keeps the setup deterministic.
+      # (Pixel 2 + aosp-atd on a 64-bit runner resolves to the x86_64 image, with an x86 fallback.)
+      - name: Install emulator + ATD system image
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          "$SDKMANAGER" "emulator" "platform-tools"
+          "$SDKMANAGER" "system-images;android-30;aosp_atd;x86_64" \
+            || "$SDKMANAGER" "system-images;android-30;aosp_atd;x86"
+
+      # Force software GPU (swiftshader_indirect). Headless runners have no GPU, and newer emulator
+      # builds reject AGP's default `auto-no-window` mode ("Selected GPU option 'auto-no-window' is
+      # not valid, switching to 'auto'") then fail to boot the managed device during :app:<device>Setup.
+      # See https://developer.android.com/studio/test/managed-devices (headless build servers).
+      #
+      # Retry the whole GMD run once before failing the job. Emulator instrumentation is occasionally
+      # flaky — a single test can spuriously fail (e.g. a DataStore-round-trip timeout/async hiccup)
+      # under CI load even when the suite is sound. A genuinely broken test still fails both attempts,
+      # so this only absorbs transient flakes; it doesn't mask real regressions.
+      - name: Instrumentation tests (Gradle Managed Device)
+        run: |
+          gmd() {
+            ./gradlew -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect \
+              :app:pixel2api30DebugAndroidTest --no-daemon --stacktrace
+          }
+          if gmd; then
+            exit 0
+          fi
+          echo "::warning::Instrumentation run failed; retrying once before failing the job."
+          gmd
+
+      - name: Upload instrumentation test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-test-report
+          path: app/build/reports/androidTests/**
           if-no-files-found: ignore
