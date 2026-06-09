@@ -1,0 +1,132 @@
+name: Release
+
+# Cut a release by pushing a semver tag, e.g.:
+#   git tag v1.0.0 && git push origin v1.0.0
+# This builds a SIGNED Android App Bundle (.aab) stamped with the tag's version
+# and publishes it as a GitHub Release. The .aab is then uploaded to the Play
+# Console manually (or wired into fastlane supply later) — see RELEASING.md.
+on:
+  push:
+    tags:
+      # Match v1.2.3 only — three numeric components, no pre-release suffix.
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+# The publish step creates a GitHub Release, which needs write access to contents.
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build signed AAB + publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      # Match the Gradle daemon JVM pinned in gradle/gradle-daemon-jvm.properties
+      # (JetBrains Runtime 21), same as ci.yml.
+      - name: Set up JBR 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: jetbrains
+          java-version: '21'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      # Fail fast with a clear message if any signing secret is missing, rather
+      # than letting build.gradle.kts silently fall back to an UNSIGNED bundle
+      # that only gets rejected at Play upload time.
+      - name: Verify signing secrets are present
+        env:
+          PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
+          PULSAR_KEYSTORE_PASSWORD: ${{ secrets.PULSAR_KEYSTORE_PASSWORD }}
+          PULSAR_KEY_ALIAS: ${{ secrets.PULSAR_KEY_ALIAS }}
+          PULSAR_KEY_PASSWORD: ${{ secrets.PULSAR_KEY_PASSWORD }}
+        run: |
+          missing=""
+          [ -z "$PULSAR_KEYSTORE_BASE64" ] && missing="$missing PULSAR_KEYSTORE_BASE64"
+          [ -z "$PULSAR_KEYSTORE_PASSWORD" ] && missing="$missing PULSAR_KEYSTORE_PASSWORD"
+          [ -z "$PULSAR_KEY_ALIAS" ] && missing="$missing PULSAR_KEY_ALIAS"
+          [ -z "$PULSAR_KEY_PASSWORD" ] && missing="$missing PULSAR_KEY_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing release signing secret(s):$missing. Set them under Settings → Secrets and variables → Actions. See RELEASING.md."
+            exit 1
+          fi
+
+      # versionName comes straight from the tag (v1.2.3 -> 1.2.3). versionCode is
+      # a monotonic integer derived from semver: MAJOR*10000 + MINOR*100 + PATCH
+      # (so 1.0.0 -> 10000). The MINOR/PATCH < 100 constraint that keeps this
+      # scheme collision-free is enforced below, not just documented, so a stray
+      # tag fails fast with a clear message instead of producing a versionCode
+      # that Play silently rejects (or that collides with another version).
+      - name: Derive version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          NAME="${TAG#v}"
+          if [[ ! "$NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '$TAG' is not vMAJOR.MINOR.PATCH with numeric components."
+            exit 1
+          fi
+          MAJOR="${NAME%%.*}"
+          REST="${NAME#*.}"
+          MINOR="${REST%%.*}"
+          PATCH="${REST##*.}"
+          if [ "$MINOR" -ge 100 ] || [ "$PATCH" -ge 100 ]; then
+            echo "::error::MINOR and PATCH must each be < 100 for the versionCode scheme (got $NAME). Ship the next minor/major instead."
+            exit 1
+          fi
+          CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "Releasing $NAME (versionCode $CODE)"
+
+      # Reconstruct the keystore on the runner from a base64 secret. Generate the
+      # secret locally with:  base64 -w0 upload-keystore.jks   (see RELEASING.md).
+      # printf '%s' (not echo) avoids appending a trailing newline to the secret.
+      - name: Decode upload keystore
+        env:
+          PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
+        run: printf '%s' "$PULSAR_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
+
+      - name: Build signed App Bundle
+        env:
+          PULSAR_VERSION_NAME: ${{ steps.version.outputs.name }}
+          PULSAR_VERSION_CODE: ${{ steps.version.outputs.code }}
+          PULSAR_KEYSTORE_PATH: ${{ runner.temp }}/upload-keystore.jks
+          PULSAR_KEYSTORE_PASSWORD: ${{ secrets.PULSAR_KEYSTORE_PASSWORD }}
+          PULSAR_KEY_ALIAS: ${{ secrets.PULSAR_KEY_ALIAS }}
+          PULSAR_KEY_PASSWORD: ${{ secrets.PULSAR_KEY_PASSWORD }}
+        run: ./gradlew :app:bundleRelease --no-daemon --stacktrace
+
+      # Belt-and-braces: confirm the bundle is actually signed before we publish
+      # it. jarsigner ships with the JDK set up above.
+      - name: Verify the bundle is signed
+        run: jarsigner -verify app/build/outputs/bundle/release/app-release.aab
+
+      - name: Rename bundle for upload
+        run: cp app/build/outputs/bundle/release/app-release.aab "pulsar-${{ steps.version.outputs.name }}.aab"
+
+      - name: Upload AAB as a workflow artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: pulsar-${{ steps.version.outputs.name }}-aab
+          path: pulsar-${{ steps.version.outputs.name }}.aab
+          if-no-files-found: error
+
+      # Publish a GitHub Release for the tag with the signed AAB attached.
+      # Notes are auto-generated from merged PRs; edit them afterward or paste the
+      # matching CHANGELOG.md section. The AAB still has to be uploaded to the Play
+      # Console (manually or via fastlane supply) — this is not a Play deployment.
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "pulsar-${{ steps.version.outputs.name }}.aab" \
+            --title "Pulsar ${{ steps.version.outputs.name }}" \
+            --generate-notes \
+            --verify-tag

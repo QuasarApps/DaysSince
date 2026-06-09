@@ -7,7 +7,7 @@ home-screen widget.
 
 - Minimum Android version: **8.0 (API 26)**
 - Targets Android: **15 (API 35)**
-- Fully offline. No accounts, no network calls, no permissions.
+- Offline-first. No accounts, no permissions, no tracking — your milestones never leave your device.
 
 ---
 
@@ -28,8 +28,9 @@ home-screen widget.
   device (no wallpaper adaptation), following the system light/dark setting.
 - **Accessibility:** TalkBack descriptions on widget content, respects the
   system reduce-motion setting, tabular figures so digits don't jump.
-- **No network, no permissions.** Data is stored in app-private DataStore
-  preferences and included in Auto Backup so it survives a reinstall.
+- **No accounts, no permissions, no tracking.** Your milestones are stored in
+  app-private DataStore preferences and never leave the device; they're included
+  in Auto Backup so they survive a reinstall.
 
 ---
 
@@ -194,7 +195,24 @@ different milestone.
 ## Privacy
 
 Pulsar stores all data locally in the app's private storage. It does
-not request any runtime permissions, makes no network requests, and
-includes no analytics or crash reporting. The stored milestones are
+not request any runtime permissions, sends no personal data over the
+network, and includes no analytics or crash reporting. The stored milestones are
 included in Android Auto Backup so they survive an uninstall/reinstall
-on the same Google account.
+on the same Google account — you can turn that off under
+*Settings → Backup & privacy*.
+
+The full, hosting-ready privacy policy is at
+[`docs/privacy-policy.md`](docs/privacy-policy.md); it doubles as the
+Play-required privacy policy URL.
+
+---
+
+## Releasing
+
+Releases are cut by pushing a `vMAJOR.MINOR.PATCH` tag, which triggers
+[`.github/workflows/release.yml`](.github/workflows/release.yml) to build a
+signed App Bundle and publish a GitHub Release. The full process — versioning,
+signing secrets, and Play Console upload — is documented in
+[`RELEASING.md`](RELEASING.md). User-facing history is in
+[`CHANGELOG.md`](CHANGELOG.md); the Play store listing lives under
+[`fastlane/metadata/android/`](fastlane/metadata/android).
