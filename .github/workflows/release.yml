@@ -88,7 +88,7 @@ jobs:
           fi
           NAME="${RAW#v}"
           if [[ ! "$NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Version '$RAW' is not vMAJOR.MINOR.PATCH with numeric components."
+            echo "::error::Version '$RAW' must be MAJOR.MINOR.PATCH with numeric components (an optional leading 'v' is allowed: e.g. 1.2.3 or v1.2.3)."
             exit 1
           fi
           MAJOR="${NAME%%.*}"
