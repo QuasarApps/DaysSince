@@ -197,4 +197,21 @@ Pulsar stores all data locally in the app's private storage. It does
 not request any runtime permissions, makes no network requests, and
 includes no analytics or crash reporting. The stored milestones are
 included in Android Auto Backup so they survive an uninstall/reinstall
-on the same Google account.
+on the same Google account — you can turn that off under
+*Settings → Backup & privacy*.
+
+The full, hosting-ready privacy policy is at
+[`docs/privacy-policy.md`](docs/privacy-policy.md); it doubles as the
+Play-required privacy policy URL.
+
+---
+
+## Releasing
+
+Releases are cut by pushing a `vMAJOR.MINOR.PATCH` tag, which triggers
+[`.github/workflows/release.yml`](.github/workflows/release.yml) to build a
+signed App Bundle and publish a GitHub Release. The full process — versioning,
+signing secrets, and Play Console upload — is documented in
+[`RELEASING.md`](RELEASING.md). User-facing history is in
+[`CHANGELOG.md`](CHANGELOG.md); the Play store listing lives under
+[`fastlane/metadata/android/`](fastlane/metadata/android).
