@@ -87,4 +87,9 @@
     <string name="settings_backup_title">النسخ الاحتياطي للأحداث</string>
     <string name="settings_backup_subtitle">ضمِّن أحداثك في النسخة الاحتياطية من Google على هذا الجهاز ليتم استعادتها على هاتف جديد.</string>
     <string name="settings_privacy_note">يخزّن نباض كل شيء على جهازك — بدون حسابات أو خوادم أو تتبع. عند تفعيل النسخ الاحتياطي، تُضمَّن أحداثك في النسخة الاحتياطية من Google على جهازك.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">فرز</string>
+    <string name="home_sort_recently_added">المضافة حديثًا</string>
+    <string name="home_sort_most_days">الأكثر أيامًا</string>
+    <string name="home_sort_alphabetical">أبجديًا</string>
 </resources>

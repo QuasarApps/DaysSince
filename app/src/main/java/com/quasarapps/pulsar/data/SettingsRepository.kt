@@ -22,11 +22,35 @@ enum class ThemeMode {
     }
 }
 
+/** How the Home list is ordered. */
+enum class SortOrder {
+    /** Most recently added first (createdAt descending) — the default and the original behaviour. */
+    RECENTLY_ADDED,
+    /** Most elapsed days first — i.e. the earliest start instant first (clock-independent). */
+    MOST_DAYS,
+    /** By title, case-insensitive A→Z. */
+    ALPHABETICAL;
+
+    /** Returns [milestones] ordered per this option. Pure (doesn't read the current clock). */
+    fun sort(milestones: List<Milestone>): List<Milestone> = when (this) {
+        RECENTLY_ADDED -> milestones.sortedByDescending { it.createdAt }
+        MOST_DAYS -> milestones.sortedWith(compareBy({ it.date }, { it.time }))
+        ALPHABETICAL -> milestones.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.title })
+    }
+
+    companion object {
+        /** Parse a stored token back to an order, defaulting to [RECENTLY_ADDED] for unknown/missing. */
+        fun fromStorage(value: String?): SortOrder = entries.firstOrNull { it.name == value } ?: RECENTLY_ADDED
+    }
+}
+
 /** User-facing app preferences, independent of milestone data. */
 data class Settings(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     /** Whether the detail screen shows the live hours/minutes/seconds breakdown under the day count. */
     val showUnits: Boolean = true,
+    /** How the Home list is ordered. */
+    val sortOrder: SortOrder = SortOrder.RECENTLY_ADDED,
     /**
      * Whether milestone data may be included in the device's cloud/transfer backup. Default true
      * (preserves restore-on-new-device). When false, [com.quasarapps.pulsar.backup.MilestoneBackupAgent]
@@ -58,6 +82,7 @@ class SettingsRepository internal constructor(
             themeMode = ThemeMode.fromStorage(prefs[KEY_THEME_MODE]),
             showUnits = prefs[KEY_SHOW_UNITS] ?: true,
             backupEnabled = prefs[KEY_BACKUP_ENABLED] ?: true,
+            sortOrder = SortOrder.fromStorage(prefs[KEY_SORT_ORDER]),
         )
     }.distinctUntilChanged()
 
@@ -75,9 +100,14 @@ class SettingsRepository internal constructor(
         dataStore.edit { it[KEY_BACKUP_ENABLED] = enabled }
     }
 
+    suspend fun setSortOrder(order: SortOrder) {
+        dataStore.edit { it[KEY_SORT_ORDER] = order.name }
+    }
+
     companion object {
         private val KEY_THEME_MODE = stringPreferencesKey("theme_mode")
         private val KEY_SHOW_UNITS = booleanPreferencesKey("show_units")
         private val KEY_BACKUP_ENABLED = booleanPreferencesKey("backup_enabled")
+        private val KEY_SORT_ORDER = stringPreferencesKey("sort_order")
     }
 }

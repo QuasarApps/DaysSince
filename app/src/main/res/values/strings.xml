@@ -29,6 +29,11 @@
     <!-- Accessibility label for the add FAB; its decorative star + "Mark" text are merged into one
          node, so this is what TalkBack announces. -->
     <string name="home_fab_content_description">Add milestone</string>
+    <!-- Home sort control (top bar). -->
+    <string name="home_sort_content_description">Sort</string>
+    <string name="home_sort_recently_added">Recently added</string>
+    <string name="home_sort_most_days">Most days</string>
+    <string name="home_sort_alphabetical">Alphabetical</string>
     <!-- translator: standalone caption shown under a large standalone number; not adjacent to it,
          so no number agreement is needed. -->
     <string name="card_days_since_label">DAYS SINCE</string>

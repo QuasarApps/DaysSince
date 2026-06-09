@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.quasarapps.pulsar.data.Milestone
+import com.quasarapps.pulsar.data.SortOrder
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -46,13 +47,19 @@ class HomeScreenTest {
         milestones: List<Milestone>,
         onAdd: () -> Unit = {},
         onOpen: (String) -> Unit = {},
+        onSetSortOrder: (SortOrder) -> Unit = {},
     ) {
         // The milestone cards' rememberElapsedDhm runs an infinite delay loop; under Robolectric the
         // virtual clock would advance through it forever, so freeze it and waitForIdle settles.
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
             PulsarTheme {
-                HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
+                HomeScreen(
+                    milestones = milestones,
+                    onAdd = onAdd,
+                    onOpen = onOpen,
+                    onSetSortOrder = onSetSortOrder,
+                )
             }
         }
     }
@@ -95,6 +102,18 @@ class HomeScreenTest {
         // The number / kicker / title merge into one node whose contentDescription leads with the
         // title, so TalkBack announces a single labeled "Sober, N days" button per card.
         composeRule.onNodeWithContentDescription("Sober", substring = true).assertIsDisplayed()
+    }
+
+    @Test
+    fun sortControl_isShownWhenListIsPopulated() {
+        setContent(milestones = listOf(milestone("a", "Sober")))
+        composeRule.onNodeWithContentDescription("Sort").assertIsDisplayed()
+    }
+
+    @Test
+    fun emptyState_hidesSortControl() {
+        setContent(milestones = emptyList())
+        composeRule.onNodeWithContentDescription("Sort").assertDoesNotExist()
     }
 
     @Test

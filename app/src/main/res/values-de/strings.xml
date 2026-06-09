@@ -82,4 +82,9 @@
     <string name="settings_backup_title">Meilensteine sichern</string>
     <string name="settings_backup_subtitle">Deine Meilensteine in die Google-Sicherung dieses Geräts einbeziehen, damit sie auf einem neuen Telefon wiederhergestellt werden.</string>
     <string name="settings_privacy_note">Pulsar speichert alles auf deinem Gerät – keine Konten, keine Server, kein Tracking. Wenn die Sicherung aktiviert ist, werden deine Meilensteine in die Google-Sicherung deines Geräts aufgenommen.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Sortieren</string>
+    <string name="home_sort_recently_added">Zuletzt hinzugefügt</string>
+    <string name="home_sort_most_days">Meiste Tage</string>
+    <string name="home_sort_alphabetical">Alphabetisch</string>
 </resources>

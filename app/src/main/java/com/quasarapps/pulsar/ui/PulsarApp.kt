@@ -136,11 +136,18 @@ fun PulsarApp(deepLink: DeepLinkTarget? = null) {
             ) {
                 NavHost(navController = navController, startDestination = Routes.HOME) {
                     composable(Routes.HOME) {
+                        // Apply the user's sort here (both the list and the chosen order are in scope);
+                        // remember so it only re-sorts when the list or order actually changes.
+                        val sorted = remember(milestones, settings.sortOrder) {
+                            settings.sortOrder.sort(milestones)
+                        }
                         HomeScreen(
-                            milestones = milestones,
+                            milestones = sorted,
                             onAdd = { navController.navigate(Routes.ADD) },
                             onOpen = { id -> navController.navigate(Routes.detail(id)) },
                             onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                            sortOrder = settings.sortOrder,
+                            onSetSortOrder = settingsVm::setSortOrder,
                         )
                     }
 

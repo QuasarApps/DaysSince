@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.quasarapps.pulsar.data.Milestone
+import com.quasarapps.pulsar.data.SortOrder
 import com.quasarapps.pulsar.ui.theme.PulsarTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -41,13 +42,19 @@ class HomeScreenInstrumentedTest {
         milestones: List<Milestone>,
         onAdd: () -> Unit = {},
         onOpen: (String) -> Unit = {},
+        onSetSortOrder: (SortOrder) -> Unit = {},
     ) {
         // Note: we deliberately do NOT freeze the test clock here. The milestone cards'
         // rememberElapsedDhm loop is delay-based (it suspends between minute ticks, which counts as
         // idle), so on a real device waitForIdle settles fine.
         composeRule.setContent {
             PulsarTheme {
-                HomeScreen(milestones = milestones, onAdd = onAdd, onOpen = onOpen)
+                HomeScreen(
+                    milestones = milestones,
+                    onAdd = onAdd,
+                    onOpen = onOpen,
+                    onSetSortOrder = onSetSortOrder,
+                )
             }
         }
     }
@@ -130,6 +137,17 @@ class HomeScreenInstrumentedTest {
         composeRule.onNodeWithContentDescription("Sober", substring = true).performClick()
 
         assertEquals("abc", opened)
+    }
+
+    @Test
+    fun sortControl_selectingAnOption_invokesCallback() {
+        var picked: SortOrder? = null
+        setContent(milestones = listOf(milestone("a", "Sober")), onSetSortOrder = { picked = it })
+
+        composeRule.onNodeWithContentDescription("Sort").performClick()
+        composeRule.onNodeWithText("Alphabetical").performClick()
+
+        assertEquals(SortOrder.ALPHABETICAL, picked)
     }
 
     @Test

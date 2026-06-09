@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.quasarapps.pulsar.data.Settings
 import com.quasarapps.pulsar.data.SettingsRepository
+import com.quasarapps.pulsar.data.SortOrder
 import com.quasarapps.pulsar.data.ThemeMode
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,5 +37,9 @@ class SettingsViewModel internal constructor(
 
     fun setBackupEnabled(enabled: Boolean) {
         viewModelScope.launch { repo.setBackupEnabled(enabled) }
+    }
+
+    fun setSortOrder(order: SortOrder) {
+        viewModelScope.launch { repo.setSortOrder(order) }
     }
 }

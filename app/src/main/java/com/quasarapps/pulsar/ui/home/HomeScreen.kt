@@ -5,13 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,11 +19,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +38,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import com.quasarapps.pulsar.ElapsedTime
 import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.Milestone
+import com.quasarapps.pulsar.data.SortOrder
 import com.quasarapps.pulsar.ui.components.Starburst
 import com.quasarapps.pulsar.ui.components.rememberElapsedDhm
 import com.quasarapps.pulsar.ui.theme.NewBeginningBrush
@@ -66,6 +74,8 @@ fun HomeScreen(
     onAdd: () -> Unit,
     onOpen: (String) -> Unit,
     onOpenSettings: () -> Unit = {},
+    sortOrder: SortOrder = SortOrder.RECENTLY_ADDED,
+    onSetSortOrder: (SortOrder) -> Unit = {},
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -84,6 +94,10 @@ fun HomeScreen(
                     )
                 },
                 actions = {
+                    // Sorting only matters with a list to sort, so the control hides on the empty state.
+                    if (milestones.isNotEmpty()) {
+                        SortAction(current = sortOrder, onSelect = onSetSortOrder)
+                    }
                     IconButton(onClick = onOpenSettings) {
                         Icon(
                             Icons.Filled.Settings,
@@ -104,44 +118,66 @@ fun HomeScreen(
                     .padding(padding),
             )
         } else {
-            // Two-column layout via a LazyColumn of paired Rows: both cells in a row share the row's
-            // max content height (height(IntrinsicSize.Min) + fillMaxHeight), so the columns stay
-            // visually balanced while each row sizes to its own content.
-            LazyColumn(
+            // Two-column grid keyed per milestone id, so a re-sort animates each card to its new
+            // slot (animateItem) instead of snapping. Cards size independently (min 150dp); we trade
+            // the old per-row height equalization for stable keys + animated reordering.
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 110.dp),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                items(
-                    items = milestones.chunked(2),
-                    key = { pair -> pair.joinToString("|") { it.id } },
-                ) { pair ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(IntrinsicSize.Min),
-                        horizontalArrangement = Arrangement.spacedBy(14.dp),
-                    ) {
-                        pair.forEach { milestone ->
-                            MilestoneCard(
-                                milestone = milestone,
-                                onClick = { onOpen(milestone.id) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .fillMaxHeight(),
-                            )
-                        }
-                        if (pair.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    }
+                items(items = milestones, key = { it.id }) { milestone ->
+                    MilestoneCard(
+                        milestone = milestone,
+                        onClick = { onOpen(milestone.id) },
+                        modifier = Modifier.animateItem(),
+                    )
                 }
             }
         }
     }
 }
+
+@Composable
+private fun SortAction(current: SortOrder, onSelect: (SortOrder) -> Unit) {
+    var open by remember { mutableStateOf(false) }
+    Box {
+        IconButton(onClick = { open = true }) {
+            Icon(
+                Icons.AutoMirrored.Filled.Sort,
+                contentDescription = stringResource(R.string.home_sort_content_description),
+                tint = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            SortOrder.entries.forEach { order ->
+                DropdownMenuItem(
+                    text = { Text(sortOrderLabel(order)) },
+                    // Re-selecting the active order is a no-op: skip it so we don't write the same
+                    // value back to DataStore.
+                    onClick = { open = false; if (order != current) onSelect(order) },
+                    // A trailing check marks the active order without shifting the other labels.
+                    trailingIcon = {
+                        if (order == current) Icon(Icons.Filled.Check, contentDescription = null)
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun sortOrderLabel(order: SortOrder): String = stringResource(
+    when (order) {
+        SortOrder.RECENTLY_ADDED -> R.string.home_sort_recently_added
+        SortOrder.MOST_DAYS -> R.string.home_sort_most_days
+        SortOrder.ALPHABETICAL -> R.string.home_sort_alphabetical
+    },
+)
 
 @Composable
 private fun MilestoneCard(

@@ -84,4 +84,9 @@
     <string name="settings_backup_title">Резервное копирование событий</string>
     <string name="settings_backup_subtitle">Включите свои события в резервную копию Google этого устройства, чтобы восстановить их на новом телефоне.</string>
     <string name="settings_privacy_note">Pulsar хранит всё на вашем устройстве — без аккаунтов, без серверов и без отслеживания. Когда резервное копирование включено, ваши события входят в резервную копию Google вашего устройства.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Сортировка</string>
+    <string name="home_sort_recently_added">Недавно добавленные</string>
+    <string name="home_sort_most_days">Больше дней</string>
+    <string name="home_sort_alphabetical">По алфавиту</string>
 </resources>
