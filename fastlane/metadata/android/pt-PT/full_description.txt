@@ -1,23 +1,23 @@
-Pulsar counts the time since the moments that matter to you — your last night out, the last time you went to the gym, an anniversary, a new job. Pick a moment and watch the days add up.
+O Pulsar conta o tempo desde os momentos que mais te marcam — a tua última saída à noite, a última vez que foste ao ginásio, um aniversário, um emprego novo. Escolhe um momento e vê os dias a somar.
 
-Every milestone gets a bold gradient card and an optional home-screen widget, so your streak is always one glance away.
+Cada marco ganha um cartão com um gradiente vibrante e um widget opcional no ecrã principal, para que a tua sequência esteja sempre a um relance.
 
-WHY PULSAR
+PORQUÊ O PULSAR
 
-• Beautifully simple. One job, done well: count up from a date and time you choose.
-• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
-• Widgets that look great. Two sizes — a compact day count and a wide days · hours · minutes readout — with an optional transparent background that floats the number on your wallpaper.
+• Lindamente simples. Faz uma só coisa, e bem: conta a partir de uma data e hora à tua escolha.
+• Verdadeiramente privado. Sem conta, sem rede, sem permissões, sem anúncios, sem rastreio. Tudo fica no teu dispositivo.
+• Widgets com ótimo aspeto. Dois tamanhos — uma contagem compacta de dias e uma leitura ampla de dias · horas · minutos — com um fundo transparente opcional que faz o número flutuar sobre o teu fundo de ecrã.
 
-FEATURES
+FUNCIONALIDADES
 
-• Track as many milestones as you like, each with its own colour accent.
-• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
-• Sort your milestones by recently added, most days, or alphabetically.
-• Undo an accidental delete with a single tap.
-• Reset a milestone to "now" to start a fresh streak.
-• Light, dark, or system theme.
-• Daylight-saving-aware day counting, so a day is always a real calendar day.
-• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
-• Available in 10 languages.
+• Acompanha tantos marcos quantos quiseres, cada um com a sua própria cor de destaque.
+• Um ecrã de detalhe com gradiente de margem a margem, uma animação de contagem suave e uma divisão em dias / horas / minutos / segundos.
+• Ordena os teus marcos por adicionados recentemente, mais dias ou por ordem alfabética.
+• Anula uma eliminação acidental com um único toque.
+• Reinicia um marco para "agora" e começa uma nova sequência.
+• Tema claro, escuro ou do sistema.
+• Contagem de dias atenta à mudança da hora, para que um dia seja sempre um dia real do calendário.
+• Cópia de segurança no Google opcional, para que os teus marcos sobrevivam a um telemóvel novo — és tu que decides se está ativa.
+• Disponível em 10 idiomas.
 
-Pulsar is fully offline and asks for nothing. Just the days, counting up.
+O Pulsar funciona totalmente offline e não pede nada. Apenas os dias, a somar.

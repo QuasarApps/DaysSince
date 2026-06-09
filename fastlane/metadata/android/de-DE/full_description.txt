@@ -1,23 +1,23 @@
-Pulsar counts the time since the moments that matter to you — your last night out, the last time you went to the gym, an anniversary, a new job. Pick a moment and watch the days add up.
+Pulsar zählt die Zeit seit den Momenten, die dir wichtig sind – dein letzter Abend mit Freunden, dein letzter Besuch im Fitnessstudio, ein Jahrestag, ein neuer Job. Wähle einen Moment und sieh zu, wie sich die Tage summieren.
 
-Every milestone gets a bold gradient card and an optional home-screen widget, so your streak is always one glance away.
+Jeder Meilenstein bekommt eine kräftige Karte mit Farbverlauf und ein optionales Widget für den Startbildschirm, sodass deine Serie immer nur einen Blick entfernt ist.
 
-WHY PULSAR
+WARUM PULSAR
 
-• Beautifully simple. One job, done well: count up from a date and time you choose.
-• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
-• Widgets that look great. Two sizes — a compact day count and a wide days · hours · minutes readout — with an optional transparent background that floats the number on your wallpaper.
+• Wunderbar einfach. Eine Aufgabe, gut gemacht: Zählen ab einem von dir gewählten Datum und einer Uhrzeit.
+• Wirklich privat. Kein Konto, kein Netzwerk, keine Berechtigungen, keine Werbung, kein Tracking. Alles bleibt auf deinem Gerät.
+• Widgets, die super aussehen. Zwei Größen – eine kompakte Tageszählung und eine breite Anzeige mit Tagen · Stunden · Minuten – mit optionalem transparentem Hintergrund, der die Zahl auf deinem Hintergrundbild schweben lässt.
 
-FEATURES
+FUNKTIONEN
 
-• Track as many milestones as you like, each with its own colour accent.
-• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
-• Sort your milestones by recently added, most days, or alphabetically.
-• Undo an accidental delete with a single tap.
-• Reset a milestone to "now" to start a fresh streak.
-• Light, dark, or system theme.
-• Daylight-saving-aware day counting, so a day is always a real calendar day.
-• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
-• Available in 10 languages.
+• Verfolge so viele Meilensteine, wie du möchtest, jeder mit eigenem Farbakzent.
+• Eine Detailansicht mit randlosem Farbverlauf, einer flüssigen Hochzähl-Animation und einer Aufschlüsselung in Tage / Stunden / Minuten / Sekunden.
+• Sortiere deine Meilensteine nach zuletzt hinzugefügt, meisten Tagen oder alphabetisch.
+• Mache ein versehentliches Löschen mit einem einzigen Tippen rückgängig.
+• Setze einen Meilenstein auf „jetzt“ zurück, um eine neue Serie zu starten.
+• Helles, dunkles oder Systemdesign.
+• Tageszählung mit Berücksichtigung der Sommerzeit, sodass ein Tag immer ein echter Kalendertag ist.
+• Optionales Google-Backup, damit deine Meilensteine ein neues Handy überstehen – du entscheidest, ob es aktiviert ist.
+• In 10 Sprachen verfügbar.
 
-Pulsar is fully offline and asks for nothing. Just the days, counting up.
+Pulsar ist vollständig offline und verlangt nach nichts. Einfach nur die Tage, die hochzählen.

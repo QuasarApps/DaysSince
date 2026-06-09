@@ -1,23 +1,23 @@
-Pulsar counts the time since the moments that matter to you — your last night out, the last time you went to the gym, an anniversary, a new job. Pick a moment and watch the days add up.
+يحسب Pulsar الوقت المنقضي منذ اللحظات التي تهمك — آخر سهرة قضيتها، آخر مرة ذهبت فيها إلى النادي الرياضي، ذكرى سنوية، أو وظيفة جديدة. اختر لحظةً وشاهد الأيام تتراكم.
 
-Every milestone gets a bold gradient card and an optional home-screen widget, so your streak is always one glance away.
+يحصل كل حدث مهم على بطاقة بتدرج لوني جريء وأداة اختيارية على الشاشة الرئيسية، لتبقى سلسلتك على بُعد نظرة واحدة دائمًا.
 
-WHY PULSAR
+لماذا Pulsar
 
-• Beautifully simple. One job, done well: count up from a date and time you choose.
-• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
-• Widgets that look great. Two sizes — a compact day count and a wide days · hours · minutes readout — with an optional transparent background that floats the number on your wallpaper.
+• بساطة آسرة. مهمة واحدة تؤديها بإتقان: العد التصاعدي من تاريخ ووقت تختارهما بنفسك.
+• خصوصية حقيقية. بلا حساب، بلا اتصال بالشبكة، بلا أذونات، بلا إعلانات، بلا تتبع. يبقى كل شيء على جهازك.
+• أدوات رائعة المظهر. حجمان — عداد أيام مدمج، وعرض موسّع للأيام · الساعات · الدقائق — مع خلفية شفافة اختيارية تجعل الرقم يطفو فوق خلفية شاشتك.
 
-FEATURES
+الميزات
 
-• Track as many milestones as you like, each with its own colour accent.
-• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
-• Sort your milestones by recently added, most days, or alphabetically.
-• Undo an accidental delete with a single tap.
-• Reset a milestone to "now" to start a fresh streak.
-• Light, dark, or system theme.
-• Daylight-saving-aware day counting, so a day is always a real calendar day.
-• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
-• Available in 10 languages.
+• تتبّع أي عدد تشاء من الأحداث المهمة، لكلٍّ منها لونه المميز.
+• شاشة تفاصيل بتدرج لوني يملأ الشاشة، وحركة عدّ تصاعدي سلسة، وتفصيل بالأيام / الساعات / الدقائق / الثواني.
+• رتّب أحداثك حسب الأحدث إضافةً، أو الأكثر أيامًا، أو أبجديًا.
+• تراجَع عن أي حذف غير مقصود بنقرة واحدة.
+• أعد ضبط أي حدث إلى "الآن" لبدء سلسلة جديدة.
+• مظهر فاتح أو داكن أو حسب النظام.
+• حساب للأيام يراعي التوقيت الصيفي، فيكون اليوم دائمًا يومًا تقويميًا حقيقيًا.
+• نسخ احتياطي اختياري عبر Google لتبقى أحداثك بعد اقتناء هاتف جديد — وأنت من يقرر تفعيله.
+• متوفر بعشر لغات.
 
-Pulsar is fully offline and asks for nothing. Just the days, counting up.
+يعمل Pulsar دون اتصال تمامًا ولا يطلب منك شيئًا. مجرد أيام، تتصاعد.
