@@ -63,6 +63,15 @@ To localize a listing, translate these files in the locale's directory:
 
 Keep within the limits noted above (80 / 4000 / 500 chars).
 
+### Planned: a keyword-rich title (ASO)
+
+The listing `title.txt` is currently the bare brand name **Pulsar** in every
+locale (safe, and needs no translation). A keyword-rich title such as
+**"Pulsar: Days Since Tracker"** (≤ 30 chars) would help store-search ranking and
+is a wanted change. Adopting it means the descriptor part then needs a natural
+per-locale translation (the brand "Pulsar" stays), so it is folded into the
+translation pass above rather than shipped English-only across all locales.
+
 ## Graphic assets (not in git)
 
 These are required/recommended by Play and are **not** committed (binary, and
@@ -87,8 +96,10 @@ Pulsar collects and shares **nothing**, so the Console's Data safety section is
 short. Recommended answers:
 
 - **Does your app collect or share any of the required user data types?** → **No.**
-- **Is all of the user data encrypted in transit?** → N/A (no data leaves the
-  device; the app makes no network requests).
+- **Is all of the user data encrypted in transit?** → N/A — no personal or user
+  data is sent over the network. (The app's only network activity is the optional
+  Android downloadable-fonts fetch, which sends just a font-family name, never
+  user data.)
 - **Do you provide a way for users to request that their data be deleted?** →
   Users delete milestones in-app; uninstalling removes everything. No server-side
   data exists.
@@ -97,6 +108,9 @@ Notes for the reviewer questionnaire:
 
 - No personal or sensitive data is collected, transmitted, or shared.
 - No ads, no analytics, no third-party SDKs.
+- The app uses Android's downloadable Google Fonts: on a Play-Services device the
+  font name is fetched from Google's provider (governed by Google's Privacy
+  Policy); bundled fallback fonts cover the offline path. No user data is involved.
 - The optional Android Auto Backup is performed by the OS / the user's Google
   account, not by the app — it is not developer data collection. See
   [`docs/privacy-policy.md`](../docs/privacy-policy.md).

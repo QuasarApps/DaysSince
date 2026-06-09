@@ -30,8 +30,10 @@ other app can read.
 
 - **No data collection.** Pulsar does not collect personal or sensitive user
   data of any kind.
-- **No network access.** Pulsar makes no network requests. It has no servers and
-  no backend. Your milestones never leave your device through the app.
+- **No personal data leaves your device.** Pulsar has no servers and no backend.
+  It never sends your milestones, settings, or any personal data over the
+  network. (See *Fonts* below for the one piece of non-personal, optional network
+  activity.)
 - **No accounts.** There is no sign-in, registration, or user profile.
 - **No permissions.** Pulsar requests no runtime permissions (no location, no
   contacts, no camera, no storage access).
@@ -39,6 +41,20 @@ other app can read.
   advertising SDKs, no crash-reporting services, and no third-party trackers.
 - **No data sharing.** Because nothing is collected, nothing is shared with any
   third party.
+
+## Fonts (the only network activity)
+
+Pulsar uses Android's [downloadable
+fonts](https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts)
+for its two brand typefaces. On a device with Google Play Services, the system
+may fetch these fonts from Google's fonts provider. In that request **only the
+name of the font is sent** — never your milestones, settings, or any personal or
+identifying data — and it is handled by Google under [Google's Privacy
+Policy](https://policies.google.com/privacy). The app ships with bundled fallback
+fonts, so it renders and works fully even with no network or no Play Services.
+
+This is the only network activity Pulsar triggers, and it involves no personal
+data.
 
 ## Android Auto Backup
 

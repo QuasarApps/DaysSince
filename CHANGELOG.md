@@ -50,9 +50,11 @@ First public release.
   system reduce-motion setting, and tabular figures so digits don't jump.
 
 ### Privacy
-- Fully offline: no network calls, no runtime permissions, no accounts, no
-  analytics, and no crash reporting. All data is stored in app-private DataStore
-  preferences. See [`docs/privacy-policy.md`](docs/privacy-policy.md).
+- Private by default: no accounts, no runtime permissions, no analytics, and no
+  crash reporting; no personal data ever leaves the device. All data is stored in
+  app-private DataStore preferences. The app is fully usable offline — the only
+  network activity is an optional Android downloadable-fonts fetch (which sends
+  just a font name). See [`docs/privacy-policy.md`](docs/privacy-policy.md).
 
 ### Technical
 - Minimum Android 8.0 (API 26); targets Android 15 (API 35).

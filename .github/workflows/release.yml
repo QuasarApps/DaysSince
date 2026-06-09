@@ -58,16 +58,27 @@ jobs:
 
       # versionName comes straight from the tag (v1.2.3 -> 1.2.3). versionCode is
       # a monotonic integer derived from semver: MAJOR*10000 + MINOR*100 + PATCH
-      # (so 1.0.0 -> 10000). This keeps MINOR and PATCH below 100; see RELEASING.md.
+      # (so 1.0.0 -> 10000). The MINOR/PATCH < 100 constraint that keeps this
+      # scheme collision-free is enforced below, not just documented, so a stray
+      # tag fails fast with a clear message instead of producing a versionCode
+      # that Play silently rejects (or that collides with another version).
       - name: Derive version from tag
         id: version
         run: |
           TAG="${GITHUB_REF_NAME}"
           NAME="${TAG#v}"
+          if [[ ! "$NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Tag '$TAG' is not vMAJOR.MINOR.PATCH with numeric components."
+            exit 1
+          fi
           MAJOR="${NAME%%.*}"
           REST="${NAME#*.}"
           MINOR="${REST%%.*}"
           PATCH="${REST##*.}"
+          if [ "$MINOR" -ge 100 ] || [ "$PATCH" -ge 100 ]; then
+            echo "::error::MINOR and PATCH must each be < 100 for the versionCode scheme (got $NAME). Ship the next minor/major instead."
+            exit 1
+          fi
           CODE=$((MAJOR * 10000 + MINOR * 100 + PATCH))
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           echo "code=$CODE" >> "$GITHUB_OUTPUT"
@@ -75,10 +86,11 @@ jobs:
 
       # Reconstruct the keystore on the runner from a base64 secret. Generate the
       # secret locally with:  base64 -w0 upload-keystore.jks   (see RELEASING.md).
+      # printf '%s' (not echo) avoids appending a trailing newline to the secret.
       - name: Decode upload keystore
         env:
           PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
-        run: echo "$PULSAR_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload-keystore.jks"
+        run: printf '%s' "$PULSAR_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
 
       - name: Build signed App Bundle
         env:
