@@ -130,6 +130,29 @@ First release only. In the [Play Console](https://play.google.com/console):
 
 ---
 
+## Dry-running the workflow (optional)
+
+Before adding the signing secrets or cutting your first tag, you can shake out
+the workflow plumbing from the **Actions** tab with no side effects:
+
+1. Go to **Actions → Release → Run workflow**.
+2. Optionally set a fake version (default `0.0.1`), then run it.
+
+This manual (`workflow_dispatch`) run exercises checkout, the JBR/Gradle
+toolchain, the version parsing and its validation, and an **unsigned**
+`:app:bundleRelease`, then uploads the resulting AAB as a workflow artifact. It
+**skips** the signing-secret check, the keystore decode, signature verification,
+and the GitHub Release publish — so it needs no secrets and publishes nothing.
+
+That validates everything *except* signing. Once it's green, add the secrets
+([above](#2-add-the-github-actions-secrets)) and cut a throwaway `v0.0.1` tag to
+exercise the signing + publish path before the real `v1.0.0`.
+
+> The "Run workflow" button only appears once this workflow file is on the
+> repository's default branch.
+
+---
+
 ## Building a signed bundle locally (optional)
 
 With a real `keystore.properties` in place:

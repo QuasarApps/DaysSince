@@ -5,11 +5,23 @@ name: Release
 # This builds a SIGNED Android App Bundle (.aab) stamped with the tag's version
 # and publishes it as a GitHub Release. The .aab is then uploaded to the Play
 # Console manually (or wired into fastlane supply later) — see RELEASING.md.
+#
+# You can also trigger a manual DRY RUN from the Actions tab ("Run workflow").
+# A dry run exercises checkout, the JBR/Gradle toolchain, version parsing, and an
+# UNSIGNED :app:bundleRelease — but skips the signing-secret check, the keystore,
+# signature verification, and the GitHub Release publish. Use it to shake out the
+# workflow plumbing before adding secrets or cutting a real tag.
 on:
   push:
     tags:
       # Match v1.2.3 only — three numeric components, no pre-release suffix.
       - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      dry_run_version:
+        description: 'Fake version to stamp the dry-run build with, e.g. 0.0.1'
+        default: '0.0.1'
+        required: false
 
 # The publish step creates a GitHub Release, which needs write access to contents.
 permissions:
@@ -40,6 +52,7 @@ jobs:
       # than letting build.gradle.kts silently fall back to an UNSIGNED bundle
       # that only gets rejected at Play upload time.
       - name: Verify signing secrets are present
+        if: github.event_name == 'push'
         env:
           PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
           PULSAR_KEYSTORE_PASSWORD: ${{ secrets.PULSAR_KEYSTORE_PASSWORD }}
@@ -56,19 +69,26 @@ jobs:
             exit 1
           fi
 
-      # versionName comes straight from the tag (v1.2.3 -> 1.2.3). versionCode is
-      # a monotonic integer derived from semver: MAJOR*10000 + MINOR*100 + PATCH
-      # (so 1.0.0 -> 10000). The MINOR/PATCH < 100 constraint that keeps this
-      # scheme collision-free is enforced below, not just documented, so a stray
-      # tag fails fast with a clear message instead of producing a versionCode
-      # that Play silently rejects (or that collides with another version).
-      - name: Derive version from tag
+      # versionName comes from the tag on a real release (v1.2.3 -> 1.2.3), or from
+      # the dry_run_version input on a manual run. versionCode is a monotonic
+      # integer derived from semver: MAJOR*10000 + MINOR*100 + PATCH (so
+      # 1.0.0 -> 10000). The MINOR/PATCH < 100 constraint that keeps this scheme
+      # collision-free is enforced below, not just documented, so a stray tag (or
+      # a bad dry-run input) fails fast with a clear message instead of producing a
+      # versionCode that Play silently rejects (or that collides).
+      - name: Derive version
         id: version
+        env:
+          DISPATCH_VERSION: ${{ github.event.inputs.dry_run_version }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
-          NAME="${TAG#v}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RAW="$DISPATCH_VERSION"
+          else
+            RAW="${GITHUB_REF_NAME}"
+          fi
+          NAME="${RAW#v}"
           if [[ ! "$NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Tag '$TAG' is not vMAJOR.MINOR.PATCH with numeric components."
+            echo "::error::Version '$RAW' is not vMAJOR.MINOR.PATCH with numeric components."
             exit 1
           fi
           MAJOR="${NAME%%.*}"
@@ -88,11 +108,13 @@ jobs:
       # secret locally with:  base64 -w0 upload-keystore.jks   (see RELEASING.md).
       # printf '%s' (not echo) avoids appending a trailing newline to the secret.
       - name: Decode upload keystore
+        if: github.event_name == 'push'
         env:
           PULSAR_KEYSTORE_BASE64: ${{ secrets.PULSAR_KEYSTORE_BASE64 }}
         run: printf '%s' "$PULSAR_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/upload-keystore.jks"
 
       - name: Build signed App Bundle
+        if: github.event_name == 'push'
         env:
           PULSAR_VERSION_NAME: ${{ steps.version.outputs.name }}
           PULSAR_VERSION_CODE: ${{ steps.version.outputs.code }}
@@ -102,9 +124,23 @@ jobs:
           PULSAR_KEY_PASSWORD: ${{ secrets.PULSAR_KEY_PASSWORD }}
         run: ./gradlew :app:bundleRelease --no-daemon --stacktrace
 
+      # Dry-run counterpart of the step above: the same bundleRelease task, but
+      # with NO signing env, so build.gradle.kts produces an UNSIGNED bundle (its
+      # all-or-nothing signing guard treats "no signing inputs" as a clean unsigned
+      # build). This is the core of the manual dry run — it proves the toolchain,
+      # version stamping, and the R8/bundle pipeline without needing any secret.
+      - name: Build unsigned App Bundle (dry-run)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PULSAR_VERSION_NAME: ${{ steps.version.outputs.name }}
+          PULSAR_VERSION_CODE: ${{ steps.version.outputs.code }}
+        run: ./gradlew :app:bundleRelease --no-daemon --stacktrace
+
       # Belt-and-braces: confirm the bundle is actually signed before we publish
-      # it. jarsigner ships with the JDK set up above.
+      # it. jarsigner ships with the JDK set up above. Skipped on a dry run, where
+      # the bundle is intentionally unsigned.
       - name: Verify the bundle is signed
+        if: github.event_name == 'push'
         run: jarsigner -verify app/build/outputs/bundle/release/app-release.aab
 
       - name: Rename bundle for upload
@@ -122,6 +158,7 @@ jobs:
       # matching CHANGELOG.md section. The AAB still has to be uploaded to the Play
       # Console (manually or via fastlane supply) — this is not a Play deployment.
       - name: Publish GitHub Release
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
