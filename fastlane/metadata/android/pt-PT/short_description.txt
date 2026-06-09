@@ -1,1 +1,1 @@
-Conta os dias, horas e minutos desde os momentos que mais te marcam.
+Widgets no ecrã principal que contam os dias desde os momentos que te marcam.

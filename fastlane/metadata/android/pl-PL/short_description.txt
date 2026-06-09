@@ -1,1 +1,1 @@
-Licz dni, godziny i minuty od chwil, które są dla Ciebie ważne.
+Widżety na ekran główny liczące dni od chwil, które są dla Ciebie ważne.

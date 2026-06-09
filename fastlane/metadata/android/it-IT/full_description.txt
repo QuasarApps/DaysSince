@@ -1,15 +1,16 @@
-Pulsar conta il tempo trascorso dai momenti che contano per te: l'ultima serata fuori, l'ultima volta in palestra, un anniversario, un nuovo lavoro. Scegli un momento e guarda i giorni accumularsi.
+Pulsar porta i momenti che contano per te direttamente sulla schermata Home. Conta i giorni, le ore e i minuti dall'ultima serata fuori, dall'ultima volta in palestra, da un anniversario o da un nuovo lavoro, con splendidi widget per la Home e vivaci schede sfumate.
 
-Ogni traguardo ottiene una vivace scheda sfumata e un widget opzionale per la schermata Home, così il tuo conteggio è sempre a portata di sguardo.
+Aggiungi un widget Pulsar alla schermata Home e il tuo conteggio sarà sempre a portata di sguardo, senza bisogno di aprire l'app. Scegli tra due dimensioni — un conteggio compatto dei giorni o una visualizzazione ampia giorni · ore · minuti — e rendi entrambi completamente trasparenti, così il numero fluttua direttamente sul tuo sfondo.
 
 PERCHÉ PULSAR
 
+• Widget in primo piano. Due dimensioni per la Home, uno sfondo trasparente opzionale e un'anteprima realistica nel selettore: il tuo conteggio vive sulla schermata Home, non sepolto in un'app.
 • Splendidamente semplice. Un solo compito, svolto bene: contare a partire da una data e un'ora che scegli tu.
 • Davvero privato. Nessun account, nessuna rete, nessun permesso, nessuna pubblicità, nessun tracciamento. Tutto resta sul tuo dispositivo.
-• Widget bellissimi. Due dimensioni: un conteggio compatto dei giorni e una visualizzazione ampia giorni · ore · minuti, con uno sfondo trasparente opzionale che fa fluttuare il numero sul tuo sfondo.
 
 FUNZIONALITÀ
 
+• Due widget per la Home — un conteggio compatto dei giorni e una visualizzazione ampia giorni · ore · minuti — ciascuno con uno sfondo trasparente opzionale.
 • Tieni traccia di tutti i traguardi che vuoi, ciascuno con il proprio colore distintivo.
 • Una schermata di dettaglio con una sfumatura a tutto schermo, una fluida animazione di conteggio e una suddivisione in giorni / ore / minuti / secondi.
 • Ordina i tuoi traguardi per aggiunti di recente, più giorni o in ordine alfabetico.
@@ -20,4 +21,4 @@ FUNZIONALITÀ
 • Backup Google opzionale, così i tuoi traguardi sopravvivono a un nuovo telefono: decidi tu se attivarlo.
 • Disponibile in 10 lingue.
 
-Pulsar è completamente offline e non chiede nulla. Solo i giorni, che continuano a salire.
+Pulsar è completamente offline e non chiede nulla. Solo i giorni, che continuano a salire, direttamente sulla schermata Home.

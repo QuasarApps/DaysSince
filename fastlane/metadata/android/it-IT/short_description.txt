@@ -1,1 +1,1 @@
-Conta i giorni, le ore e i minuti dai momenti che contano per te.
+Widget per la Home che contano i giorni dai momenti che contano per te.

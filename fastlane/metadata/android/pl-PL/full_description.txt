@@ -1,15 +1,16 @@
-Pulsar liczy czas, jaki upłynął od chwil, które są dla Ciebie ważne — ostatniego wyjścia ze znajomymi, ostatniego treningu, rocznicy czy nowej pracy. Wybierz moment i patrz, jak przybywa dni.
+Pulsar umieszcza chwile, które są dla Ciebie ważne, wprost na Twoim ekranie głównym. Licz dni, godziny i minuty od ostatniego wyjścia ze znajomymi, ostatniego treningu, rocznicy czy nowej pracy — dzięki pięknym widżetom na ekran główny i wyrazistym kartom z gradientem.
 
-Każdy kamień milowy dostaje wyrazistą kartę z gradientem i opcjonalny widżet na ekranie głównym, więc Twoja seria jest zawsze w zasięgu wzroku.
+Umieść widżet Pulsar na ekranie głównym, a Twoja seria zawsze będzie w zasięgu jednego spojrzenia — bez otwierania aplikacji. Wybierz spośród dwóch rozmiarów — kompaktowego licznika dni albo szerokiego odczytu dni · godziny · minuty — i ustaw każdy z nich jako w pełni przezroczysty, by liczba unosiła się wprost nad Twoją tapetą.
 
 DLACZEGO PULSAR
 
+• Widżety na pierwszym planie. Dwa rozmiary na ekran główny, opcjonalne przezroczyste tło i realistyczny podgląd w selektorze — Twój licznik żyje na ekranie głównym, a nie ukryty w aplikacji.
 • Piękny w swojej prostocie. Jedno zadanie, wykonane dobrze: odlicza czas od wybranej przez Ciebie daty i godziny.
 • W pełni prywatny. Bez konta, bez sieci, bez uprawnień, bez reklam, bez śledzenia. Wszystko zostaje na Twoim urządzeniu.
-• Świetnie wyglądające widżety. Dwa rozmiary — kompaktowy licznik dni oraz szeroki odczyt dni · godziny · minuty — z opcjonalnym przezroczystym tłem, dzięki któremu liczba unosi się nad Twoją tapetą.
 
 FUNKCJE
 
+• Dwa widżety na ekran główny — kompaktowy licznik dni oraz szeroki odczyt dni · godziny · minuty — każdy z opcjonalnym przezroczystym tłem.
 • Śledź dowolną liczbę kamieni milowych, każdy z własnym akcentem kolorystycznym.
 • Ekran szczegółów z gradientem na całą szerokość, płynną animacją odliczania oraz podziałem na dni / godziny / minuty / sekundy.
 • Sortuj kamienie milowe według daty dodania, liczby dni lub alfabetycznie.
@@ -20,4 +21,4 @@ FUNKCJE
 • Opcjonalna kopia zapasowa Google, dzięki której Twoje kamienie milowe przetrwają zmianę telefonu — to Ty decydujesz, czy jest włączona.
 • Dostępny w 10 językach.
 
-Pulsar działa w pełni offline i o nic nie prosi. Po prostu dni, które przybywają.
+Pulsar działa w pełni offline i o nic nie prosi. Po prostu dni, które przybywają — wprost na Twoim ekranie głównym.
