@@ -83,4 +83,9 @@
     <string name="settings_backup_title">Fazer backup dos marcos</string>
     <string name="settings_backup_subtitle">Inclua seus marcos no backup do Google deste dispositivo para que sejam restaurados em um novo telefone.</string>
     <string name="settings_privacy_note">O Pulsar armazena tudo no seu dispositivo — sem contas, sem servidores e sem rastreamento. Com o backup ativado, seus marcos são incluídos no backup do Google do seu dispositivo.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Ordenar</string>
+    <string name="home_sort_recently_added">Adicionados recentemente</string>
+    <string name="home_sort_most_days">Mais dias</string>
+    <string name="home_sort_alphabetical">Alfabética</string>
 </resources>

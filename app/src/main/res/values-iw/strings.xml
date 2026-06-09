@@ -83,4 +83,9 @@
     <string name="settings_backup_title">גיבוי האירועים</string>
     <string name="settings_backup_subtitle">כלול את האירועים שלך בגיבוי Google של המכשיר הזה כדי שישוחזרו בטלפון חדש.</string>
     <string name="settings_privacy_note">Pulsar שומר הכול במכשיר שלך — בלי חשבונות, בלי שרתים ובלי מעקב. כשהגיבוי מופעל, האירועים שלך נכללים בגיבוי Google של המכשיר.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">מיון</string>
+    <string name="home_sort_recently_added">נוספו לאחרונה</string>
+    <string name="home_sort_most_days">הכי הרבה ימים</string>
+    <string name="home_sort_alphabetical">לפי א-ב</string>
 </resources>

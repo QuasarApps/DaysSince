@@ -83,4 +83,9 @@
     <string name="settings_backup_title">Esegui il backup degli eventi</string>
     <string name="settings_backup_subtitle">Includi i tuoi eventi nel backup di Google di questo dispositivo, così verranno ripristinati su un nuovo telefono.</string>
     <string name="settings_privacy_note">Pulsar memorizza tutto sul tuo dispositivo: nessun account, nessun server e nessun tracciamento. Con il backup attivo, i tuoi eventi vengono inclusi nel backup di Google del tuo dispositivo.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Ordina</string>
+    <string name="home_sort_recently_added">Aggiunti di recente</string>
+    <string name="home_sort_most_days">Più giorni</string>
+    <string name="home_sort_alphabetical">Alfabetico</string>
 </resources>

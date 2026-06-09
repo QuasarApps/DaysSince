@@ -122,8 +122,8 @@ speculative refactors are explicitly parked (bottom).
 |----|-------|-------|--------|
 | 1 | #34 (backup **toggle**, not exclude-only) + #35 (privacy note) + flaky-test fix | Privacy & backup control | ✅ done (#60) |
 | 2 | #36 undo delete | Data-loss safety net | ✅ done (#61) |
-| 3 | #39 ticker lifecycle pause | Quality & efficiency | ✅ this PR |
-| 4 | #37 (sort modes) + #17 (grid / `animateItem`) | Home ordering | pending |
+| 3 | #39 ticker lifecycle pause | Quality & efficiency | ✅ done (#62) |
+| 4 | #37 (sort modes) + #17 (grid / `animateItem`) | Home ordering | ✅ this PR |
 | 5 | #27 accent/new-beginning snapshot tests (Roborazzi) | Visual regression net | optional |
 
 ¹ flaky-test hardening was folded into PR 1 (CI stability for the rest of the run).
@@ -137,7 +137,7 @@ app-level encryption (key-management would break restore; Android already encryp
 the lockscreen key). #35 discloses this in-app.
 
 ### Parked — revisit on a real trigger, not pre-emptively
-- **#17 drag-reorder** *(the L half of #37)* — needs a persisted order field + drag gesture; sort modes (PR 4) cover most of the need. *(Note: the grid/`animateItem` half of #17 is being pulled into PR 4.)*
+- **#37 drag-reorder** *(the L half of #37)* — needs a persisted order field + drag gesture; the sort modes shipped in PR 4 cover most of the need. *(The grid/`animateItem` half of #17 landed in PR 4.)*
 - **#20 / #21** repo DI / `ViewModelProvider.Factory` — DataStore is already a process singleton; lateral churn.
 - **#23** type-safe Compose navigation — low ROI for a 5-route graph.
 

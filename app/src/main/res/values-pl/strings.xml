@@ -84,4 +84,9 @@
     <string name="settings_backup_title">Twórz kopię zapasową wydarzeń</string>
     <string name="settings_backup_subtitle">Dołącz swoje wydarzenia do kopii zapasowej Google tego urządzenia, aby przywrócić je na nowym telefonie.</string>
     <string name="settings_privacy_note">Pulsar przechowuje wszystko na Twoim urządzeniu — bez kont, bez serwerów i bez śledzenia. Gdy kopia zapasowa jest włączona, Twoje wydarzenia są dołączane do kopii zapasowej Google Twojego urządzenia.</string>
+    <!-- Home sort control -->
+    <string name="home_sort_content_description">Sortuj</string>
+    <string name="home_sort_recently_added">Ostatnio dodane</string>
+    <string name="home_sort_most_days">Najwięcej dni</string>
+    <string name="home_sort_alphabetical">Alfabetycznie</string>
 </resources>

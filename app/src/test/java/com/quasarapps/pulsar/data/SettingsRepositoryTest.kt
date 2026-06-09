@@ -57,6 +57,16 @@ class SettingsRepositoryTest {
         assertTrue(settings.showUnits)
         // Backup defaults ON so restore-on-new-device keeps working unless the user opts out.
         assertTrue(settings.backupEnabled)
+        assertEquals(SortOrder.RECENTLY_ADDED, settings.sortOrder)
+    }
+
+    @Test
+    fun setSortOrder_persistsAndRoundTrips() = runTest(dispatcher) {
+        repo.setSortOrder(SortOrder.ALPHABETICAL)
+        assertEquals(SortOrder.ALPHABETICAL, repo.snapshot().sortOrder)
+
+        repo.setSortOrder(SortOrder.MOST_DAYS)
+        assertEquals(SortOrder.MOST_DAYS, repo.snapshot().sortOrder)
     }
 
     @Test
