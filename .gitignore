@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 /.idea/planningMode.xml
 /.idea/androidTestResultsUserPreferences.xml
+/.idea/.name
+/.idea/markdown.xml
 .DS_Store
 /build
 /captures
