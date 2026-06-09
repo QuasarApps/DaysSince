@@ -73,7 +73,7 @@
     <string name="edit_title_new">New milestone</string>
     <string name="edit_title_edit">Edit milestone</string>
     <string name="edit_title_field_label">Title</string>
-    <string name="edit_title_field_placeholder">e.g. Quit smoking</string>
+    <string name="edit_title_field_placeholder">e.g. Last bike ride</string>
     <string name="edit_field_date">Date</string>
     <string name="edit_field_time">Time</string>
     <string name="edit_accent_header">Accent</string>

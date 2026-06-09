@@ -64,11 +64,11 @@ class EditMilestoneScreenTest {
     @Test
     fun existingMilestone_showsEditHeaderAndPrefillsTitle() {
         setContent(
-            existing = Milestone("a", "Sober", sampleDate, sampleTime, accent = 2, createdAt = 1L),
+            existing = Milestone("a", "Birthday", sampleDate, sampleTime, accent = 2, createdAt = 1L),
         )
 
         composeRule.onNodeWithText("Edit milestone").assertIsDisplayed()
-        composeRule.onNode(hasSetTextAction()).assertTextContains("Sober")
+        composeRule.onNode(hasSetTextAction()).assertTextContains("Birthday")
     }
 
     @Test
@@ -81,7 +81,7 @@ class EditMilestoneScreenTest {
     @Test
     fun existingPastMilestone_previewShowsDaysSinceKicker() {
         setContent(
-            existing = Milestone("a", "Sober", sampleDate, sampleTime, accent = 2, createdAt = 1L),
+            existing = Milestone("a", "Birthday", sampleDate, sampleTime, accent = 2, createdAt = 1L),
         )
         composeRule.onNodeWithText("DAYS SINCE").assertIsDisplayed()
     }

@@ -17,7 +17,7 @@ class MilestoneJsonTest {
         val list = listOf(
             Milestone(
                 id = "a",
-                title = "Sober",
+                title = "Birthday",
                 date = LocalDate.of(2025, 1, 2),
                 time = LocalTime.of(9, 30),
                 accent = 3,

@@ -19,7 +19,7 @@ First public release.
 
 ### Added
 - **Multiple milestones.** Track the days, hours, and minutes since any number
-  of moments — sober time, last gym session, an anniversary. Each milestone gets
+  of moments — the first day of school, last bike ride, an anniversary. Each milestone gets
   its own accent from the Pulsar palette (Magenta, Violet, Indigo, Nebula,
   Aurora, Solar, Ember, Deep).
 - **Detail screen** with a full-bleed gradient hero, a count-up animation, and a

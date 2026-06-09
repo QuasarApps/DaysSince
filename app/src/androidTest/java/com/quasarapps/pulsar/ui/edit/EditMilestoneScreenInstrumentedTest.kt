@@ -59,11 +59,11 @@ class EditMilestoneScreenInstrumentedTest {
     @Test
     fun existingMilestone_showsEditHeaderAndPrefillsTitleAndAccent() {
         setContent(
-            existing = Milestone("a", "Sober", sampleDate, sampleTime, accent = 2, createdAt = 1L),
+            existing = Milestone("a", "Birthday", sampleDate, sampleTime, accent = 2, createdAt = 1L),
         )
 
         composeRule.onNodeWithText("Edit milestone").assertIsDisplayed()
-        composeRule.onNode(hasSetTextAction()).assertTextContains("Sober")
+        composeRule.onNode(hasSetTextAction()).assertTextContains("Birthday")
         // Accent index 2 is "Indigo". Every swatch is a labeled radio option; the prefilled one is
         // selected, so assertIsSelected confirms the accent prefilled correctly.
         composeRule.onNodeWithContentDescription("Indigo").assertIsSelected()
