@@ -1,4 +1,5 @@
 ---
+layout: default
 title: Privacy Policy for Pulsar
 permalink: /privacy-policy/
 ---
