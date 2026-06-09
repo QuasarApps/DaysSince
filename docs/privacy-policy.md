@@ -1,9 +1,13 @@
-# Privacy Policy for Pulsar
+---
+layout: default
+title: Privacy Policy for Pulsar
+permalink: /privacy-policy/
+---
 
 **Effective date:** 8 June 2026
 **App:** Pulsar (`com.quasarapps.pulsar`)
 **Developer:** Quasar Apps
-**Contact:** martin@quasarapps.com
+**Contact:** admin@quasarapps.com
 
 Pulsar is designed to be private by default. The short version: **Pulsar does not
 collect, transmit, or share any personal data.** Everything you enter stays on your
@@ -92,4 +96,4 @@ reflected in the app's release notes.
 ## Contact
 
 Questions about this policy or about privacy in Pulsar can be sent to
-**martin@quasarapps.com**.
+**admin@quasarapps.com**.
