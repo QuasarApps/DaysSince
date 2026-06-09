@@ -21,8 +21,9 @@ internal object MilestoneJson {
                     put("date", m.date.toString())
                     put("time", m.time.toString())
                     // Persist a stable key, not the list index, so reordering accents later doesn't
-                    // recolor existing milestones. (An older build reading this falls back to Dynamic;
-                    // downgrades aren't supported, so that's acceptable.)
+                    // recolor existing milestones. (Downgrade caveat: an older build expecting an int
+                    // reads the string and falls back to its default accent — "Dynamic" in the builds
+                    // that had it. Downgrades aren't supported, so that's acceptable.)
                     put("accent", AccentKeys.keyForIndex(m.accent))
                     put("createdAt", m.createdAt)
                 }
