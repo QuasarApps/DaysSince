@@ -27,12 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.quasarapps.pulsar.R
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.quasarapps.pulsar.R
 import com.quasarapps.pulsar.data.ThemeMode
 import com.quasarapps.pulsar.ui.detail.DetailScreen
 import com.quasarapps.pulsar.ui.edit.EditMilestoneScreen
