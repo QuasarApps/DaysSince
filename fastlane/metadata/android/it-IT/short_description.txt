@@ -1,1 +1,1 @@
-Track the days, hours and minutes since the moments that matter to you.
+Widget per la Home che contano i giorni dai momenti che contano per te.

@@ -1,23 +1,24 @@
-Pulsar counts the time since the moments that matter to you — your last night out, the last time you went to the gym, an anniversary, a new job. Pick a moment and watch the days add up.
+Pulsar umieszcza chwile, które są dla Ciebie ważne, wprost na Twoim ekranie głównym. Licz dni, godziny i minuty od ostatniego wyjścia ze znajomymi, ostatniego treningu, rocznicy czy nowej pracy — dzięki pięknym widżetom na ekran główny i wyrazistym kartom z gradientem.
 
-Every milestone gets a bold gradient card and an optional home-screen widget, so your streak is always one glance away.
+Umieść widżet Pulsar na ekranie głównym, a Twoja seria zawsze będzie w zasięgu jednego spojrzenia — bez otwierania aplikacji. Wybierz spośród dwóch rozmiarów — kompaktowego licznika dni albo szerokiego odczytu dni · godziny · minuty — i ustaw każdy z nich jako w pełni przezroczysty, by liczba unosiła się wprost nad Twoją tapetą.
 
-WHY PULSAR
+DLACZEGO PULSAR
 
-• Beautifully simple. One job, done well: count up from a date and time you choose.
-• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
-• Widgets that look great. Two sizes — a compact day count and a wide days · hours · minutes readout — with an optional transparent background that floats the number on your wallpaper.
+• Widżety na pierwszym planie. Dwa rozmiary na ekran główny, opcjonalne przezroczyste tło i realistyczny podgląd w selektorze — Twój licznik żyje na ekranie głównym, a nie ukryty w aplikacji.
+• Piękny w swojej prostocie. Jedno zadanie, wykonane dobrze: odlicza czas od wybranej przez Ciebie daty i godziny.
+• W pełni prywatny. Bez konta, bez sieci, bez uprawnień, bez reklam, bez śledzenia. Wszystko zostaje na Twoim urządzeniu.
 
-FEATURES
+FUNKCJE
 
-• Track as many milestones as you like, each with its own colour accent.
-• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
-• Sort your milestones by recently added, most days, or alphabetically.
-• Undo an accidental delete with a single tap.
-• Reset a milestone to "now" to start a fresh streak.
-• Light, dark, or system theme.
-• Daylight-saving-aware day counting, so a day is always a real calendar day.
-• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
-• Available in 10 languages.
+• Dwa widżety na ekran główny — kompaktowy licznik dni oraz szeroki odczyt dni · godziny · minuty — każdy z opcjonalnym przezroczystym tłem.
+• Śledź dowolną liczbę kamieni milowych, każdy z własnym akcentem kolorystycznym.
+• Ekran szczegółów z gradientem na całą szerokość, płynną animacją odliczania oraz podziałem na dni / godziny / minuty / sekundy.
+• Sortuj kamienie milowe według daty dodania, liczby dni lub alfabetycznie.
+• Cofnij przypadkowe usunięcie jednym dotknięciem.
+• Zresetuj kamień milowy do „teraz”, aby rozpocząć nową serię.
+• Motyw jasny, ciemny lub zgodny z systemem.
+• Zliczanie dni uwzględniające zmianę czasu, więc dzień to zawsze prawdziwy dzień kalendarzowy.
+• Opcjonalna kopia zapasowa Google, dzięki której Twoje kamienie milowe przetrwają zmianę telefonu — to Ty decydujesz, czy jest włączona.
+• Dostępny w 10 językach.
 
-Pulsar is fully offline and asks for nothing. Just the days, counting up.
+Pulsar działa w pełni offline i o nic nie prosi. Po prostu dni, które przybywają — wprost na Twoim ekranie głównym.

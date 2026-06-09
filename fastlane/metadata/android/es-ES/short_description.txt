@@ -1,1 +1,1 @@
-Track the days, hours and minutes since the moments that matter to you.
+Widgets de inicio que cuentan los días desde los momentos que te importan.

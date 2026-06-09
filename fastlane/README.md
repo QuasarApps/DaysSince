@@ -44,24 +44,26 @@ qualifiers. The mapping for the locales Pulsar ships:
 
 ## Translation status
 
-⚠️ **Only `en-US` is written in its native language.** Every other locale
-currently contains the **English** text as a placeholder so the listing is
-complete and uploadable from day one. `title.txt` is the brand name `Pulsar`
-and needs no translation; the three description/changelog files do.
+✅ **All 10 listing locales are in their native language.** `en-US` is the
+English source; the 9 locales below have been translated (short_description,
+full_description, changelogs/default). `title.txt` is the brand name `Pulsar`
+in every locale and needs no translation.
 
-To localize a listing, translate these files in the locale's directory:
+- [x] `de-DE` — short_description, full_description, changelogs/default
+- [x] `es-ES` — short_description, full_description, changelogs/default
+- [x] `fr-FR` — short_description, full_description, changelogs/default
+- [x] `it-IT` — short_description, full_description, changelogs/default
+- [x] `iw-IL` — short_description, full_description, changelogs/default
+- [x] `pl-PL` — short_description, full_description, changelogs/default
+- [x] `pt-PT` — short_description, full_description, changelogs/default
+- [x] `ru-RU` — short_description, full_description, changelogs/default
+- [x] `ar`    — short_description, full_description, changelogs/default
 
-- [ ] `de-DE` — short_description, full_description, changelogs/default
-- [ ] `es-ES` — short_description, full_description, changelogs/default
-- [ ] `fr-FR` — short_description, full_description, changelogs/default
-- [ ] `it-IT` — short_description, full_description, changelogs/default
-- [ ] `iw-IL` — short_description, full_description, changelogs/default
-- [ ] `pl-PL` — short_description, full_description, changelogs/default
-- [ ] `pt-PT` — short_description, full_description, changelogs/default
-- [ ] `ru-RU` — short_description, full_description, changelogs/default
-- [ ] `ar`    — short_description, full_description, changelogs/default
+All stay within the limits noted above (80 / 4000 / 500 chars).
 
-Keep within the limits noted above (80 / 4000 / 500 chars).
+> These translations were produced with LLM assistance. A native-speaker
+> proofread before publishing is recommended — especially for the RTL locales
+> (`iw-IL`, `ar`) and any idiomatic word choices (e.g. "milestone"/"streak").
 
 ### Planned: a keyword-rich title (ASO)
 

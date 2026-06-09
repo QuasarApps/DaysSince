@@ -1,3 +1,3 @@
-Welcome to Pulsar 1.0 — the first release.
+Witaj w Pulsar 1.0 — pierwsze wydanie.
 
-Count the days, hours and minutes since the moments that matter to you, with bold gradient cards and two home-screen widgets. Fully private: no account, no network, no permissions, no tracking. Available in 10 languages.
+Licz dni, godziny i minuty od chwil, które są dla Ciebie ważne, dzięki wyrazistym kartom z gradientem i dwóm widżetom na ekranie głównym. W pełni prywatny: bez konta, bez sieci, bez uprawnień, bez śledzenia. Dostępny w 10 językach.

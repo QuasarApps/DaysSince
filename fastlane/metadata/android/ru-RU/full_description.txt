@@ -1,23 +1,24 @@
-Pulsar counts the time since the moments that matter to you — your last night out, the last time you went to the gym, an anniversary, a new job. Pick a moment and watch the days add up.
+Pulsar выводит важные для вас моменты прямо на главный экран. Считайте дни, часы и минуты с последней вечеринки, последнего похода в спортзал, годовщины или нового места работы — с помощью красивых виджетов и ярких градиентных карточек.
 
-Every milestone gets a bold gradient card and an optional home-screen widget, so your streak is always one glance away.
+Добавьте виджет Pulsar на главный экран, и ваш счёт всегда будет на расстоянии одного взгляда — без необходимости открывать приложение. Выберите один из двух размеров: компактный счётчик дней или широкий формат дни · часы · минуты — и сделайте любой из них полностью прозрачным, чтобы число парило прямо на ваших обоях.
 
-WHY PULSAR
+ПОЧЕМУ PULSAR
 
-• Beautifully simple. One job, done well: count up from a date and time you choose.
-• Truly private. No account, no network, no permissions, no ads, no tracking. Everything stays on your device.
-• Widgets that look great. Two sizes — a compact day count and a wide days · hours · minutes readout — with an optional transparent background that floats the number on your wallpaper.
+• Виджеты на первом месте. Два размера для главного экрана, прозрачный фон по желанию и реалистичный предпросмотр в списке выбора — ваш счёт живёт на главном экране, а не спрятан в приложении.
+• Красиво и просто. Одна задача, выполненная хорошо: отсчёт от выбранной вами даты и времени.
+• По-настоящему приватно. Без аккаунта, без сети, без разрешений, без рекламы, без слежки. Всё хранится на вашем устройстве.
 
-FEATURES
+ВОЗМОЖНОСТИ
 
-• Track as many milestones as you like, each with its own colour accent.
-• A detail screen with a full-bleed gradient, a smooth count-up animation, and a days / hours / minutes / seconds breakdown.
-• Sort your milestones by recently added, most days, or alphabetically.
-• Undo an accidental delete with a single tap.
-• Reset a milestone to "now" to start a fresh streak.
-• Light, dark, or system theme.
-• Daylight-saving-aware day counting, so a day is always a real calendar day.
-• Optional Google backup so your milestones survive a new phone — you decide whether it's on.
-• Available in 10 languages.
+• Два виджета для главного экрана — компактный счётчик дней и широкий формат дни · часы · минуты — каждый с прозрачным фоном по желанию.
+• Отслеживайте сколько угодно событий, каждое со своим цветовым акцентом.
+• Экран с подробностями: градиент во весь экран, плавная анимация отсчёта и разбивка на дни / часы / минуты / секунды.
+• Сортируйте события по дате добавления, числу дней или по алфавиту.
+• Отмените случайное удаление одним касанием.
+• Сбросьте событие на «сейчас», чтобы начать отсчёт заново.
+• Светлая, тёмная или системная тема.
+• Учёт перехода на летнее время, так что день — это всегда настоящий календарный день.
+• Резервное копирование в Google по желанию, чтобы события сохранились на новом телефоне — вы сами решаете, включать его или нет.
+• Доступно на 10 языках.
 
-Pulsar is fully offline and asks for nothing. Just the days, counting up.
+Pulsar работает полностью офлайн и ничего не просит. Просто дни, которые идут вперёд — прямо на вашем главном экране.

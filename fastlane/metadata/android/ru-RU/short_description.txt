@@ -1,1 +1,1 @@
-Track the days, hours and minutes since the moments that matter to you.
+Виджеты для главного экрана, считающие дни с важных для вас моментов.
